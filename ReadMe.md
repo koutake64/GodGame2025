@@ -23,4 +23,4 @@
 | `パッケージ名`        | パッケージの簡単な説明 |
 
 # コーディング規約
-
+- <a href="../../wiki/Coding-Standards"><strong>Wiki</strong></a>
