@@ -63,7 +63,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     void TryGrabObject()
     {
         Ray ray = new Ray(transform.position, transform.forward);

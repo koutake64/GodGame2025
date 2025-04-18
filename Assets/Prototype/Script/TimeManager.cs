@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,12 @@ public class TimeManager : MonoBehaviour
 	
 	private float time;
 
-	private void Update()
+    private void Start()
+    {
+        levelText.text = time.ToString("’©");
+    }
+
+    private void Update()
 	{
 		time += Time.deltaTime;
 		
