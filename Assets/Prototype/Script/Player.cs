@@ -2,94 +2,69 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float grabDistance = 3f; // 掴める距離
-    [SerializeField] Transform holdPoint;
+	[SerializeField, Header("行動クールタイム(秒)")] private float moveCooldown;
+	[SerializeField,Header("プレイヤー生成位置")] private Vector2Int startPos;
+	[SerializeField,Header("FieldDataManagerを設定")] private FieldDataManager fieldManager;
 
-    private GameObject heldObject = null;
-    private Rigidbody heldRb = null;
-    private Collider heldCol = null;
+	private Vector2Int currentPos;
+	private float moveTimer;
 
-    private void Start()
-    {
-        if (holdPoint == null)
-        {
-            GameObject holdObj = new GameObject("HoldPoint");
-            holdObj.transform.SetParent(transform);
-            holdObj.transform.localPosition = new Vector3(0, 1, 1.5f);
-            holdPoint = holdObj.transform;
-        }
-    }
+	void Start()
+	{
+		currentPos = startPos;
+		transform.position = fieldManager.GetInfo(currentPos).obj.transform.position;
+	}
 
-    private void Update()
-    {
-        // 移動処理
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += speed * transform.forward * Time.deltaTime;
-        }
+	void Update()
+	{
+		moveTimer += Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position -= speed * transform.forward * Time.deltaTime;
-        }
+		// 移動処理
+		if (moveTimer >= moveCooldown)
+		{
+			Vector2Int direction = Vector2Int.zero;
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += speed * transform.right * Time.deltaTime;
-        }
+			if (Input.GetKey(KeyCode.W)) direction = Vector2Int.up;
+			else if (Input.GetKey(KeyCode.S)) direction = Vector2Int.down;
+			else if (Input.GetKey(KeyCode.D)) direction = Vector2Int.right;
+			else if (Input.GetKey(KeyCode.A)) direction = Vector2Int.left;
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position -= speed * transform.right * Time.deltaTime;
-        }
+			if (direction != Vector2Int.zero)
+			{
+				TryMove(direction);
+				moveTimer = 0;
+			}
+		}
+	}
 
-        // つかみ処理
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            if (heldObject == null)
-            {
-                TryGrabObject();
-            }
-            else
-            {
-                ReleaseObject();
-            }
-        }
+	void TryMove(Vector2Int direction)
+	{
+		Vector2Int nextPos = currentPos + direction;
 
-        if (heldObject != null)
-        {
-            heldObject.transform.position = holdPoint.position;
-        }
-    }
+		if (CanMoveTo(nextPos))
+		{
+			currentPos = nextPos;
+			transform.position = fieldManager.GetInfo(currentPos).obj.transform.position;
 
-    void TryGrabObject()
-    {
-        Ray ray = new Ray(transform.position, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, grabDistance))
-        {
-            if (hit.collider.CompareTag("playerObject"))
-            {
-                heldObject = hit.collider.gameObject;
-                heldRb = heldObject.GetComponent<Rigidbody>();
-                heldCol = heldObject.GetComponent<Collider>();
+			var state = fieldManager.GetInfo(currentPos).state;
+			if (state == FieldDataManager.E_FIELDSTATE.goal)
+			{
+				Debug.Log(" ゴールしました！");
+			}
+		}
+	}
 
-                if (heldRb != null) heldRb.isKinematic = true;
-                if (heldCol != null) heldCol.enabled = false;
-            }
-        }
-    }
+	bool CanMoveTo(Vector2Int pos)
+	{
+		if (fieldManager == null) return false;
 
-    void ReleaseObject()
-    {
-        if (heldObject != null)
-        {
-            if (heldRb != null) heldRb.isKinematic = false;
-            if (heldCol != null) heldCol.enabled = true;
+		int maxX = fieldManager.fieldInfoArray.GetLength(0);
+		int maxY = fieldManager.fieldInfoArray.GetLength(1);
 
-            heldObject = null;
-            heldRb = null;
-            heldCol = null;
-        }
-    }
+		if (pos.x < 0 || pos.y < 0 || pos.x >= maxX || pos.y >= maxY)
+			return false;
+
+		var state = fieldManager.GetInfo(pos).state;
+		return state == FieldDataManager.E_FIELDSTATE.none || state == FieldDataManager.E_FIELDSTATE.goal;
+	}
 }
