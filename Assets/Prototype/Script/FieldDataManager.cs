@@ -4,12 +4,16 @@ public class FieldDataManager : MonoBehaviour
 {
     public enum E_FIELDSTATE
     {
-        none,
-        start,
-        goal,
-        obstacle,
-        camera,
-        cameraRange,
+        outOfRange = -1,// 範囲外
+        none,           // 何もない
+        start,          // お姫様のスタート地点
+        goal,           // お宝の場所
+        obstacle,       // 障害物(仮)
+        camera,         // 監視カメラ
+        cameraRange,    // 監視カメラの見える範囲
+        player,         // プレイヤー
+        princess,       // お姫様
+        security,       // 警備員
 
         _count
     }
@@ -76,7 +80,41 @@ public class FieldDataManager : MonoBehaviour
     /// <returns>指定したマスの情報</returns>
     public S_FIELDINFO GetInfo(Vector2 pos)
     {
+        // 範囲外チェック
+        if (fieldInfoArray == null || pos.x < 0 || pos.y < 0 || pos.x >= fieldInfoArray.GetLength(0) || pos.y >= fieldInfoArray.GetLength(1))
+        {
+            S_FIELDINFO info = new S_FIELDINFO();
+            info.state = E_FIELDSTATE.outOfRange;
+            info.obj = null;
+            return info;
+        }
+
         return fieldInfoArray[(int)pos.x, (int)pos.y];
+    }
+
+    /// <summary>
+    /// 情報のSetter
+    /// </summary>
+    /// <param name="pos">指定マス</param>
+    /// <param name="info">情報</param>
+    /// <returns>指定したマスの情報を設定</returns>
+    public bool SetInfo(Vector2 pos, S_FIELDINFO info)
+    {
+        // 範囲外チェック
+        if (fieldInfoArray == null || pos.x < 0 || pos.y < 0 ||
+            pos.x >= fieldInfoArray.GetLength(0) || pos.y >= fieldInfoArray.GetLength(1))
+        {
+            Debug.LogError(
+                "Script:FieldDataManager.cs \n" +
+                "SetInfo: 指定のマスは範囲外です" +
+                $"pos=({pos.x},{pos.y})"
+            );
+            return false;
+        }
+
+        // 情報の上書き
+        fieldInfoArray[(int)pos.x, (int)pos.y] = info;
+        return true;
     }
 
 }
