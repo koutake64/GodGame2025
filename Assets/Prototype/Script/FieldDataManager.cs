@@ -7,6 +7,9 @@ public class FieldDataManager : MonoBehaviour
         none,
         start,
         goal,
+        obstacle,
+        camera,
+        cameraRange,
 
         _count
     }

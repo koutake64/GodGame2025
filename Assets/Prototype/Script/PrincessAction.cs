@@ -18,10 +18,10 @@ public class PrincessAction : MonoBehaviour
         switch(state)
         {
             case E_ACTIONSTATE.none:
-
+                DecideTargetPos();
                 break;
             case E_ACTIONSTATE.move:
-
+                //Move();
                 break;
         }
     }
@@ -31,9 +31,9 @@ public class PrincessAction : MonoBehaviour
 
     }
 
-    private void Move()
-    {
+    //private void Move()
+    //{
 
-    }
+    //}
 
 }
