@@ -18,6 +18,12 @@ public class GameSystem : MonoBehaviour
     [Header("お姫様のプレハブ")]
     [SerializeField] private GameObject princess;
 
+    [Header("キャラクターの移動速度")]
+    [SerializeField] private float moveSpeed;
+
+    [Header("キャラクターの回転速度")]
+    [SerializeField] private float rotateSpeed;
+
     /// <summary>
     /// GameSystem.csのStart関数が正常に通った場合にtrueになる
     /// </summary>
@@ -161,4 +167,12 @@ public class GameSystem : MonoBehaviour
 
     }
 
+    public float GetCharacterMoveSpeed()
+    {
+        return moveSpeed;
+    }
+    public float GetCharacterRotateSpeed()
+    {
+        return rotateSpeed;
+    }
 }
