@@ -23,6 +23,7 @@ public class FieldDataManager : MonoBehaviour
     {
         public GameObject obj;
         public E_FIELDSTATE state;
+        public CommonSE_Proto.E_DIRECTION dir;
     }
 
     public S_FIELDINFO[,] fieldInfoArray;
