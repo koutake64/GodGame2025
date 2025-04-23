@@ -52,7 +52,6 @@ public class CharacterMoveController : MonoBehaviour
                "transformがnullです"
                );
         }
-
     }
 
     // Update is called once per frame
@@ -81,11 +80,17 @@ public class CharacterMoveController : MonoBehaviour
         }
 
         // 移動先更新
-        targetPos.position = state.obj.transform.position;
+        targetPos.position = new Vector3(
+            state.obj.transform.position.x, 
+            (state.obj.transform.position.y + state.obj.transform.localScale.y * 0.5f) + transform.localScale.y * 0.5f, // 目標の床から自身のハーフサイズを足した座標
+            state.obj.transform.position.z);
     }
 
     public void AddPosX(int num)
     {
+        // 移動中なら終了
+        if (isMove) return;
+
         currentPosX += num;
         isMove = true;
         if (currentPosX < 0)
@@ -100,6 +105,9 @@ public class CharacterMoveController : MonoBehaviour
     }
     public void AddPosY(int num)
     {
+        // 移動中なら終了
+        if (isMove) return;
+
         currentPosY += num;
         isMove = true;
         if (currentPosY < 0)
