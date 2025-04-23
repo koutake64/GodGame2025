@@ -18,6 +18,12 @@ public class GameSystem : MonoBehaviour
     [Header("お姫様のプレハブ")]
     [SerializeField] private GameObject princess;
 
+    [Header("プレイヤーのプレハブ")]
+    [SerializeField] private GameObject player;
+
+    [Header("監視カメラのプレハブ")]
+    [SerializeField] private GameObject surveillanceCamera;
+
     [Header("キャラクターの移動速度")]
     [SerializeField] private float moveSpeed;
 
@@ -62,6 +68,22 @@ public class GameSystem : MonoBehaviour
             Debug.LogError(
                 "Script:GameSystem.cs \n" +
                 "princess が null になっています"
+                );
+            return;
+        }
+        if (!GOUtils_Proto.CheckGameObject(player))
+        {
+            Debug.LogError(
+                "Script:GameSystem.cs \n" +
+                "player が null になっています"
+                );
+            return;
+        }
+        if (!GOUtils_Proto.CheckGameObject(surveillanceCamera))
+        {
+            Debug.LogError(
+                "Script:GameSystem.cs \n" +
+                "surveillanceCamera が null になっています"
                 );
             return;
         }
@@ -140,6 +162,13 @@ public class GameSystem : MonoBehaviour
         Instantiate(
             princess,
             Vector3.zero,
+            Quaternion.identity
+            );
+
+        // --- プレイヤーの生成
+        Instantiate(
+            player,
+            new Vector3(1.0f, 0.0f, 0.0f),
             Quaternion.identity
             );
 
