@@ -4,11 +4,14 @@ using static UnityEngine.GraphicsBuffer;
 
 public class CharacterMoveController : MonoBehaviour
 {
-    [Header("GameSystemObject")]
+    [Header("GameSystemObject.script")]
     [SerializeField] private GameSystem system;
 
-    [Header("FileDataManager")]
+    [Header("FileDataManager.script")]
     [SerializeField] private FieldDataManager fieldData;
+
+    [Header("スタート座標")]
+    [SerializeField] private Vector2 startPos;
 
     private float           moveSpeed;    // 移動速度
     private float           rotateSpeed;  // 回転速度
@@ -21,6 +24,7 @@ public class CharacterMoveController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
         // nullチェック
         if(!system)
         {
@@ -29,6 +33,8 @@ public class CharacterMoveController : MonoBehaviour
                "systemがnullです"
                );
         }
+
+        fieldData = GameObject.Find("Field").GetComponentInChildren<FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
@@ -52,6 +58,9 @@ public class CharacterMoveController : MonoBehaviour
                "transformがnullです"
                );
         }
+
+        // プレイヤー配置
+        SetPos(startPos);
     }
 
     // Update is called once per frame
@@ -117,5 +126,37 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動情報更新
         UpdateTargetPosition();
+    }
+
+    private void SetPos(Vector2 pos)
+    {
+        if (pos.x < 0 || pos.y < 0)
+        {
+            Debug.LogError(
+              "Script:CharacterMoveController.cs \n" +
+              gameObject.name + "のスタート座標が範囲外です"
+              );
+        }
+
+        // 現在位置更新
+        currentPosX = (int)pos.x;
+        currentPosY = (int)pos.y;
+
+        // 移動先の情報取得
+        FieldDataManager.S_FIELDINFO state = fieldData.GetInfo(new Vector2(currentPosX, currentPosY));
+
+        // 移動可能か判定
+        if (state.state != FieldDataManager.E_FIELDSTATE.none)
+        {
+            Debug.LogError(
+             "Script:CharacterMoveController.cs \n" +
+             gameObject.name + "のスタート座標が設定不可です"
+             );
+
+            return;
+        }
+
+        // 座標設定
+        transform.position = state.obj.transform.position;
     }
 }

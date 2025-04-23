@@ -291,6 +291,10 @@ MonoBehaviour:
   fieldSizeX: 25
   fieldSizeY: 25
   princess: {fileID: 6077740110341776202, guid: c36f4f9294a8b2c4ca847a82794edd79, type: 3}
+  player: {fileID: 0}
+  surveillanceCamera: {fileID: 0}
+  moveSpeed: 0
+  rotateSpeed: 0
   isStart: 0
 --- !u!4 &324205372
 Transform:
