@@ -1,18 +1,11 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerMove : MonoBehaviour
 {
-    [SerializeField, Header("行動クールタイム(秒)")] private float moveCooldown;
-    [SerializeField, Header("プレイヤー生成位置")] private Vector2Int startPos;
-    [SerializeField, Header("FieldDataManagerを設定")] private FieldDataManager fieldManager;
-
-    private Vector2Int currentPos;
     private CharacterMoveController moveController;
 
     void Start()
     {
-        currentPos = startPos;
-        transform.position = fieldManager.GetInfo(currentPos).obj.transform.position;
         moveController = GetComponent<CharacterMoveController>();
     }
 
