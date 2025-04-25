@@ -1,135 +1,149 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class SurveillanceCamera : MonoBehaviour
 {
-    [SerializeField] FieldDataManager fieldDataManager;
+    [SerializeField] private FieldDataManager fieldDataManager;
+    [SerializeField] private GameObject rotatingObject;
 
-    private Vector2 pos; // カメラの設置位置
-    private Vector2 forward = Vector2.up; // 初期向き：上（前方向）
+    private int x;
+    private int y;
 
-    private void Update()
+    private Vector2 forward = Vector2.up;
+
+    void Update()
     {
-        /////////////////////////////////////////////////////////////////////
-        ///アイテムが使用されたときに後で変える
-        ///投げられた方向で向きが変わるようにする。
-        // キーボード入力で向きを変更（K:左, L:右）
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("左回転");
-            forward = RotateDirection(forward, true); // 左回転
-            UpdateView();
+            forward = RotateDirection(forward, true);
+            Debug.Log("カメラを左に回したよ！向き：" + forward);
+            RotateVisualObject();
         }
         else if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("右回転");
-            forward = RotateDirection(forward, false); // 右回転
-            UpdateView();
+            forward = RotateDirection(forward, false);
+            Debug.Log("カメラを右に回したよ！向き：" + forward);
+            RotateVisualObject();
         }
-        ////////////////////////////////////////////////////////////////////////
+
+        ResetCameraRange();
+        SearchRange();
     }
 
-    /// <summary>
-    /// 監視カメラの設置位置を保存
-    /// </summary>
-    public void SetPosition(Vector2 _pos)
+    public void PositionSave(int _x, int _y)
     {
-        pos = _pos;
-        UpdateView(); // 初期状態の視野を描画
+        x = _x;
+        y = _y;
     }
 
-    /// <summary>
-    /// 視野を3x3で描画
-    /// </summary>
-    private void UpdateView()
+    private Vector2 RotateDirection(Vector2 dir, bool isLeft)
     {
-        // 3x3の範囲を前方方向にオフセットして確認
-        for (int y = -1; y <= 1; y++)
+        if (dir == Vector2.up) return isLeft ? Vector2.left : Vector2.right;
+        if (dir == Vector2.right) return isLeft ? Vector2.up : Vector2.down;
+        if (dir == Vector2.down) return isLeft ? Vector2.right : Vector2.left;
+        if (dir == Vector2.left) return isLeft ? Vector2.down : Vector2.up;
+        return Vector2.up;
+    }
+
+    private void RotateVisualObject()
+    {
+        if (rotatingObject == null)
         {
-            for (int x = 1; x <= 3; x++)
-            {
-                Vector2 offset = new Vector2(x, y);
-                Vector2 rotatedOffset = RotateOffset(offset, forward);
-                Vector2 targetPos = pos + rotatedOffset;
+            Debug.LogWarning("回すオブジェクトがないよ！");
+            return;
+        }
 
-                var info = new FieldDataManager.S_FIELDINFO();
-                info.state = FieldDataManager.E_FIELDSTATE.cameraRange;
-                fieldDataManager.SetInfo(targetPos, info);
+        float angleY = 0f;
+
+        if (forward == Vector2.up) angleY = 0f;
+        else if (forward == Vector2.right) angleY = 90f;
+        else if (forward == Vector2.down) angleY = 180f;
+        else if (forward == Vector2.left) angleY = 270f;
+
+        rotatingObject.transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+    }
+
+    private void SearchRange()
+    {
+        Vector2 center = new Vector2(x, y);
+        int maxX = fieldDataManager.fieldInfoArray.GetLength(0);
+        int maxY = fieldDataManager.fieldInfoArray.GetLength(1);
+
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = 1; dy <= 3; dy++)
+            {
+                Vector2 offset = new Vector2(dx, dy);
+                Vector2 rotatedOffset = RotateOffset(offset, forward);
+                Vector2 targetPos = center + rotatedOffset;
+
+                int tx = (int)targetPos.x;
+                int ty = (int)targetPos.y;
+
+                // 範囲チェックをここで直接行う
+                if (tx < 0 || tx >= maxX || ty < 0 || ty >= maxY)
+                {
+                    continue;
+                }
+
+                var info = fieldDataManager.GetInfo(targetPos);
+
+                if (info.state == FieldDataManager.E_FIELDSTATE.none)
+                {
+                    info.state = FieldDataManager.E_FIELDSTATE.cameraRange;
+
+                    if (info.obj != null)
+                    {
+                        MeshRenderer rend = info.obj.GetComponent<MeshRenderer>();
+                        if (rend != null)
+                        {
+                            rend.material.color = Color.red; // 赤に変える
+                        }
+                    }
+
+                    fieldDataManager.SetInfo(targetPos, info);
+                }
             }
         }
-
-        // カメラ自身のマスも設定
-        var selfInfo = new FieldDataManager.S_FIELDINFO();
-        selfInfo.state = FieldDataManager.E_FIELDSTATE.camera;
-        fieldDataManager.SetInfo(pos, selfInfo);
     }
 
-    /// <summary>
-    /// 向きに応じてオフセットを回転
-    /// </summary>
+    private void ResetCameraRange()
+    {
+        int maxX = fieldDataManager.fieldInfoArray.GetLength(0);
+        int maxY = fieldDataManager.fieldInfoArray.GetLength(1);
+        
+        for (int i = 0; i < maxX; i++)
+        {
+            for (int j = 0; j < maxY; j++)
+            {
+                Vector2 pos = new Vector2(i, j);
+                FieldDataManager.S_FIELDINFO info = fieldDataManager.GetInfo(pos);
+
+                if (info.state == FieldDataManager.E_FIELDSTATE.cameraRange)
+                {
+                    info.state = FieldDataManager.E_FIELDSTATE.none;
+
+                    if (info.obj != null)
+                    {
+                        // TODO 元の色を変える処理を書く後で！！
+                        MeshRenderer rend = info.obj.GetComponent<MeshRenderer>();
+                        if (rend != null)
+                        {
+                            rend.material.color = Color.green; // 緑に変える
+                        }
+                    }
+
+                    fieldDataManager.SetInfo(pos, info);
+                }
+            }
+        }
+    }
+
     private Vector2 RotateOffset(Vector2 offset, Vector2 forward)
     {
-        // forwardに合わせてオフセットを回転（上基準）
         if (forward == Vector2.up) return offset;
         if (forward == Vector2.right) return new Vector2(-offset.y, offset.x);
         if (forward == Vector2.down) return new Vector2(-offset.x, -offset.y);
         if (forward == Vector2.left) return new Vector2(offset.y, -offset.x);
         return offset;
-    }
-
-    /// <summary>
-    /// 向きを90度回転（左か右か指定）
-    /// </summary>
-    private Vector2 RotateDirection(Vector2 dir, bool isLeft)
-    {
-        if (dir == Vector2.up)
-        {
-            if (isLeft)
-            {
-                return Vector2.left;
-            }
-            else
-            {
-                return Vector2.right;
-            }
-        }
-
-        if (dir == Vector2.right)
-        {
-            if (isLeft)
-            {
-                return Vector2.up;
-            }
-            else
-            {
-                return Vector2.down;
-            }
-        }
-
-        if (dir == Vector2.down)
-        {
-            if (isLeft)
-            {
-                return Vector2.right;
-            }
-            else
-            {
-                return Vector2.left;
-            }
-        }
-
-        if (dir == Vector2.left)
-        {
-            if (isLeft)
-            {
-                return Vector2.down;
-            }
-            else
-            {
-                return Vector2.up;
-            }
-        }
-        // 万が一どの条件にも当てはまらなかったら上を返す（デフォルト）
-        return Vector2.up;
     }
 }

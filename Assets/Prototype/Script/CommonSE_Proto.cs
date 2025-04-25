@@ -7,29 +7,23 @@ public static class CommonSE_Proto
 {
     public enum E_DIRECTION
     { 
-        UP,
-        RIGHT,
-        DOWN,
-        LEFT
+        up,
+        right,
+        down,
+        left
     }
+
+    public enum E_TIMEOFDAY
+    {
+        morning,
+        noon,
+        night
+    }
+
 
     public static int DirConvInt(E_DIRECTION dir)
     {
         return (int)dir;
-    }
-
-    public static E_DIRECTION DirIncrement(E_DIRECTION inDir)
-    {
-        // TODO –¢ŽÀ‘•
-        E_DIRECTION outDir = inDir;
-        return outDir;
-    }
-
-    public static E_DIRECTION DirDecrement(E_DIRECTION inDir)
-    {
-        // TODO –¢ŽÀ‘•
-        E_DIRECTION outDir = inDir;
-        return outDir;
     }
 
 }
