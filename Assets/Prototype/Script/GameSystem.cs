@@ -142,7 +142,7 @@ public class GameSystem : MonoBehaviour
                 info.obj = obj;
                 info.state = FieldDataManager.E_FIELDSTATE.none;
                 // TODO 仕様確認必要
-                info.dir = CommonSE_Proto.E_DIRECTION.UP;
+                info.dir = CommonSE_Proto.E_DIRECTION.up;
                 fdMng.AddFieldInfo(new Vector2(x, y), info);
 
                 // 生成タイルを反転

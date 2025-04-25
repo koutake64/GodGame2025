@@ -490,8 +490,8 @@ MonoBehaviour:
   fieldSizeX: 25
   fieldSizeY: 25
   princess: {fileID: 6077740110341776202, guid: c36f4f9294a8b2c4ca847a82794edd79, type: 3}
-  player: {fileID: 0}
-  surveillanceCamera: {fileID: 0}
+  player: {fileID: 6077740110341776202, guid: c36f4f9294a8b2c4ca847a82794edd79, type: 3}
+  surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
   moveSpeed: 2
   rotateSpeed: 1
   isStart: 0
@@ -1021,9 +1021,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8763ddf1a91eb42aad0845ee01da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveCooldown: 2
-  startPos: {x: 0, y: 0}
-  fieldManager: {fileID: 324351708}
 --- !u!4 &740057028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5174243038739983082, guid: d0126c7bf72d858429eb86c0ead8a045, type: 3}
@@ -1043,6 +1040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   system: {fileID: 324205371}
   fieldData: {fileID: 324351708}
+  startPos: {x: 0, y: 0}
 --- !u!1 &1628049947
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ public class FieldDataManager : MonoBehaviour
     public struct S_FIELDINFO
     {
         public GameObject obj;
+        public Vector2 pos;
         public E_FIELDSTATE state;
         public CommonSE_Proto.E_DIRECTION dir;
     }
@@ -45,32 +46,31 @@ public class FieldDataManager : MonoBehaviour
     /// <returns>成功:true, 失敗:false</returns>
     public bool AddFieldInfo(Vector2 pos, S_FIELDINFO info)
     {
-        int x = (int)pos.x;
-        int y = (int)pos.y;
-
         // 範囲外チェック
-        if (fieldInfoArray == null || x < 0 || y < 0 || x >= fieldInfoArray.GetLength(0) || y >= fieldInfoArray.GetLength(1))
+        if (fieldInfoArray == null || pos.x < 0 || pos.y < 0 || pos.x >= fieldInfoArray.GetLength(0) || pos.y >= fieldInfoArray.GetLength(1))
         {
             Debug.LogError(
                 "Script:FieldDataManager.cs \n" +
                 "AddFieldInfo:指定のマスは範囲外です" +
-                $"pos=({x},{y})"
+                $"pos=({pos.x},{pos.y})"
                 );
             return false;
         }
 
         // すでに何か入っている場合は追加しない
-        if (fieldInfoArray[x, y].obj != null)
+        if (fieldInfoArray[(int)pos.x, (int)pos.y].obj != null)
         {
             Debug.LogWarning(
                 "Script:FieldDataManager.cs \n" +
                 "AddFieldInfo:指定のマスには既に情報があります" +
-                $"pos=({x},{y})"
+                $"pos=({pos.x},{pos.y})"
                 );
             return false;
         }
 
-        fieldInfoArray[x, y] = info;
+        fieldInfoArray[(int)pos.x, (int)pos.y] = info;
+        fieldInfoArray[(int)pos.x, (int)pos.y].pos = pos;
+
         return true;
     }
 
@@ -115,6 +115,8 @@ public class FieldDataManager : MonoBehaviour
 
         // 情報の上書き
         fieldInfoArray[(int)pos.x, (int)pos.y] = info;
+        fieldInfoArray[(int)pos.x, (int)pos.y].pos = pos;
+
         return true;
     }
 
