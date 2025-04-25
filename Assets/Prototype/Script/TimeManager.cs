@@ -5,12 +5,12 @@ using UnityEngine.UI;
 public class TimeManager : MonoBehaviour
 {
     // ====== シリアライズ =====
-    [SerializeField, Header("昼開始時刻(秒)")] private float noonTime;
-    [SerializeField, Header("夕方背景時刻(秒)")] private float afterNoonTime;
-    [SerializeField, Header("夜開始時刻(秒)")] private float nightTime;
-    [SerializeField, Header("時間表示テキスト")] private Text timeText;
-    [SerializeField, Header("状態テキスト")] private Text levelText;
-    [SerializeField, Header("太陽光")] private GameObject sun;
+    [SerializeField, Header("昼開始時刻(秒)")]     private float noonTime;
+    [SerializeField, Header("夕方背景時刻(秒)")]   private float afterNoonTime;
+    [SerializeField, Header("夜開始時刻(秒)")]     private float nightTime;
+    [SerializeField, Header("時間表示テキスト")]   private Text timeText;
+    [SerializeField, Header("状態テキスト")]       private Text levelText;
+    [SerializeField, Header("太陽光")]             private GameObject sun;
 
     // --- 変数 ---
     private float time = 0; // 時間管理
