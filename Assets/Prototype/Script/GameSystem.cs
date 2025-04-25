@@ -206,4 +206,8 @@ public class GameSystem : MonoBehaviour
     {
         return rotateSpeed;
     }
+    public Vector2Int GetFieldSize()
+    {
+        return new Vector2Int(fieldSizeX, fieldSizeY);
+    }
 }

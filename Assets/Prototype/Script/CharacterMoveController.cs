@@ -1,37 +1,38 @@
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class CharacterMoveController : MonoBehaviour
 {
-    [Header("GameSystemObject.script")]
-    [SerializeField] private GameSystem system;
-
-    [Header("FileDataManager.script")]
-    [SerializeField] private FieldDataManager fieldData;
-
     [Header("スタート座標")]
-    [SerializeField] private Vector2 startPos;
+    [SerializeField] private Vector2Int startPos;
 
-    private float           moveSpeed;    // 移動速度
-    private float           rotateSpeed;  // 回転速度
-    private int             currentPosX;  // 現在のXマス
-    private int             currentPosY;  // 現在のYマス
-    private new Transform   transform;    // Transform
-    private Vector3         targetPos;    // 目標座標
-    bool                    isMove;       // 移動するか
+    [Header("自動移動")]
+    [SerializeField] private bool isAutoMove = true;
+
+
+    private FieldDataManager    fieldData;      // FieldDataManager
+    private float               moveSpeed;      // 移動速度
+    private float               rotateSpeed;    // 回転速度
+    private Vector2Int          currentPos;     // 現在のマス
+    private new Transform       transform;      // Transform
+    private Vector3             targetPos;      // 目標座標
+    bool                        isMove;         // 移動するか
+    Vector2Int                  fieldSize;      // フィールドサイズ
+    private Queue<Vector2Int>   moveRoute;      // 移動経路
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
+        GameSystem system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
         // nullチェック
         if(!system)
         {
             Debug.LogError(
                "Script:CharacterMoveController.cs \n" +
                "systemがnullです"
-               );
+            );
         }
 
         fieldData = GameObject.Find("Field").GetComponentInChildren<FieldDataManager>();
@@ -40,15 +41,17 @@ public class CharacterMoveController : MonoBehaviour
             Debug.LogError(
                "Script:CharacterMoveController.cs \n" +
                "fieldDataがnullです"
-               );
+            );
         }
 
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
         rotateSpeed = system.GetCharacterRotateSpeed();
-        currentPosX = currentPosY = 0;
+        currentPos = new Vector2Int( 0, 0);
         transform = GetComponent<Transform>();
         isMove = false;
+        fieldSize = system.GetFieldSize();
+        moveRoute = new Queue<Vector2Int>();
 
         // nullチェック
         if (!transform)
@@ -56,7 +59,7 @@ public class CharacterMoveController : MonoBehaviour
             Debug.LogError(
                "Script:CharacterMoveController.cs \n" +
                "transformがnullです"
-               );
+            );
         }
 
         // プレイヤー配置
@@ -73,36 +76,50 @@ public class CharacterMoveController : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
 
             // 移動終了
-            if (Vector3.Distance(transform.position, targetPos) <= 0.1f) isMove = false;
+            if (Vector3.Distance(transform.position, targetPos) <= 0.1f)
+            {
+                isMove = false;
+
+                // 自動移動trueなら次のマスをセット
+                if(isAutoMove)
+                {
+                    MoveNextStep();
+                }
+            }
         }
     }
     private void UpdateTargetPosition()
     {
-
         // 移動先の情報取得
-        FieldDataManager.S_FIELDINFO state = fieldData.GetInfo(new Vector2(currentPosX, currentPosY));
+        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
 
         // 移動可能か判定
-        if (state.state != FieldDataManager.E_FIELDSTATE.none)
+        if (info.state != FieldDataManager.E_FIELDSTATE.none)
         {
             isMove = false;
             return;
         }
 
         // 移動先更新
-        targetPos = state.obj.transform.position;
+        targetPos = info.obj.transform.position;
     }
 
     public void AddPosX(int num)
     {
-        // 移動中なら終了
-        if (isMove) return;
+        // 移動中・自動移動中なら終了
+        if (isMove || isAutoMove) return;
 
-        currentPosX += num;
+        currentPos.x += num;
         isMove = true;
-        if (currentPosX < 0)
+        if (currentPos.x < 0)
         {
-            currentPosX = 0;
+            currentPos.x = 0;
+            isMove = false;
+            return;
+        }
+        if (currentPos.x > fieldSize.x)
+        {
+            currentPos.x = fieldSize.x;
             isMove = false;
             return;
         }
@@ -112,14 +129,20 @@ public class CharacterMoveController : MonoBehaviour
     }
     public void AddPosY(int num)
     {
-        // 移動中なら終了
-        if (isMove) return;
+        // 移動中・自動移動中なら終了
+        if (isMove || isAutoMove) return;
 
-        currentPosY += num;
+        currentPos.y += num;
         isMove = true;
-        if (currentPosY < 0)
+        if (currentPos.y < 0)
         {
-            currentPosY = 0;
+            currentPos.y = 0;
+            isMove = false;
+            return;
+        }
+        if (currentPos.y > fieldSize.y)
+        {
+            currentPos.y = fieldSize.y;
             isMove = false;
             return;
         }
@@ -128,35 +151,67 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
     }
 
-    private void SetPos(Vector2 pos)
+    private void SetPos(Vector2Int pos)
     {
         if (pos.x < 0 || pos.y < 0)
         {
             Debug.LogError(
               "Script:CharacterMoveController.cs \n" +
               gameObject.name + "のスタート座標が範囲外です"
-              );
+            );
         }
 
         // 現在位置更新
-        currentPosX = (int)pos.x;
-        currentPosY = (int)pos.y;
+        currentPos = pos;
 
         // 移動先の情報取得
-        FieldDataManager.S_FIELDINFO state = fieldData.GetInfo(new Vector2(currentPosX, currentPosY));
+        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
 
         // 移動可能か判定
-        if (state.state != FieldDataManager.E_FIELDSTATE.none)
+        if (info.state != FieldDataManager.E_FIELDSTATE.none)
         {
             Debug.LogError(
              "Script:CharacterMoveController.cs \n" +
              gameObject.name + "のスタート座標が設定不可です"
-             );
+            );
 
             return;
         }
 
         // 座標設定
-        transform.position = state.obj.transform.position;
+        transform.position = info.obj.transform.position;
+    }
+
+    public void SetMoveRoute(List<Vector2Int> route)
+    {
+        // 新しいルート
+        moveRoute.Clear();
+        moveRoute = new Queue<Vector2Int>(route);
+        MoveNextStep();
+    }
+
+    private void MoveNextStep()
+    {
+        // ゴール到達
+        if(moveRoute.Count == 0)
+        {
+            // 移動終了
+            isMove = false;
+            return;
+        }
+
+        // 次ルートをセット
+        Vector2Int next = moveRoute.Dequeue();
+        currentPos.x = next.x;
+        currentPos.y = next.y;
+
+        // 座標更新
+        isMove = true;
+        UpdateTargetPosition();
+    }
+
+    public void IsAutoMove(bool flg)
+    {
+        isAutoMove = flg;
     }
 }
