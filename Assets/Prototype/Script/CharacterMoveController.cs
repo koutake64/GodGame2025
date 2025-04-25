@@ -119,7 +119,8 @@ public class CharacterMoveController : MonoBehaviour
 
         // ’Ê‚ê‚é‚©”»’è
         var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
-        if (info.state != FieldDataManager.E_FIELDSTATE.none)
+        if (info.state != FieldDataManager.E_FIELDSTATE.none && 
+            info.state != FieldDataManager.E_FIELDSTATE.cameraRange)
         {
             currentPos.x -= num;
             isMove = false;
@@ -151,7 +152,8 @@ public class CharacterMoveController : MonoBehaviour
 
         // ’Ê‚ê‚é‚©”»’è
         var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
-        if (info.state != FieldDataManager.E_FIELDSTATE.none)
+        if (info.state != FieldDataManager.E_FIELDSTATE.none &&
+            info.state != FieldDataManager.E_FIELDSTATE.cameraRange)
         {
             currentPos.y -= num;
             isMove = false;
