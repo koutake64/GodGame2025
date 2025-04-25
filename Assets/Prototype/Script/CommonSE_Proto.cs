@@ -17,6 +17,7 @@ public static class CommonSE_Proto
     {
         morning,
         noon,
+        afternoon,
         night
     }
 
