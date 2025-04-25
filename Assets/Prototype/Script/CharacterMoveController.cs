@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -13,6 +14,8 @@ public class CharacterMoveController : MonoBehaviour
 
 
     private FieldDataManager    fieldData;      // FieldDataManager
+    GameSystem                  system;         // GameSystem
+    RouteSearch                 routeSearch;    // routeSearch
     private float               moveSpeed;      // 移動速度
     private float               rotateSpeed;    // 回転速度
     private Vector2Int          currentPos;     // 現在のマス
@@ -25,7 +28,7 @@ public class CharacterMoveController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameSystem system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
+        system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
         // nullチェック
         if(!system)
         {
@@ -41,6 +44,15 @@ public class CharacterMoveController : MonoBehaviour
             Debug.LogError(
                "Script:CharacterMoveController.cs \n" +
                "fieldDataがnullです"
+            );
+        }
+
+        routeSearch = this.GetComponent<RouteSearch>();
+        if (!routeSearch)
+        {
+            Debug.LogError(
+               "Script:CharacterMoveController.cs \n" +
+               "routeSearchがnullです"
             );
         }
 
@@ -93,13 +105,6 @@ public class CharacterMoveController : MonoBehaviour
         // 移動先の情報取得
         var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
 
-        // 移動可能か判定
-        if (info.state != FieldDataManager.E_FIELDSTATE.none)
-        {
-            isMove = false;
-            return;
-        }
-
         // 移動先更新
         targetPos = info.obj.transform.position;
     }
@@ -111,15 +116,24 @@ public class CharacterMoveController : MonoBehaviour
 
         currentPos.x += num;
         isMove = true;
+
+        // 通れるか判定
+        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
+        if (info.state != FieldDataManager.E_FIELDSTATE.none)
+        {
+            currentPos.x -= num;
+            isMove = false;
+            return;
+        }
         if (currentPos.x < 0)
         {
             currentPos.x = 0;
             isMove = false;
             return;
         }
-        if (currentPos.x > fieldSize.x)
+        if (currentPos.x > fieldSize.x - 1)
         {
-            currentPos.x = fieldSize.x;
+            currentPos.x = fieldSize.x - 1;
             isMove = false;
             return;
         }
@@ -134,15 +148,25 @@ public class CharacterMoveController : MonoBehaviour
 
         currentPos.y += num;
         isMove = true;
+
+        // 通れるか判定
+        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
+        if (info.state != FieldDataManager.E_FIELDSTATE.none)
+        {
+            currentPos.y -= num;
+            isMove = false;
+            return;
+        }
+
         if (currentPos.y < 0)
         {
             currentPos.y = 0;
             isMove = false;
             return;
         }
-        if (currentPos.y > fieldSize.y)
+        if (currentPos.y > fieldSize.y - 1)
         {
-            currentPos.y = fieldSize.y;
+            currentPos.y = fieldSize.y - 1;
             isMove = false;
             return;
         }
@@ -182,6 +206,14 @@ public class CharacterMoveController : MonoBehaviour
         transform.position = info.obj.transform.position;
     }
 
+    public void StartAutoMove(Vector2Int start, Vector2Int goal)
+    {
+        if (isAutoMove) return;
+        isAutoMove = true;
+        // 経路探索
+        SetMoveRoute(routeSearch.MoveRouteSearch(start, goal));
+    }
+
     public void SetMoveRoute(List<Vector2Int> route)
     {
         // 新しいルート
@@ -197,6 +229,11 @@ public class CharacterMoveController : MonoBehaviour
         {
             // 移動終了
             isMove = false;
+            isAutoMove = false;
+
+            // TODO プロト終わったら消す
+            routeSearch.ResetTileColor();
+
             return;
         }
 
@@ -213,5 +250,10 @@ public class CharacterMoveController : MonoBehaviour
     public void IsAutoMove(bool flg)
     {
         isAutoMove = flg;
+    }
+
+    public Vector2Int GetCurrentPos()
+    {
+        return currentPos;
     }
 }

@@ -4840,6 +4840,7 @@ GameObject:
   - component: {fileID: 2470000023856331754}
   - component: {fileID: 6171723566064971479}
   - component: {fileID: 5545681105856504586}
+  - component: {fileID: 6862256481821965981}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -4888,9 +4889,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8763ddf1a91eb42aad0845ee01da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveCooldown: 2
-  startPos: {x: 0, y: 0}
-  fieldManager: {fileID: 0}
 --- !u!136 &6171723566064971479
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4926,8 +4924,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1706c19d2460d44b41c2b431ac6c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  system: {fileID: 0}
-  fieldData: {fileID: 0}
+  startPos: {x: 0, y: 0}
+  isAutoMove: 0
+--- !u!114 &6862256481821965981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6857237519413723628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7920a2328f646bf4481ee6c2f5b3a504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6865408904129907875
 GameObject:
   m_ObjectHideFlags: 0

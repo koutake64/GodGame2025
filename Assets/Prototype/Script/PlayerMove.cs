@@ -3,11 +3,12 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     private CharacterMoveController moveController;
-
+    
     void Start()
     {
         moveController = GetComponent<CharacterMoveController>();
     }
+
 
     void Update()
     {
@@ -19,5 +20,6 @@ public class PlayerMove : MonoBehaviour
             else if (Input.GetKey(KeyCode.D)) moveController.AddPosX(1);
             else if (Input.GetKey(KeyCode.A)) moveController.AddPosX(-1);
 
+            if (Input.GetKey(KeyCode.P)) moveController.StartAutoMove(moveController.GetCurrentPos(), new Vector2Int(24,24));
     }
 }

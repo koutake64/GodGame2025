@@ -140,7 +140,14 @@ public class GameSystem : MonoBehaviour
 
                 // 情報の追加
                 info.obj = obj;
+
                 info.state = FieldDataManager.E_FIELDSTATE.none;
+                
+                if (x == 23 && y == 23)
+                    info.state = FieldDataManager.E_FIELDSTATE.security;
+                if (x == 22 && y == 23)
+                    info.state = FieldDataManager.E_FIELDSTATE.security;
+            
                 // TODO 仕様確認必要
                 info.dir = CommonSE_Proto.E_DIRECTION.up;
                 fdMng.AddFieldInfo(new Vector2(x, y), info);
@@ -195,7 +202,7 @@ public class GameSystem : MonoBehaviour
 
         // TODO 常に動かすゲームシステムを実装
 
-
+        
     }
 
     public float GetCharacterMoveSpeed()

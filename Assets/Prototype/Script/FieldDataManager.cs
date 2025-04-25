@@ -120,4 +120,9 @@ public class FieldDataManager : MonoBehaviour
         return true;
     }
 
+    // TODO ÉvÉçÉgèIÇÌÇ¡ÇΩÇÁè¡Ç∑
+    public void SetColor(Vector2Int pos, Color color)
+    {
+        fieldInfoArray[pos.x, pos.y].obj.GetComponent<MeshRenderer>().material.color = color;
+    }
 }
