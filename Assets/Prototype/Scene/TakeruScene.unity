@@ -145,7 +145,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 316948676}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &316948678
 Camera:
   m_ObjectHideFlags: 0
@@ -291,9 +291,9 @@ MonoBehaviour:
   fieldSizeX: 25
   fieldSizeY: 25
   princess: {fileID: 6077740110341776202, guid: c36f4f9294a8b2c4ca847a82794edd79, type: 3}
-  player: {fileID: 6857237519413723628, guid: 5cd7d8aac2c8b4941b18471ee71a0160, type: 3}
-  surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
-  moveSpeed: 5
+  player: {fileID: 0}
+  surveillanceCamera: {fileID: 0}
+  moveSpeed: 0
   rotateSpeed: 0
   isStart: 0
 --- !u!4 &324205372

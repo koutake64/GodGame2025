@@ -179,6 +179,31 @@ public class GameSystem : MonoBehaviour
             Quaternion.identity
             );
 
+
+        // ====================================================================================================
+
+        // --- 監視カメラの仮生成
+        Vector2 scPos;
+        FieldDataManager.S_FIELDINFO scInfo = new FieldDataManager.S_FIELDINFO();
+
+        scPos = new Vector2(4.0f, 4.0f);
+
+        scInfo.obj = fdMng.GetInfo(scPos).obj;
+        scInfo.pos = scPos;
+        scInfo.dir = CommonSE_Proto.E_DIRECTION.down;
+        scInfo.state = FieldDataManager.E_FIELDSTATE.camera;
+        fdMng.SetInfo(scPos, scInfo);
+
+        Instantiate(
+            surveillanceCamera,
+            new Vector3(scPos.x, 0.0f, scPos.y),
+            Quaternion.identity
+            );
+
+        // ====================================================================================================
+
+
+
         // --- スタート関数正常終了
         isStart = true;
 
