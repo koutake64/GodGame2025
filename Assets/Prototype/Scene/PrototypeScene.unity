@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noonTime: 60
-  afterNoonTime: 0
+  afterNoonTime: 180
   nightTime: 240
   timeText: {fileID: 227084327}
   levelText: {fileID: 1628049948}
