@@ -11,7 +11,7 @@ public class SurveillanceCamera : MonoBehaviour
     {
         Left,
         Center,
-        Right
+        Right,
     }
 
     // 現在の監視状態（初期は中央）
@@ -20,18 +20,13 @@ public class SurveillanceCamera : MonoBehaviour
     // フィールド情報を管理するクラス
     private FieldDataManager fieldDataManager;
 
-    // 向きの変更に合わせて見た目を回転させるオブジェクト
-    [SerializeField] private GameObject rotatingObject;
-
 
 
     // カメラの位置（マス座標）
     private int x;
     private int y;
 
-    // 左右の視点切替時のスライド量（-2～+2）
-    private int slideOffset = 0;
-
+   
     // カメラの正面方向（初期は上方向）
     private Vector2 forward = Vector2.up;
 
@@ -53,37 +48,110 @@ public class SurveillanceCamera : MonoBehaviour
         y = Mathf.RoundToInt(worldPos.z); // Z軸をマスのYとして使用
 
         Debug.Log($"カメラ位置（マス座標）: ({x}, {y})");
+
+        float yRotation = transform.eulerAngles.y;
+        if (Mathf.Approximately(yRotation, 0f))
+            forward = Vector2.up;
+        else if (Mathf.Approximately(yRotation, 90f))
+            forward = Vector2.right;
+        else if (Mathf.Approximately(yRotation, 180f))
+            forward = Vector2.down;
+        else if (Mathf.Approximately(yRotation, 270f))
+            forward = Vector2.left;
+        else
+            Debug.LogWarning($"想定外の角度です: {yRotation}");
+
+        // 回転と索敵範囲の初期描画を実行
+        RotateVisualObject();
+        SearchRange();
+
     }
 
     void Update()
     {
-        // Kキー：監視状態を右に切り替える
-        if (Input.GetKeyDown(KeyCode.K))
+        // プレイヤーの GameObject を使って座標を取得
+        GameObject player = GameObject.FindWithTag("Player");
+        Vector3 playerPos = new Vector3();
+        if (player != null)
         {
-            if (watchState == E_WATCHSTATE.Left)
-            {
-                watchState = E_WATCHSTATE.Center;
-            }
-            else if (watchState == E_WATCHSTATE.Center)
-            {
-                watchState = E_WATCHSTATE.Right;
-            }
-
-            Debug.Log("→ 現在の監視状態：" + watchState);
+            playerPos = player.transform.position;
         }
-        // Lキー：監視状態を左に切り替える
-        else if (Input.GetKeyDown(KeyCode.L))
+        else
         {
-            if (watchState == E_WATCHSTATE.Right)
+            Debug.LogError("プレイヤーが見つかりませんでした");
+        }
+
+        
+        /////////
+        ///
+        if (Input.GetKeyDown(KeyCode.K)) // 右ボタン
+        {
+            if(forward == Vector2.up)
+            if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
             {
-                watchState = E_WATCHSTATE.Center;
+                if (watchState == E_WATCHSTATE.Center)
+                    watchState = E_WATCHSTATE.Right;
+                else if (watchState == E_WATCHSTATE.Left)
+                    watchState = E_WATCHSTATE.Center;
             }
-            else if (watchState == E_WATCHSTATE.Center)
+            else if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの右側
             {
-                watchState = E_WATCHSTATE.Left;
+                if (watchState == E_WATCHSTATE.Center)
+                    watchState = E_WATCHSTATE.Left;
+                else if (watchState == E_WATCHSTATE.Right)
+                    watchState = E_WATCHSTATE.Center;
             }
 
-            Debug.Log("← 現在の監視状態：" + watchState);
+            if (forward == Vector2.down)
+                if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの左側
+                {
+                    if (watchState == E_WATCHSTATE.Center)
+                        watchState = E_WATCHSTATE.Right;
+                    else if (watchState == E_WATCHSTATE.Left)
+                        watchState = E_WATCHSTATE.Center;
+                }
+                else if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの右側
+                {
+                    if (watchState == E_WATCHSTATE.Center)
+                        watchState = E_WATCHSTATE.Left;
+                    else if (watchState == E_WATCHSTATE.Right)
+                        watchState = E_WATCHSTATE.Center;
+                }
+
+            if (forward == Vector2.left)
+                if (playerPos.z < this.transform.position.z) // プレイヤーがカメラの左側
+                {
+                    if (watchState == E_WATCHSTATE.Center)
+                        watchState = E_WATCHSTATE.Right;
+                    else if (watchState == E_WATCHSTATE.Left)
+                        watchState = E_WATCHSTATE.Center;
+                }
+                else if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの右側
+                {
+                    if (watchState == E_WATCHSTATE.Center)
+                        watchState = E_WATCHSTATE.Left;
+                    else if (watchState == E_WATCHSTATE.Right)
+                        watchState = E_WATCHSTATE.Center;
+                }
+
+            if (forward == Vector2.right)
+                if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの左側
+                {
+                    if (watchState == E_WATCHSTATE.Center)
+                        watchState = E_WATCHSTATE.Right;
+                    else if (watchState == E_WATCHSTATE.Left)
+                        watchState = E_WATCHSTATE.Center;
+                }
+                else if (playerPos.z < this.transform.position.z) // プレイヤーがカメラの右側
+                {
+                    if (watchState == E_WATCHSTATE.Center)
+                        watchState = E_WATCHSTATE.Left;
+                    else if (watchState == E_WATCHSTATE.Right)
+                        watchState = E_WATCHSTATE.Center;
+                }
+
+            RotateVisualObject();
+            Debug.Log("→ 現在の監視状態：" + watchState);
         }
 
         // 監視範囲の状態をリセット
@@ -94,68 +162,10 @@ public class SurveillanceCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 与えられた方向を90度回転させる
-    /// </summary>
-    private Vector2 RotateDirection(Vector2 dir, bool isLeft)
-    {
-        if (dir == Vector2.up)
-        {
-            if (isLeft)
-            {
-                return Vector2.left;
-            }
-            else
-            {
-                return Vector2.right;
-            }
-        }
-        else if (dir == Vector2.right)
-        {
-            if (isLeft)
-            {
-                return Vector2.up;
-            }
-            else
-            {
-                return Vector2.down;
-            }
-        }
-        else if (dir == Vector2.down)
-        {
-            if (isLeft)
-            {
-                return Vector2.right;
-            }
-            else
-            {
-                return Vector2.left;
-            }
-        }
-        else if (dir == Vector2.left)
-        {
-            if (isLeft)
-            {
-                return Vector2.down;
-            }
-            else
-            {
-                return Vector2.up;
-            }
-        }
-
-        return Vector2.up;
-    }
-
-    /// <summary>
     /// カメラオブジェクトの見た目をforwardの向きに合わせて回転させる
     /// </summary>
     private void RotateVisualObject()
     {
-        if (rotatingObject == null)
-        {
-            Debug.LogWarning("回すオブジェクトがないよ");
-            return;
-        }
 
         float angleY = 0f;
 
@@ -176,7 +186,7 @@ public class SurveillanceCamera : MonoBehaviour
             angleY = 270f;
         }
 
-        rotatingObject.transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+        this.transform.rotation = Quaternion.Euler(0f, angleY, 0f);
     }
 
     /// <summary>
@@ -199,9 +209,12 @@ public class SurveillanceCamera : MonoBehaviour
         {
             offsetValue = -2;
         }
+      
+
 
         // スライド方向を現在の向きに回転
         Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
+        
 
         // 索敵範囲の中心位置を計算（カメラの2マス先＋スライド方向）
         Vector2 center = new Vector2(x, y) + forward * 2 + slideDir;
@@ -315,4 +328,9 @@ public class SurveillanceCamera : MonoBehaviour
 
         return offset;
     }
+
+
+
+
+
 }
