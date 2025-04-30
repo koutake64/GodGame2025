@@ -12,22 +12,22 @@ public class PrincessAction : MonoBehaviour
     }
 
     private FieldDataManager fdMng;
-    //private CharacterController characterController;
+    private CharacterMoveController cmController;
     private E_ACTIONSTATE state;
     private Vector3 targetPos;
     private CommonSE_Proto.E_TIMEOFDAY timeOfDay;
 
     private void Start()
     {
-        //characterController = GetComponent<CharacterController>();
-        //if (!characterController)
-        //{
-        //    Debug.LogError(
-        //        "Script:PrincessAction.cs \n" +
-        //        "Princess ‚É CharacterController ‚ª‚Â‚¢‚Ä‚¢‚Ü‚¹‚ñ"
-        //        );
-        //    return;
-        //}
+        cmController = GetComponent<CharacterMoveController>();
+        if (!cmController)
+        {
+            Debug.LogError(
+                "Script:PrincessAction.cs \n" +
+                "Princess ‚É cmController ‚ª‚Â‚¢‚Ä‚¢‚Ü‚¹‚ñ"
+                );
+            return;
+        }
 
         fdMng = GameObject.Find("Field").GetComponentInChildren<FieldDataManager>();
         if (!fdMng)
@@ -46,31 +46,41 @@ public class PrincessAction : MonoBehaviour
 
     private void Action(CommonSE_Proto.E_TIMEOFDAY tod)
     {
-        switch(tod)
+        // TODO ‰¼
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            case CommonSE_Proto.E_TIMEOFDAY.morning:
-
-                break;
-            case CommonSE_Proto.E_TIMEOFDAY.noon:
-                Noon();
-                break;
-            case CommonSE_Proto.E_TIMEOFDAY.night:
-
-                break;
+            DecideTargetPos();
+            Debug.Log("targetPos.x : " + targetPos.x);
+            Debug.Log("targetPos.y : " + targetPos.y);
         }
+
+        //switch(tod)
+        //{
+        //    case CommonSE_Proto.E_TIMEOFDAY.morning:
+
+        //        break;
+        //    case CommonSE_Proto.E_TIMEOFDAY.noon:
+        //        Noon();
+        //        break;
+        //    case CommonSE_Proto.E_TIMEOFDAY.night:
+
+        //        break;
+        //}
     }
 
     private void Noon()
     {
-        switch(state)
-        {
-            case E_ACTIONSTATE.none:
-                DecideTargetPos();
-                break;
-            case E_ACTIONSTATE.move:
-                Move();
-                break;
-        }
+        //switch(state)
+        //{
+        //    case E_ACTIONSTATE.none:
+
+        //        DecideTargetPos();
+
+        //        break;
+        //    case E_ACTIONSTATE.move:
+                
+        //        break;
+        //}
     }
 
 
@@ -192,6 +202,9 @@ public class PrincessAction : MonoBehaviour
     FoundFinalTarget:
         targetPos = finalTarget;
 
+        cmController.AddPosX((int)finalTarget.x);
+        cmController.AddPosY((int)finalTarget.y);
+        
 
     }
 

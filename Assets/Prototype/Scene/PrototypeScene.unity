@@ -494,6 +494,7 @@ MonoBehaviour:
   princess: {fileID: 6077740110341776202, guid: c36f4f9294a8b2c4ca847a82794edd79, type: 3}
   player: {fileID: 6857237519413723628, guid: 5cd7d8aac2c8b4941b18471ee71a0160, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
+  obstacle: {fileID: 3556016710770019404, guid: 1d93dbef7d234f940b6a4667d30a01ba, type: 3}
   moveSpeed: 2
   rotateSpeed: 1
   isStart: 0

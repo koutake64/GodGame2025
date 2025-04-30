@@ -125,4 +125,9 @@ public class FieldDataManager : MonoBehaviour
     {
         fieldInfoArray[pos.x, pos.y].obj.GetComponent<MeshRenderer>().material.color = color;
     }
+
+    private void FixedUpdate()
+    {
+        
+    }
 }

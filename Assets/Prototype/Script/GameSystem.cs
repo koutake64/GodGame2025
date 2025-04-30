@@ -24,6 +24,9 @@ public class GameSystem : MonoBehaviour
     [Header("監視カメラのプレハブ")]
     [SerializeField] private GameObject surveillanceCamera;
 
+    [Header("障害物のプレハブ")]
+    [SerializeField] private GameObject obstacle;
+
     [Header("キャラクターの移動速度")]
     [SerializeField] private float moveSpeed;
 
@@ -84,6 +87,14 @@ public class GameSystem : MonoBehaviour
             Debug.LogError(
                 "Script:GameSystem.cs \n" +
                 "surveillanceCamera が null になっています"
+                );
+            return;
+        }
+        if (!GOUtils_Proto.CheckGameObject(obstacle))
+        {
+            Debug.LogError(
+                "Script:GameSystem.cs \n" +
+                "obstacle が null になっています"
                 );
             return;
         }
@@ -202,7 +213,21 @@ public class GameSystem : MonoBehaviour
 
         // ====================================================================================================
 
+        Vector2 obPos = new Vector2(5.0f, 10.0f);
+        FieldDataManager.S_FIELDINFO obInfo = new FieldDataManager.S_FIELDINFO();
 
+        obInfo.obj = fdMng.GetInfo(obPos).obj;
+        obInfo.pos = obPos;
+        obInfo.dir = CommonSE_Proto.E_DIRECTION.down;
+        obInfo.state = FieldDataManager.E_FIELDSTATE.obstacle;
+
+        fdMng.SetInfo(obPos, obInfo);
+
+        Instantiate(
+            obstacle,
+            new Vector3(obPos.x, 0.0f, obPos.y),
+            Quaternion.identity
+            );
 
         // --- スタート関数正常終了
         isStart = true;
