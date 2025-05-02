@@ -84,7 +84,7 @@ public class SurveillanceCamera : MonoBehaviour
         
         /////////
         ///
-        if (Input.GetKeyDown(KeyCode.K)) // 右ボタン
+        if (Input.GetKeyDown(KeyCode.Return)) // 右ボタン
         {
             if(forward == Vector2.up)
             if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
