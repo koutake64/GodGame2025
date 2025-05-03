@@ -3,23 +3,30 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     private CharacterMoveController moveController;
-    
-    void Start()
+	private TimeManager timeManager;
+
+	void Start()
     {
         moveController = GetComponent<CharacterMoveController>();
-    }
+        timeManager = FindFirstObjectByType<TimeManager>();
+	}
 
 
     void Update()
     {
-
-            Vector2Int direction = Vector2Int.zero;
-
+        if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.noon)
+        {
             if (Input.GetKey(KeyCode.W)) moveController.AddPosY(1);
             else if (Input.GetKey(KeyCode.S)) moveController.AddPosY(-1);
             else if (Input.GetKey(KeyCode.D)) moveController.AddPosX(1);
             else if (Input.GetKey(KeyCode.A)) moveController.AddPosX(-1);
+        }
 
-            if (Input.GetKey(KeyCode.P)) moveController.StartAutoMove(moveController.GetCurrentPos(), new Vector2Int(24,24));
+        if (Input.GetKey(KeyCode.P)) moveController.StartAutoMove(moveController.GetCurrentPos(), new Vector2Int(24,24));
+
+        if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 }

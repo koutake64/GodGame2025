@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -82,4 +81,7 @@ public class TimeManager : MonoBehaviour
     {
         sun.transform.transform.localRotation = Quaternion.Euler(angle, 0, 0);
     }
+
+	public CommonSE_Proto.E_TIMEOFDAY CurrentState => currentState;
+
 }
