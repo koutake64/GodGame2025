@@ -14,11 +14,11 @@ public class RouteSearch : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        fieldData = GameObject.Find("Field").GetComponentInChildren<FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
-               "Script:SecurityController.cs \n" +
+               "Script:RouteSearch.cs \n" +
                "fieldDataがnullです"
             );
         }
@@ -28,7 +28,7 @@ public class RouteSearch : MonoBehaviour
         if (!system)
         {
             Debug.LogError(
-               "Script:SecurityController.cs \n" +
+               "Script:RouteSearch.cs \n" +
                "systemがnullです"
             );
         }
@@ -81,6 +81,8 @@ public class RouteSearch : MonoBehaviour
             }
         }
 
+        Debug.Log("通れるルートがありません");
+
         // ルートが見つからなかった
         return new List<Vector2Int>();
     }
@@ -96,6 +98,7 @@ public class RouteSearch : MonoBehaviour
             current = routeFrom[current];
         }
 
+        // リストの要素を反対にする
         route.Reverse();
 
         // TODO プロト終わったら消す

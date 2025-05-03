@@ -10,10 +10,11 @@ public class CharacterMoveController : MonoBehaviour
     [SerializeField] private Vector2Int startPos;
 
     [Header("自動移動")]
-    [SerializeField] private bool isAutoMove = true;
+    [SerializeField] private bool isAutoMoving = true;
 
 
     private FieldDataManager    fieldData;      // FieldDataManager
+    private SecurityController  security;       // SecurityController
     GameSystem                  system;         // GameSystem
     RouteSearch                 routeSearch;    // routeSearch
     private float               moveSpeed;      // 移動速度
@@ -25,7 +26,6 @@ public class CharacterMoveController : MonoBehaviour
     Vector2Int                  fieldSize;      // フィールドサイズ
     private Queue<Vector2Int>   moveRoute;      // 移動経路
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
@@ -38,7 +38,7 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        fieldData = GameObject.Find("Field").GetComponentInChildren<FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
@@ -47,7 +47,7 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        routeSearch = this.GetComponent<RouteSearch>();
+        routeSearch = GetComponent<RouteSearch>();
         if (!routeSearch)
         {
             Debug.LogError(
@@ -59,11 +59,12 @@ public class CharacterMoveController : MonoBehaviour
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
         rotateSpeed = system.GetCharacterRotateSpeed();
-        currentPos = new Vector2Int( 0, 0);
+        currentPos = new Vector2Int(0, 0);
         transform = GetComponent<Transform>();
         isMove = false;
         fieldSize = system.GetFieldSize();
         moveRoute = new Queue<Vector2Int>();
+        security = GetComponent<SecurityController>();
 
         // nullチェック
         if (!transform)
@@ -87,13 +88,21 @@ public class CharacterMoveController : MonoBehaviour
             // 指定速度で移動
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
 
+            // 指定速度で回転
+            Vector3 direction = (targetPos - transform.position).normalized;
+            if(direction.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+            }
+
             // 移動終了
             if (Vector3.Distance(transform.position, targetPos) <= 0.1f)
             {
                 isMove = false;
 
                 // 自動移動trueなら次のマスをセット
-                if(isAutoMove)
+                if(isAutoMoving)
                 {
                     MoveNextStep();
                 }
@@ -107,15 +116,21 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動先更新
         targetPos = info.obj.transform.position;
+
+        // TODO いるマスの更新
+        // ここに自身の情報とcurrentPosでいるマスを設定する
+
     }
 
     public void AddPosX(int num)
     {
         // 移動中・自動移動中なら終了
-        if (isMove || isAutoMove) return;
+        if (isMove || isAutoMoving) return;
+
+        // フィールド情報リセット
+        ResetFieldData();
 
         currentPos.x += num;
-        isMove = true;
 
         // 通れるか判定
         var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
@@ -123,32 +138,32 @@ public class CharacterMoveController : MonoBehaviour
             info.state != FieldDataManager.E_FIELDSTATE.cameraRange)
         {
             currentPos.x -= num;
-            isMove = false;
             return;
         }
         if (currentPos.x < 0)
         {
             currentPos.x = 0;
-            isMove = false;
             return;
         }
         if (currentPos.x > fieldSize.x - 1)
         {
             currentPos.x = fieldSize.x - 1;
-            isMove = false;
             return;
         }
 
         // 移動情報更新
+        isMove = true;
         UpdateTargetPosition();
     }
     public void AddPosY(int num)
     {
         // 移動中・自動移動中なら終了
-        if (isMove || isAutoMove) return;
+        if (isMove || isAutoMoving) return;
+
+        // フィールド情報リセット
+        ResetFieldData();
 
         currentPos.y += num;
-        isMove = true;
 
         // 通れるか判定
         var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
@@ -156,24 +171,22 @@ public class CharacterMoveController : MonoBehaviour
             info.state != FieldDataManager.E_FIELDSTATE.cameraRange)
         {
             currentPos.y -= num;
-            isMove = false;
             return;
         }
 
         if (currentPos.y < 0)
         {
             currentPos.y = 0;
-            isMove = false;
             return;
         }
         if (currentPos.y > fieldSize.y - 1)
         {
             currentPos.y = fieldSize.y - 1;
-            isMove = false;
             return;
         }
 
         // 移動情報更新
+        isMove = true;
         UpdateTargetPosition();
     }
 
@@ -210,8 +223,9 @@ public class CharacterMoveController : MonoBehaviour
 
     public void StartAutoMove(Vector2Int start, Vector2Int goal)
     {
-        if (isAutoMove) return;
-        isAutoMove = true;
+        if (isAutoMoving) return;
+
+        isAutoMoving = true;
         // 経路探索
         SetMoveRoute(routeSearch.MoveRouteSearch(start, goal));
     }
@@ -231,13 +245,22 @@ public class CharacterMoveController : MonoBehaviour
         {
             // 移動終了
             isMove = false;
-            isAutoMove = false;
+            isAutoMoving = false;
 
             // TODO プロト終わったら消す
             routeSearch.ResetTileColor();
 
+            // 警備員なら
+            if(security)
+            {
+                security.EndMovement();
+            }
+
             return;
         }
+
+        // いるマスの情報をリセット
+        ResetFieldData();
 
         // 次ルートをセット
         Vector2Int next = moveRoute.Dequeue();
@@ -249,9 +272,15 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
     }
 
+    private void ResetFieldData()
+    {
+        // TODO 
+        // ここで一度currentPosを使っている座標をnoneで上書き
+    }
+
     public void IsAutoMove(bool flg)
     {
-        isAutoMove = flg;
+        isAutoMoving = flg;
     }
 
     public Vector2Int GetCurrentPos()
