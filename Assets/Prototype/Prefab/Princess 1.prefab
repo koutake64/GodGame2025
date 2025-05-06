@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 14678996455793842}
   - component: {fileID: 4072175560239113654}
   m_Layer: 0
-  m_Name: Security
+  m_Name: Princess 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
