@@ -246,6 +246,36 @@ public class _FieldDataManager : MonoBehaviour
 
     }
 
+    public bool GetIsThrough(Vector2Int pos)
+    {
+        int cnt = fieldData[pos.x, pos.y].Count;
+
+        for (int i = 0; i < cnt; ++i)
+        {
+            switch (fieldData[pos.x, pos.y][i].state)
+            {
+                case E_FIELDSTATE.outOfRange:
+                    return false;
+                case E_FIELDSTATE.pillar:
+                    return false;
+                case E_FIELDSTATE.wall:
+                    return false;
+                case E_FIELDSTATE.exhibitionStand:
+                    return false;
+                case E_FIELDSTATE.butler:
+                    return false;
+                case E_FIELDSTATE.princess:
+                    return false;
+                case E_FIELDSTATE.securityGuard_N:
+                    return false;
+                default:
+                    break;
+            }
+        }   
+
+        return true;
+    }
+
     public void AddInfo(Vector2Int pos, E_FIELDSTATE state, CommonSE_Proto.E_DIRECTION dir = CommonSE_Proto.E_DIRECTION.down, int id = 0)
     {
         S_FIELDINFO info = new S_FIELDINFO();
