@@ -58,7 +58,7 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
-        prevPos = currentPos = new Vector2Int(0, 0);
+        prevPos = currentPos = startPos;
         transform = GetComponent<Transform>();
         isMove = false;
         fieldSize = system.GetFieldSize();
@@ -74,9 +74,6 @@ public class CharacterMoveController : MonoBehaviour
                "transformがnullです"
             );
         }
-
-        // プレイヤー配置
-        SetPos(startPos);
     }
 
     // Update is called once per frame
@@ -200,7 +197,7 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
     }
 
-    private void SetPos(Vector2Int pos)
+    public void SetPos(Vector2Int pos)
     {
         if (pos.x < 0 || pos.y < 0)
         {
