@@ -571,7 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b308f0049762245a0a5f9af8f66435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reLoadFlg: 0
+  reLoadFlg: 1
   field: {fileID: 324351706}
   fieldSizeX: 20
   fieldSizeY: 15
