@@ -52,7 +52,7 @@ public class _FieldDataManager : MonoBehaviour
     /// </summary>
     private List<S_FIELDINFO>[,] fieldData;
 
-    private bool reLoadFlg = true;
+    [SerializeField] private bool reLoadFlg = false;
 
     [Header("床の親オブジェクト(空のオブジェクトでOK)\n" +
             "※このゲームオブジェクトにFieldDataManagerをつける")]
@@ -113,7 +113,7 @@ public class _FieldDataManager : MonoBehaviour
         }
         for (int y = 0; y < fieldSizeY; ++y)
         {
-            for (int x = 0; x < fieldSizeY; ++x)
+            for (int x = 0; x < fieldSizeX; ++x)
             {
                 if (tileType)
                 {
@@ -154,7 +154,53 @@ public class _FieldDataManager : MonoBehaviour
         }
 
         // プロトタイプ用のステージ作成
+        AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
+        S_FIELDINFO startInfo = GetInfoList(GetStatePos(E_FIELDSTATE.start)[0])[0];
+        AddInfo(startInfo.pos, E_FIELDSTATE.pillar, startInfo.dir);
+        AddInfo(startInfo.pos, E_FIELDSTATE.princess, startInfo.dir);
 
+        AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.wall);
+
+        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(3, 10), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 3), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 4), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 5), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 6), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 7), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 8), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(19, 9), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.exhibitionStand);
+
+        AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up, 0);
+        AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right, 1);
+        AddInfo(new Vector2Int(15, 12), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right, 2);
+        AddInfo(new Vector2Int(9, 13), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.down, 3);
+
+        AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up, 0);
+        AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right, 1);
+
+        AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
 
     }
 
@@ -279,12 +325,116 @@ public class _FieldDataManager : MonoBehaviour
         //{
         //    for (int x = 0; x < fieldSize.x; ++x)
         //    {
-                
+        //        if (fieldData[x, y].Count == 0)
+        //        {
+        //            continue;
+
+        //        }
+
+        //        for (int i = 0; i < fieldData[x, y].Count; ++i)
+        //        {
+        //            Vector3 instPos = new Vector3(fieldData[x, y][i].pos.x, 0.0f, fieldData[x, y][i].pos.y);
+
+        //            float angle = 0.0f;
+
+        //            switch(fieldData[x, y][i].dir)
+        //            {
+        //                case CommonSE_Proto.E_DIRECTION.up:
+        //                    angle = 0.0f;
+        //                    break;
+        //                case CommonSE_Proto.E_DIRECTION.right:
+        //                    angle = 90.0f;
+        //                    break;
+        //                case CommonSE_Proto.E_DIRECTION.down:
+        //                    angle = 180.0f;
+        //                    break;
+        //                case CommonSE_Proto.E_DIRECTION.left:
+        //                    angle = 270.0f;
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+
+        //            Quaternion instRot = Quaternion.Euler(0, angle, 0);
+
+        //            switch(fieldData[x, y][i].state)
+        //            {
+        //                case E_FIELDSTATE.outOfRange:
+        //                    break;
+        //                case E_FIELDSTATE.start:
+        //                    break;
+        //                case E_FIELDSTATE.goal:
+        //                    break;
+        //                case E_FIELDSTATE.pillar:
+        //                    Instantiate(
+        //                        pillar,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.wall:
+        //                    Instantiate(
+        //                        wall,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.exhibitionStand:
+        //                    Instantiate(
+        //                        exhibitionStand,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.butler:
+        //                    Instantiate(
+        //                        player,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.princess:
+        //                    Instantiate(
+        //                        princess,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.securityGuard_N:
+        //                    Instantiate(
+        //                        securityGuard_N,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.surveillanceCamera:
+        //                    Instantiate(
+        //                        surveillanceCamera,
+        //                        instPos,
+        //                        instRot
+        //                        );
+        //                    break;
+        //                case E_FIELDSTATE.sc_searchRange:
+        //                    break;
+        //                case E_FIELDSTATE.sg_searchRange:
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+
+        //        }
 
         //    }
 
         //}
 
+        //reLoadFlg = false;
+
+    }
+
+    public Vector2Int GetFieldSize()
+    {
+        return new Vector2Int(fieldSizeX, fieldSizeY);
     }
 
 }
