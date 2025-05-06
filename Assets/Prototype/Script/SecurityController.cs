@@ -31,6 +31,9 @@ public class SecurityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 進行方向に対してチェックを行う
+
+
         // 移動が終了していたら
         if (isEndMovement && targetArray.Count > 0)
         {

@@ -2,97 +2,97 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// V‚µ‚¢FieldDataManager
+/// æ–°ã—ã„FieldDataManager
 /// </summary>
 public class _FieldDataManager : MonoBehaviour
 {
     /// <summary>
-    /// ƒ}ƒX‚É‰½‚ª‚ ‚é‚©‚ğ•\‚·—ñ‹“Œ^
+    /// ãƒã‚¹ã«ä½•ãŒã‚ã‚‹ã‹ã‚’è¡¨ã™åˆ—æŒ™å‹
     /// </summary>
     public enum E_FIELDSTATE
     {
-        // --- Šî–{ƒXƒe[ƒ^ƒX
-        outOfRange = -1,    // ƒXƒe[ƒW”ÍˆÍŠO
-        start,              // ƒQ[ƒ€‚ÌŠJn’n“_
-        goal,               // ‚¨•ó(ƒS[ƒ‹)‚ÌêŠ
+        // --- åŸºæœ¬ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+        outOfRange = -1,    // ã‚¹ãƒ†ãƒ¼ã‚¸ç¯„å›²å¤–
+        start,              // ã‚²ãƒ¼ãƒ ã®é–‹å§‹åœ°ç‚¹
+        goal,               // ãŠå®(ã‚´ãƒ¼ãƒ«)ã®å ´æ‰€
 
-        // --- áŠQ•¨
-        pillar,             // ’Œ(’P“Æ‚ÌƒIƒuƒWƒFƒNƒg‚ÅŠÄ‹ƒJƒƒ‰‚ğİ’u‚Å‚«‚é)
-        wall,               // •Ç(ŠÄ‹ƒJƒƒ‰‚ÌŠÄ‹”ÍˆÍ‚ğÕ’f‚Å‚«‚éƒIƒuƒWƒFƒNƒg)
-        exhibitionStand,    // “W¦‘ä(‰¡‚©c‚É’·‚¢ƒIƒuƒWƒFƒNƒg)
+        // --- éšœå®³ç‰©
+        pillar,             // æŸ±(å˜ç‹¬ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ç›£è¦–ã‚«ãƒ¡ãƒ©ã‚’è¨­ç½®ã§ãã‚‹)
+        wall,               // å£(ç›£è¦–ã‚«ãƒ¡ãƒ©ã®ç›£è¦–ç¯„å›²ã‚’é®æ–­ã§ãã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)
+        exhibitionStand,    // å±•ç¤ºå°(æ¨ªã‹ç¸¦ã«é•·ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)
 
-        // --- ƒLƒƒƒ‰ƒNƒ^[
-        butler,             // ·–(ƒvƒŒƒCƒ„[)
-        princess,           // ‚¨ì—l
-        securityGuard_N,    // ’Êí‚ÌŒx”õˆõ(ƒm[ƒ}ƒ‹)
+        // --- ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼
+        butler,             // åŸ·äº‹(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼)
+        princess,           // ãŠå¬¢æ§˜
+        securityGuard_N,    // é€šå¸¸ã®è­¦å‚™å“¡(ãƒãƒ¼ãƒãƒ«)
 
-        // --- ƒMƒ~ƒbƒNƒIƒuƒWƒFƒNƒg
-        surveillanceCamera, // ŠÄ‹ƒJƒƒ‰
+        // --- ã‚®ãƒŸãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+        surveillanceCamera, // ç›£è¦–ã‚«ãƒ¡ãƒ©
 
-        // --- ƒMƒ~ƒbƒN”ÍˆÍ
-        sc_searchRange,     // ŠÄ‹ƒJƒƒ‰‚ÌŠÄ‹”ÍˆÍ
-        sg_searchRange,     // Œx”õˆõ‚ÌŠÄ‹”ÍˆÍ
+        // --- ã‚®ãƒŸãƒƒã‚¯ç¯„å›²
+        sc_searchRange,     // ç›£è¦–ã‚«ãƒ¡ãƒ©ã®ç›£è¦–ç¯„å›²
+        sg_searchRange,     // è­¦å‚™å“¡ã®ç›£è¦–ç¯„å›²
 
     }
 
     /// <summary>
-    /// ƒ}ƒX‚É‚ ‚éî•ñ
+    /// ãƒã‚¹ã«ã‚ã‚‹æƒ…å ±
     /// </summary>
     [System.Serializable]
     public struct S_FIELDINFO
     {
-        public int alignmentID;        // ˜AŒg”Ô†
-        public Vector2Int pos;         // ˆÊ’u
-        public CommonSE_Proto.E_DIRECTION dir;  // •ûŒü
-        public E_FIELDSTATE state;     // ó‘Ô
+        public int alignmentID;        // é€£æºç•ªå·
+        public Vector2Int pos;         // ä½ç½®
+        public CommonSE_Proto.E_DIRECTION dir;  // æ–¹å‘
+        public E_FIELDSTATE state;     // çŠ¶æ…‹
     }
 
     /// <summary>
-    /// ‚Ç‚Ìƒ}ƒX‚É‰½‚ª‚ ‚é‚Ì‚©‚ğŠÇ—‚·‚é”z—ñ
+    /// ã©ã®ãƒã‚¹ã«ä½•ãŒã‚ã‚‹ã®ã‹ã‚’ç®¡ç†ã™ã‚‹é…åˆ—
     /// </summary>
     private List<S_FIELDINFO>[,] fieldData;
 
     [SerializeField] private bool reLoadFlg = false;
 
-    [Header("°‚ÌeƒIƒuƒWƒFƒNƒg(‹ó‚ÌƒIƒuƒWƒFƒNƒg‚ÅOK)\n" +
-            "¦‚±‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÉFieldDataManager‚ğ‚Â‚¯‚é")]
+    [Header("åºŠã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ç©ºã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§OK)\n" +
+            "â€»ã“ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«FieldDataManagerã‚’ã¤ã‘ã‚‹")]
     [SerializeField] private GameObject field;
 
-    [Header("ƒXƒe[ƒW‚ÌƒTƒCƒY(ƒ}ƒX) X:‰¡, Y:‰œ\n" +
-            "¦”ÍˆÍ‚Í1`50ƒ}ƒX‚É§ŒÀ‚µ‚Ä‚Ü‚·")]
+    [Header("ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚µã‚¤ã‚º(ãƒã‚¹) X:æ¨ª, Y:å¥¥\n" +
+            "â€»ç¯„å›²ã¯1ï½50ãƒã‚¹ã«åˆ¶é™ã—ã¦ã¾ã™")]
     [SerializeField, Range(1, 50)] private int fieldSizeX;
     [SerializeField, Range(1, 50)] private int fieldSizeY;
 
-    [Header("°‚É‚·‚éƒvƒŒƒnƒu(2í—Ş)")]
+    [Header("åºŠã«ã™ã‚‹ãƒ—ãƒ¬ãƒãƒ–(2ç¨®é¡)")]
     [SerializeField] private GameObject tileA;
     [SerializeField] private GameObject tileB;
 
-    [Header("‚¨•P—l‚ÌƒvƒŒƒnƒu")]
+    [Header("ãŠå§«æ§˜ã®ãƒ—ãƒ¬ãƒãƒ–")]
     [SerializeField] private GameObject princess;
 
-    [Header("ƒvƒŒƒCƒ„[‚ÌƒvƒŒƒnƒu")]
+    [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ—ãƒ¬ãƒãƒ–")]
     [SerializeField] private GameObject player;
 
-    [Header("Œx”õˆõ(’Êí)‚ÌƒvƒŒƒnƒu")]
+    [Header("è­¦å‚™å“¡(é€šå¸¸)ã®ãƒ—ãƒ¬ãƒãƒ–")]
     [SerializeField] private GameObject securityGuard_N;
 
-    [Header("ŠÄ‹ƒJƒƒ‰‚ÌƒvƒŒƒnƒu")]
+    [Header("ç›£è¦–ã‚«ãƒ¡ãƒ©ã®ãƒ—ãƒ¬ãƒãƒ–")]
     [SerializeField] private GameObject surveillanceCamera;
 
-    [Header("áŠQ•¨‚ÌƒvƒŒƒnƒu")]
-    [Header("’Œ(’P“Æ‚ÌƒIƒuƒWƒFƒNƒg‚ÅŠÄ‹ƒJƒƒ‰‚ğİ’u‚Å‚«‚é)")]
+    [Header("éšœå®³ç‰©ã®ãƒ—ãƒ¬ãƒãƒ–")]
+    [Header("æŸ±(å˜ç‹¬ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ç›£è¦–ã‚«ãƒ¡ãƒ©ã‚’è¨­ç½®ã§ãã‚‹)")]
     [SerializeField] private GameObject pillar;
-    [Header("•Ç(ŠÄ‹ƒJƒƒ‰‚ÌŠÄ‹”ÍˆÍ‚ğÕ’f‚Å‚«‚éƒIƒuƒWƒFƒNƒg)")]
+    [Header("å£(ç›£è¦–ã‚«ãƒ¡ãƒ©ã®ç›£è¦–ç¯„å›²ã‚’é®æ–­ã§ãã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)")]
     [SerializeField] private GameObject wall;
-    [Header("“W¦‘ä(‰¡‚©c‚É’·‚¢ƒIƒuƒWƒFƒNƒg)")]
+    [Header("å±•ç¤ºå°(æ¨ªã‹ç¸¦ã«é•·ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)")]
     [SerializeField] private GameObject exhibitionStand;
 
     private void Start()
     {
-        // --- ƒkƒ‹ƒ`ƒFƒbƒN
-        // TODO Œã‚Å
+        // --- ãƒŒãƒ«ãƒã‚§ãƒƒã‚¯
+        // TODO å¾Œã§
 
-        // --- ƒtƒB[ƒ‹ƒhƒf[ƒ^‚Ìì¬
+        // --- ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ
         Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
         fieldData = new List<S_FIELDINFO>[fieldSize.x, fieldSize.y];
         for (int y = 0; y < fieldSize.y; ++y)
@@ -103,7 +103,7 @@ public class _FieldDataManager : MonoBehaviour
             }
         }
 
-        // ---°‚Ì¶¬
+        // ---åºŠã®ç”Ÿæˆ
         GameObject obj = null;
         bool tileType = false;
         bool evenNumSizeX = false;
@@ -117,35 +117,35 @@ public class _FieldDataManager : MonoBehaviour
             {
                 if (tileType)
                 {
-                   // ƒ^ƒCƒ‹A¶¬
-                   obj = Instantiate(
-                       tileA,
-                       new Vector3(x, 0, y),
-                       Quaternion.identity
-                       );
+                    // ã‚¿ã‚¤ãƒ«Aç”Ÿæˆ
+                    obj = Instantiate(
+                        tileA,
+                        new Vector3(x, 0, y),
+                        Quaternion.identity
+                        );
                 }
                 else
                 {
-                   // ƒ^ƒCƒ‹B¶¬
-                   obj = Instantiate(
-                       tileB,
-                       new Vector3(x, 0, y),
-                       Quaternion.identity
-                       );
+                    // ã‚¿ã‚¤ãƒ«Bç”Ÿæˆ
+                    obj = Instantiate(
+                        tileB,
+                        new Vector3(x, 0, y),
+                        Quaternion.identity
+                        );
                 }
 
-                // ¶¬‚µ‚½ƒ^ƒCƒ‹‚ğeƒIƒuƒWƒFƒNƒg‚É‚Â‚¯‚é
+                // ç”Ÿæˆã—ãŸã‚¿ã‚¤ãƒ«ã‚’è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã¤ã‘ã‚‹
                 if (obj)
                 {
                     obj.transform.SetParent(field.transform);
                 }
 
-                // ¶¬ƒ^ƒCƒ‹‚ğ”½“]
+                // ç”Ÿæˆã‚¿ã‚¤ãƒ«ã‚’åè»¢
                 tileType ^= true;
 
             }
 
-            // ‰¡‚ÌƒTƒCƒY‚ª‹ô”‚Ìê‡A¶¬ƒ^ƒCƒ‹‚ğ”½“]
+            // æ¨ªã®ã‚µã‚¤ã‚ºãŒå¶æ•°ã®å ´åˆã€ç”Ÿæˆã‚¿ã‚¤ãƒ«ã‚’åè»¢
             if (evenNumSizeX)
             {
                 tileType ^= true;
@@ -153,7 +153,7 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
-        // ƒvƒƒgƒ^ƒCƒv—p‚ÌƒXƒe[ƒWì¬
+        // ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—ç”¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ä½œæˆ
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
         S_FIELDINFO startInfo = GetInfoList(GetStatePos(E_FIELDSTATE.start)[0])[0];
         AddInfo(startInfo.pos, E_FIELDSTATE.butler, startInfo.dir);
@@ -271,7 +271,7 @@ public class _FieldDataManager : MonoBehaviour
                 default:
                     break;
             }
-        }   
+        }
 
         return true;
     }
@@ -347,7 +347,7 @@ public class _FieldDataManager : MonoBehaviour
             return;
         }
 
-        // TODO ƒtƒB[ƒ‹ƒhƒf[ƒ^‚ğ‚à‚Æ‚ÉƒIƒuƒWƒFƒNƒg¶¬
+        // TODO ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ‡ãƒ¼ã‚¿ã‚’ã‚‚ã¨ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 
         Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
         GameObject obj = null;
