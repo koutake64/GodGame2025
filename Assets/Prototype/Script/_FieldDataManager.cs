@@ -347,6 +347,8 @@ public class _FieldDataManager : MonoBehaviour
             return;
         }
 
+        reLoadFlg = false;
+
         // TODO フィールドデータをもとにオブジェクト生成
 
         Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
@@ -458,13 +460,17 @@ public class _FieldDataManager : MonoBehaviour
                         obj.transform.SetParent(field.transform);
                     }
 
+                    //CharacterMoveController cmc = obj.GetComponent<CharacterMoveController>();
+                    //if (cmc != null)
+                    //{
+                    //    cmc.SetPos(new Vector2Int(x, y));
+                    //}
+
                 }
 
             }
 
         }
-
-        reLoadFlg = false;
 
     }
 
