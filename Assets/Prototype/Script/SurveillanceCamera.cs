@@ -1,3 +1,5 @@
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -14,26 +16,48 @@ public class SurveillanceCamera : MonoBehaviour
         Right,
     }
 
+
     // 現在の監視状態（初期は中央）
     private E_WATCHSTATE watchState = E_WATCHSTATE.Center;
 
     // フィールド情報を管理するクラス
-    private FieldDataManager fieldDataManager;
-
-
+    private _FieldDataManager fieldDataManager;
 
     // カメラの位置（マス座標）
-    private int x;
-    private int y;
+    private Vector2Int SurveillanceCameraPos = new Vector2Int();
 
    
     // カメラの正面方向（初期は上方向）
     private Vector2 forward = Vector2.up;
 
+    //プレイヤーの座標
+    Vector3 playerPos = new Vector3();
+
+    //カメラの向きの取得
+    CommonSE_Proto.E_DIRECTION CameraDir;
+
+
+
     private void Start()
     {
+
+
+        // プレイヤーの GameObject を使って座標を取得
+        GameObject player = GameObject.FindWithTag("Player");
+        
+        if (player != null)
+        {
+            playerPos = player.transform.position;
+        }
+        else
+        {
+            Debug.LogError("プレイヤーが見つかりませんでした");
+        }
+
+
+
         // フィールドマネージャーを取得
-        fieldDataManager = GameObject.Find("Field").GetComponentInChildren<FieldDataManager>();
+        fieldDataManager = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
         if (!fieldDataManager)
         {
             Debug.LogError(
@@ -42,12 +66,9 @@ public class SurveillanceCamera : MonoBehaviour
             );
         }
 
-        // ワールド座標をマス座標に変換して保存
-        Vector3 worldPos = transform.position;
-        x = Mathf.RoundToInt(worldPos.x);
-        y = Mathf.RoundToInt(worldPos.z); // Z軸をマスのYとして使用
+        SurveillanceCameraPos = new Vector2Int((int)transform.position.x,(int)transform.position.z);
 
-        Debug.Log($"カメラ位置（マス座標）: ({x}, {y})");
+        Debug.Log($"カメラ位置（マス座標）: ({SurveillanceCameraPos}");
 
         float yRotation = transform.eulerAngles.y;
         if (Mathf.Approximately(yRotation, 0f))
@@ -69,70 +90,57 @@ public class SurveillanceCamera : MonoBehaviour
 
     void Update()
     {
-        // プレイヤーの GameObject を使って座標を取得
-        GameObject player = GameObject.FindWithTag("Player");
-        Vector3 playerPos = new Vector3();
-        if (player != null)
-        {
-            playerPos = player.transform.position;
-        }
-        else
-        {
-            Debug.LogError("プレイヤーが見つかりませんでした");
-        }
+       
 
-        
-        /////////
-        ///
-        if (Input.GetKeyDown(KeyCode.Return)) // 右ボタン
-        {
-            if(forward == Vector2.up)
-            if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
-            {
-                if (watchState == E_WATCHSTATE.Center)
-                    watchState = E_WATCHSTATE.Right;
-                else if (watchState == E_WATCHSTATE.Left)
-                    watchState = E_WATCHSTATE.Center;
-            }
-            else if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの右側
-            {
-                if (watchState == E_WATCHSTATE.Center)
-                    watchState = E_WATCHSTATE.Left;
-                else if (watchState == E_WATCHSTATE.Right)
-                    watchState = E_WATCHSTATE.Center;
-            }
+                if (Input.GetKeyDown(KeyCode.Return)) // エンターキーを押したとき
+                {
+                    if (forward == Vector2.up)
+                        if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
+                        {
+                            if (watchState == E_WATCHSTATE.Center)
+                                watchState = E_WATCHSTATE.Right;
+                            else if (watchState == E_WATCHSTATE.Left)
+                                watchState = E_WATCHSTATE.Center;
+                        }
+                        else if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの右側
+                        {
+                            if (watchState == E_WATCHSTATE.Center)
+                                watchState = E_WATCHSTATE.Left;
+                            else if (watchState == E_WATCHSTATE.Right)
+                                watchState = E_WATCHSTATE.Center;
+                        }
 
-            if (forward == Vector2.down)
-                if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの左側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Right;
-                    else if (watchState == E_WATCHSTATE.Left)
-                        watchState = E_WATCHSTATE.Center;
-                }
-                else if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの右側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Left;
-                    else if (watchState == E_WATCHSTATE.Right)
-                        watchState = E_WATCHSTATE.Center;
-                }
+                    if (forward == Vector2.down)
+                        if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの左側
+                        {
+                            if (watchState == E_WATCHSTATE.Center)
+                                watchState = E_WATCHSTATE.Right;
+                            else if (watchState == E_WATCHSTATE.Left)
+                                watchState = E_WATCHSTATE.Center;
+                        }
+                        else if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの右側
+                        {
+                            if (watchState == E_WATCHSTATE.Center)
+                                watchState = E_WATCHSTATE.Left;
+                            else if (watchState == E_WATCHSTATE.Right)
+                                watchState = E_WATCHSTATE.Center;
+                        }
 
-            if (forward == Vector2.left)
-                if (playerPos.z < this.transform.position.z) // プレイヤーがカメラの左側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Right;
-                    else if (watchState == E_WATCHSTATE.Left)
-                        watchState = E_WATCHSTATE.Center;
-                }
-                else if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの右側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Left;
-                    else if (watchState == E_WATCHSTATE.Right)
-                        watchState = E_WATCHSTATE.Center;
-                }
+                    if (forward == Vector2.left)
+                        if (playerPos.z < this.transform.position.z) // プレイヤーがカメラの左側
+                        {
+                            if (watchState == E_WATCHSTATE.Center)
+                                watchState = E_WATCHSTATE.Right;
+                            else if (watchState == E_WATCHSTATE.Left)
+                                watchState = E_WATCHSTATE.Center;
+                        }
+                        else if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの右側
+                        {
+                            if (watchState == E_WATCHSTATE.Center)
+                                watchState = E_WATCHSTATE.Left;
+                            else if (watchState == E_WATCHSTATE.Right)
+                                watchState = E_WATCHSTATE.Center;
+                        }
 
             if (forward == Vector2.right)
                 if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの左側
@@ -149,7 +157,7 @@ public class SurveillanceCamera : MonoBehaviour
                     else if (watchState == E_WATCHSTATE.Right)
                         watchState = E_WATCHSTATE.Center;
                 }
-
+                
             RotateVisualObject();
             Debug.Log("→ 現在の監視状態：" + watchState);
         }
@@ -217,11 +225,10 @@ public class SurveillanceCamera : MonoBehaviour
         
 
         // 索敵範囲の中心位置を計算（カメラの2マス先＋スライド方向）
-        Vector2 center = new Vector2(x, y) + forward * 2 + slideDir;
+        Vector2 center = SurveillanceCameraPos + forward * 2 + slideDir;
 
-        int maxX = fieldDataManager.fieldInfoArray.GetLength(0);
-        int maxY = fieldDataManager.fieldInfoArray.GetLength(1);
-
+        Vector2Int max = fieldDataManager.GetFieldSize();
+        
         // 3×3の範囲を走査
         for (int dx = -1; dx <= 1; dx++)
         {
@@ -235,28 +242,22 @@ public class SurveillanceCamera : MonoBehaviour
                 int ty = (int)targetPos.y;
 
                 // 範囲外は無視
-                if (tx < 0 || tx >= maxX || ty < 0 || ty >= maxY)
+                if (tx < 0 || tx >= max.x || ty < 0 || ty >= max.y)
                 {
                     continue;
                 }
 
-                var info = fieldDataManager.GetInfo(targetPos);
-                if (info.state == FieldDataManager.E_FIELDSTATE.none)
-                {
-                    info.state = FieldDataManager.E_FIELDSTATE.cameraRange;
+                /* Vector2Int pos = new Vector2Int(tx, ty);
+                 var info = fieldDataManager.GetInfoList(pos);
 
-                    // オブジェクトの色を赤に変更
-                    if (info.obj != null)
-                    {
-                        var rend = info.obj.GetComponent<MeshRenderer>();
-                        if (rend != null)
-                        {
-                            rend.material.color = Color.red;
-                        }
-                    }
-
-                    fieldDataManager.SetInfo(targetPos, info);
-                }
+                 for (int i = 0; i < info.Count; i++)
+                 {
+                     if (info[i].state == _FieldDataManager.E_FIELDSTATE.sc_searchRange)
+                     { 
+                       //  ChangeColor(Color.red);
+                     }
+                 }
+                */
             }
         }
     }
@@ -266,40 +267,35 @@ public class SurveillanceCamera : MonoBehaviour
     /// </summary>
     private void ResetCameraRange()
     {
-        int maxX = fieldDataManager.fieldInfoArray.GetLength(0);
-        int maxY = fieldDataManager.fieldInfoArray.GetLength(1);
+        Vector2Int max = fieldDataManager.GetFieldSize();
 
-        for (int x = 0; x < maxX; x++)
+        for (int x = 0; x < max.x; x++)
         {
-            for (int y = 0; y < maxY; y++)
+            for (int y = 0; y < max.y; y++)
             {
-                var pos = new Vector2(x, y);
-                var info = fieldDataManager.GetInfo(pos);
+                Vector2Int pos = new Vector2Int(x, y);
 
-                if (info.state == FieldDataManager.E_FIELDSTATE.cameraRange)
+                /*var info = fieldDataManager.GetInfoList(pos);
+                for (int i = 0; i < info.Count; i++)
                 {
-                    info.state = FieldDataManager.E_FIELDSTATE.none;
-
-                    // タイルの色をチェッカーパターンで復元
-                    if (info.obj != null)
+                    if (info[i].state != _FieldDataManager.E_FIELDSTATE.sc_searchRange)
                     {
-                        var rend = info.obj.GetComponent<MeshRenderer>();
-                        if (rend != null)
+                        // タイルの色をチェッカーパターンで復元
+                        if (info != null)
                         {
-                            //TODO 仮で床の色を決めてあります今後変更予定
-                            if ((x + y) % 2 == 0)
+                            int num = x + y;
+
+                            if (num % 2 == 0)
                             {
-                                fieldDataManager.SetColor(new Vector2Int(x, y), Color.gray);
+                               // ChangeColor(Color.gray);
                             }
                             else
                             {
-                                fieldDataManager.SetColor(new Vector2Int(x, y), Color.white);
+                               // ChangeColor(Color.white);
                             }
                         }
                     }
-
-                    fieldDataManager.SetInfo(pos, info);
-                }
+                }*/
             }
         }
     }
@@ -329,8 +325,61 @@ public class SurveillanceCamera : MonoBehaviour
         return offset;
     }
 
+    private void CheckPillar()//柱があるかチェック
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                Vector2 offset = new Vector2(dx, dy);
+                Vector2 rotatedOffset = RotateOffset(offset, forward * 2);
+                Vector2 targetPos = SurveillanceCameraPos + rotatedOffset;
+
+                int tx = (int)targetPos.x;
+                int ty = (int)targetPos.y;
+
+                Vector2Int pos = new Vector2Int(tx, ty);
+                var info = fieldDataManager.GetInfoList(pos);
 
 
+               // CommonSE_Proto.E_DIRECTION Dir
+               
 
+                if (watchState == E_WATCHSTATE.Left)
+                {
+                    
+                    for (int i = 0; i < info.Count; i++)
+                    {
+                        if (info[i].state == _FieldDataManager.E_FIELDSTATE.pillar)
+                        { }
+                    }
+                }
+                else if (watchState == E_WATCHSTATE.Center)
+                {
+
+                    for (int i = 0; i < info.Count; i++)
+                    {
+                        if (info[i].state == _FieldDataManager.E_FIELDSTATE.pillar)
+                        { }
+                    }
+                }
+                else if (watchState == E_WATCHSTATE.Right)
+                {
+
+                    for (int i = 0; i < info.Count; i++)
+                    {
+                        if (info[i].state == _FieldDataManager.E_FIELDSTATE.pillar)
+                        { }
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void SetCameraDir(CommonSE_Proto.E_DIRECTION dir)
+    {
+        CameraDir = dir;
+    }
 
 }
