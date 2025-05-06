@@ -156,7 +156,7 @@ public class _FieldDataManager : MonoBehaviour
         // プロトタイプ用のステージ作成
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
         S_FIELDINFO startInfo = GetInfoList(GetStatePos(E_FIELDSTATE.start)[0])[0];
-        AddInfo(startInfo.pos, E_FIELDSTATE.pillar, startInfo.dir);
+        AddInfo(startInfo.pos, E_FIELDSTATE.butler, startInfo.dir);
         AddInfo(startInfo.pos, E_FIELDSTATE.princess, startInfo.dir);
 
         AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.wall);
@@ -319,116 +319,122 @@ public class _FieldDataManager : MonoBehaviour
 
         // TODO フィールドデータをもとにオブジェクト生成
 
-        //Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
+        Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
+        GameObject obj = null;
 
-        //for (int y = 0; y < fieldSize.y; ++y)
-        //{
-        //    for (int x = 0; x < fieldSize.x; ++x)
-        //    {
-        //        if (fieldData[x, y].Count == 0)
-        //        {
-        //            continue;
+        for (int y = 0; y < fieldSize.y; ++y)
+        {
+            for (int x = 0; x < fieldSize.x; ++x)
+            {
+                if (fieldData[x, y].Count == 0)
+                {
+                    continue;
 
-        //        }
+                }
 
-        //        for (int i = 0; i < fieldData[x, y].Count; ++i)
-        //        {
-        //            Vector3 instPos = new Vector3(fieldData[x, y][i].pos.x, 0.0f, fieldData[x, y][i].pos.y);
+                for (int i = 0; i < fieldData[x, y].Count; ++i)
+                {
+                    Vector3 instPos = new Vector3(fieldData[x, y][i].pos.x, 0.0f, fieldData[x, y][i].pos.y);
 
-        //            float angle = 0.0f;
+                    float angle = 0.0f;
 
-        //            switch(fieldData[x, y][i].dir)
-        //            {
-        //                case CommonSE_Proto.E_DIRECTION.up:
-        //                    angle = 0.0f;
-        //                    break;
-        //                case CommonSE_Proto.E_DIRECTION.right:
-        //                    angle = 90.0f;
-        //                    break;
-        //                case CommonSE_Proto.E_DIRECTION.down:
-        //                    angle = 180.0f;
-        //                    break;
-        //                case CommonSE_Proto.E_DIRECTION.left:
-        //                    angle = 270.0f;
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
+                    switch (fieldData[x, y][i].dir)
+                    {
+                        case CommonSE_Proto.E_DIRECTION.up:
+                            angle = 0.0f;
+                            break;
+                        case CommonSE_Proto.E_DIRECTION.right:
+                            angle = 90.0f;
+                            break;
+                        case CommonSE_Proto.E_DIRECTION.down:
+                            angle = 180.0f;
+                            break;
+                        case CommonSE_Proto.E_DIRECTION.left:
+                            angle = 270.0f;
+                            break;
+                        default:
+                            break;
+                    }
 
-        //            Quaternion instRot = Quaternion.Euler(0, angle, 0);
+                    Quaternion instRot = Quaternion.Euler(0, angle, 0);
 
-        //            switch(fieldData[x, y][i].state)
-        //            {
-        //                case E_FIELDSTATE.outOfRange:
-        //                    break;
-        //                case E_FIELDSTATE.start:
-        //                    break;
-        //                case E_FIELDSTATE.goal:
-        //                    break;
-        //                case E_FIELDSTATE.pillar:
-        //                    Instantiate(
-        //                        pillar,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.wall:
-        //                    Instantiate(
-        //                        wall,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.exhibitionStand:
-        //                    Instantiate(
-        //                        exhibitionStand,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.butler:
-        //                    Instantiate(
-        //                        player,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.princess:
-        //                    Instantiate(
-        //                        princess,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.securityGuard_N:
-        //                    Instantiate(
-        //                        securityGuard_N,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.surveillanceCamera:
-        //                    Instantiate(
-        //                        surveillanceCamera,
-        //                        instPos,
-        //                        instRot
-        //                        );
-        //                    break;
-        //                case E_FIELDSTATE.sc_searchRange:
-        //                    break;
-        //                case E_FIELDSTATE.sg_searchRange:
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
+                    switch (fieldData[x, y][i].state)
+                    {
+                        case E_FIELDSTATE.outOfRange:
+                            break;
+                        case E_FIELDSTATE.start:
+                            break;
+                        case E_FIELDSTATE.goal:
+                            break;
+                        case E_FIELDSTATE.pillar:
+                            obj = Instantiate(
+                                pillar,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.wall:
+                            obj = Instantiate(
+                                wall,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.exhibitionStand:
+                            obj = Instantiate(
+                                exhibitionStand,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.butler:
+                            obj = Instantiate(
+                                player,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.princess:
+                            obj = Instantiate(
+                                princess,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.securityGuard_N:
+                            obj = Instantiate(
+                                securityGuard_N,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.surveillanceCamera:
+                            obj = Instantiate(
+                                surveillanceCamera,
+                                instPos,
+                                instRot
+                                );
+                            break;
+                        case E_FIELDSTATE.sc_searchRange:
+                            break;
+                        case E_FIELDSTATE.sg_searchRange:
+                            break;
+                        default:
+                            break;
+                    }
 
-        //        }
+                    if (obj)
+                    {
+                        obj.transform.SetParent(field.transform);
+                    }
 
-        //    }
+                }
 
-        //}
+            }
 
-        //reLoadFlg = false;
+        }
+
+        reLoadFlg = false;
 
     }
 
