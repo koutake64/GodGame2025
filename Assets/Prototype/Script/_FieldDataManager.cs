@@ -153,6 +153,9 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
+        // プロトタイプ用のステージ作成
+
+
     }
 
     public List<Vector2Int> GetStatePos(E_FIELDSTATE state)
@@ -188,6 +191,12 @@ public class _FieldDataManager : MonoBehaviour
         }
 
         return list;
+
+    }
+
+    public List<S_FIELDINFO> GetInfoList(Vector2Int pos)
+    {
+        return fieldData[pos.x, pos.y];
 
     }
 
