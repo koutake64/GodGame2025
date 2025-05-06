@@ -230,7 +230,7 @@ public class CharacterMoveController : MonoBehaviour
         transform.position = info.obj.transform.position;
     }
 
-    public bool StartAutoMove(Vector2Int start, Vector2Int goal)
+    public void StartAutoMove(Vector2Int start, Vector2Int goal)
     {
         // 自動移動中フラグをあげる
         isAutoMoving = true;
@@ -238,16 +238,8 @@ public class CharacterMoveController : MonoBehaviour
         // 経路探索
         List<Vector2Int> route = new List<Vector2Int>(routeSearch.MoveRouteSearch(start, goal));
 
-        // ルートがなかった場合
-        if(route.Count == 0)
-        {
-            return false;
-        }
-
         // 探索経路セット
         SetMoveRoute(route);
-
-        return true;
     }
 
     public void SetMoveRoute(List<Vector2Int> route)

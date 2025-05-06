@@ -9,6 +9,7 @@ public class SecurityController : MonoBehaviour
     private CharacterMoveController moveController; // CharacterMoveController
     private bool                    isEndMovement;  // 目標座標までの移動終了したか
     private int                     currentIndex;   // 配列の何番目か
+    private int                     addNum;         // 加算する値
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,49 +25,39 @@ public class SecurityController : MonoBehaviour
 
         isEndMovement = true;
         currentIndex = 0;
+        addNum = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
         // 移動が終了していたら
-        if(isEndMovement && targetArray.Count > 0)
+        if (isEndMovement && targetArray.Count > 0)
         {
-            while (true)
-            {
-                // 移動先を指定
-                bool isCanMove = moveController.StartAutoMove(moveController.GetCurrentPos(), targetArray[currentIndex]);
-
-                // ターゲット座標に移動できない場合
-                if (!isCanMove)
-                {
-                    // リストの中身を反転する
-                    targetArray.Reverse();
-                    currentIndex = 0;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            // 移動先を指定
+            moveController.StartAutoMove(moveController.GetCurrentPos(), targetArray[currentIndex]);
 
             // 移動終了フラグを下げる
             isEndMovement = false;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        // 前方にプレイヤーがいるか監視
-        ForwardMonitoring();
+        }        
     }
 
     public void EndMovement()
     {
         // 巡回するように配列番号を更新
-        currentIndex = (currentIndex + 1) % targetArray.Count;
+        currentIndex = (currentIndex + addNum) % targetArray.Count;
+
+        if(currentIndex < 0)
+        {
+            currentIndex = targetArray.Count - 1;
+        }
 
         isEndMovement = true;
+    }
+
+    public void InverseArray()
+    {
+        addNum *= -1;
     }
 
     private void ForwardMonitoring()
