@@ -9,22 +9,18 @@ public class CharacterMoveController : MonoBehaviour
     [Header("スタート座標")]
     [SerializeField] private Vector2Int startPos;
 
-    [Header("自動移動")]
-    [SerializeField] private bool isAutoMoving = true;
-
-
-    private FieldDataManager    fieldData;      // FieldDataManager
+    private _FieldDataManager   fieldData;      // _FieldDataManager
     private SecurityController  security;       // SecurityController
-    GameSystem                  system;         // GameSystem
-    RouteSearch                 routeSearch;    // routeSearch
+    private GameSystem          system;         // GameSystem
+    private RouteSearch         routeSearch;    // routeSearch
     private float               moveSpeed;      // 移動速度
-    private float               rotateSpeed;    // 回転速度
     private Vector2Int          currentPos;     // 現在のマス
     private new Transform       transform;      // Transform
     private Vector3             targetPos;      // 目標座標
-    bool                        isMove;         // 移動するか
-    Vector2Int                  fieldSize;      // フィールドサイズ
+    private bool                isMove;         // 移動するか
+    private Vector2Int          fieldSize;      // フィールドサイズ
     private Queue<Vector2Int>   moveRoute;      // 移動経路
+    private bool                isAutoMoving;   // 自動移動中か   
 
     void Start()
     {
@@ -38,7 +34,7 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
@@ -58,13 +54,13 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
-        rotateSpeed = system.GetCharacterRotateSpeed();
         currentPos = new Vector2Int(0, 0);
         transform = GetComponent<Transform>();
         isMove = false;
         fieldSize = system.GetFieldSize();
         moveRoute = new Queue<Vector2Int>();
         security = GetComponent<SecurityController>();
+        isAutoMoving = false;
 
         // nullチェック
         if (!transform)
@@ -80,32 +76,45 @@ public class CharacterMoveController : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         // 移動するなら
         if (isMove)
         {
+            // 移動方向を計算
+            Vector3 moveDirection = (targetPos - transform.position).normalized;
+
+            // 移動方向がある場合
+            if (moveDirection.sqrMagnitude > 0.001f)
+            {
+                // 現在の向き
+                Vector3 currentForward = transform.forward;
+
+                // 移動方向との角度を計算
+                float angle = Vector3.SignedAngle(currentForward, moveDirection, Vector3.up);
+
+                // 角度を90度の倍数に丸める
+                float roundedAngle = Mathf.Round(angle / 90.0f) * 90.0f;
+
+                // 現在の回転角度
+                float currentYAngle = transform.eulerAngles.y;
+
+                // 目標の回転角度を計算
+                float targetYAngle = currentYAngle + roundedAngle;
+
+                // 回転を適用
+                transform.rotation = Quaternion.Euler(0, targetYAngle, 0);
+            }
+
             // 指定速度で移動
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-
-            // 指定速度で回転
-            Vector3 direction = (targetPos - transform.position).normalized;
-            if(direction.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
-            }
 
             // 移動終了
             if (Vector3.Distance(transform.position, targetPos) <= 0.1f)
             {
                 isMove = false;
 
-                // 自動移動trueなら次のマスをセット
-                if(isAutoMoving)
-                {
-                    MoveNextStep();
-                }
+                MoveNextStep();
             }
         }
     }
@@ -221,13 +230,24 @@ public class CharacterMoveController : MonoBehaviour
         transform.position = info.obj.transform.position;
     }
 
-    public void StartAutoMove(Vector2Int start, Vector2Int goal)
+    public bool StartAutoMove(Vector2Int start, Vector2Int goal)
     {
-        if (isAutoMoving) return;
-
+        // 自動移動中フラグをあげる
         isAutoMoving = true;
+
         // 経路探索
-        SetMoveRoute(routeSearch.MoveRouteSearch(start, goal));
+        List<Vector2Int> route = new List<Vector2Int>(routeSearch.MoveRouteSearch(start, goal));
+
+        // ルートがなかった場合
+        if(route.Count == 0)
+        {
+            return false;
+        }
+
+        // 探索経路セット
+        SetMoveRoute(route);
+
+        return true;
     }
 
     public void SetMoveRoute(List<Vector2Int> route)

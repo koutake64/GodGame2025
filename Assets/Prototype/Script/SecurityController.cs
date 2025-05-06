@@ -32,8 +32,23 @@ public class SecurityController : MonoBehaviour
         // 移動が終了していたら
         if(isEndMovement && targetArray.Count > 0)
         {
-            // 移動先を指定
-            moveController.StartAutoMove(moveController.GetCurrentPos(), targetArray[currentIndex]);
+            while (true)
+            {
+                // 移動先を指定
+                bool isCanMove = moveController.StartAutoMove(moveController.GetCurrentPos(), targetArray[currentIndex]);
+
+                // ターゲット座標に移動できない場合
+                if (!isCanMove)
+                {
+                    // リストの中身を反転する
+                    targetArray.Reverse();
+                    currentIndex = 0;
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             // 移動終了フラグを下げる
             isEndMovement = false;
@@ -54,10 +69,6 @@ public class SecurityController : MonoBehaviour
         isEndMovement = true;
     }
 
-    public void FoundTarget(Vector2Int targetPos)
-    {
-        moveController.StartAutoMove(moveController.GetCurrentPos(), targetPos);
-    }
     private void ForwardMonitoring()
     {
 
