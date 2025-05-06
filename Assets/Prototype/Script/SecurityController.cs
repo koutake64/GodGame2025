@@ -6,7 +6,12 @@ public class SecurityController : MonoBehaviour
     [Header("移動ターゲットリスト")]
     [SerializeField] private List<Vector2Int> targetArray = new List<Vector2Int>();
 
+    [Header("前方監視範囲")]
+    [SerializeField] private int monitoringRange;
+
+
     private CharacterMoveController moveController; // CharacterMoveController
+    private _FieldDataManager       fieldData;      // _FieldDataManager
     private bool                    isEndMovement;  // 目標座標までの移動終了したか
     private int                     currentIndex;   // 配列の何番目か
     private int                     addNum;         // 加算する値
@@ -32,7 +37,7 @@ public class SecurityController : MonoBehaviour
     void Update()
     {
         // 進行方向に対してチェックを行う
-
+        ForwardMonitoring();
 
         // 移動が終了していたら
         if (isEndMovement && targetArray.Count > 0)
@@ -65,6 +70,41 @@ public class SecurityController : MonoBehaviour
 
     private void ForwardMonitoring()
     {
+        // 向いている方向
+        Vector3 forward = transform.forward;
+        forward.Normalize();
+        Vector2Int direction;
+        if(Mathf.Abs(forward.x) > Mathf.Abs(forward.z))
+        {
+            direction = forward.x > 0 ? Vector2Int.right : Vector2Int.left;
+        }
+        else
+        {
+            direction = forward.z > 0 ? Vector2Int.up : Vector2Int.down;
+        }
 
+        // 監視
+        Vector2Int currentPos = moveController.GetCurrentPos();
+        for(int i = 1; i <= monitoringRange; ++i)
+        {
+            // マス目の情報取得
+            var info = fieldData.GetInfoList(currentPos + direction * i);
+            for(int j = 0; j < info.Count; ++j)
+            {
+                // お姫様を発見
+                if (info[j].state == _FieldDataManager.E_FIELDSTATE.princess)
+                {
+
+                }
+
+                // 貫通しないオブジェクトの場合
+                if (info[j].state == _FieldDataManager.E_FIELDSTATE.wall || 
+                    info[j].state == _FieldDataManager.E_FIELDSTATE.pillar ||
+                    info[j].state == _FieldDataManager.E_FIELDSTATE.exhibitionStand)
+                {
+                    break;
+                }
+            }
+        }
     }
 }
