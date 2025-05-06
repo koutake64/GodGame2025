@@ -9,7 +9,6 @@ public class SecurityController : MonoBehaviour
     [Header("前方監視範囲")]
     [SerializeField] private int monitoringRange;
 
-
     private CharacterMoveController moveController; // CharacterMoveController
     private _FieldDataManager       fieldData;      // _FieldDataManager
     private bool                    isEndMovement;  // 目標座標までの移動終了したか
@@ -25,6 +24,15 @@ public class SecurityController : MonoBehaviour
             Debug.LogError(
                "Script:SecurityController.cs \n" +
                "moveControllerがnullです"
+            );
+        }
+
+        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
+        if (!fieldData)
+        {
+            Debug.LogError(
+               "Script:CharacterMoveController.cs \n" +
+               "fieldDataがnullです"
             );
         }
 
@@ -85,10 +93,10 @@ public class SecurityController : MonoBehaviour
 
         // 監視
         Vector2Int currentPos = moveController.GetCurrentPos();
-        for(int i = 1; i <= monitoringRange; ++i)
+        for(int i = 0; i < monitoringRange; ++i)
         {
             // マス目の情報取得
-            var info = fieldData.GetInfoList(currentPos + direction * i);
+            var info = fieldData.GetInfoList(currentPos + direction * (i + 1));
             for(int j = 0; j < info.Count; ++j)
             {
                 // お姫様を発見

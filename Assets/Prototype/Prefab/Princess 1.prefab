@@ -134,7 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1706c19d2460d44b41c2b431ac6c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: 10, y: 10}
+  startPos: {x: 5, y: 1}
+  charaState: 7
 --- !u!114 &14678996455793842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,9 +161,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetArray:
-  - {x: 5, y: 5}
+  - {x: 1, y: 1}
   - {x: 4, y: 10}
-  - {x: 10, y: 10}
+  - {x: 5, y: 1}
+  monitoringRange: 5
 --- !u!1 &8167232287864194219
 GameObject:
   m_ObjectHideFlags: 0
