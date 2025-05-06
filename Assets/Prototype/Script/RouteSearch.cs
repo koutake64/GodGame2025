@@ -7,6 +7,7 @@ public class RouteSearch : MonoBehaviour
 {
     private FieldDataManager    fieldData;  // FieldDataManager
     private Vector2Int          fieldSize;  // フィールドサイズ
+    private SecurityController  security;   // SecurityController
 
     // TODO プロト終わったら消す
     List<Vector2Int>            routed;     // デバッグ用通った道
@@ -33,6 +34,9 @@ public class RouteSearch : MonoBehaviour
             );
         }
 
+        // 警備員スクリプト取得
+        security = GetComponent<SecurityController>();
+
         // フィールドサイズ取得
         fieldSize = system.GetFieldSize();
     }
@@ -55,15 +59,26 @@ public class RouteSearch : MonoBehaviour
             Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right
         };
 
+        // 目標座標が移動不可な場合に可能な限り近づける
+        Vector2Int closest = start;
+        float minDist = Vector2Int.Distance(start, goal);
+
         // ルート探索
         while (queue.Count > 0)
         {
             Vector2Int current = queue.Dequeue();
 
+            float dist = Vector2Int.Distance(current, goal);
+            if(dist < minDist)
+            {
+                minDist = dist;
+                closest = current;
+            }
+
             // 探索終了したか
             if(current == goal)
             {
-                return ReconstructRoute(routeFrom, start, goal);
+                return ReconstructRoute(routeFrom, start, goal, false);
             }
 
             // 各方向のマスを確認
@@ -81,13 +96,17 @@ public class RouteSearch : MonoBehaviour
             }
         }
 
-        Debug.Log("通れるルートがありません");
+        // 目標まで到達できなかった
+        if(security)
+        {
+            security.InverseArray();
+        }
 
-        // ルートが見つからなかった
-        return new List<Vector2Int>();
+        // 近づけるところまでのルート
+        return ReconstructRoute(routeFrom, start, closest, true);
     }
 
-    private List<Vector2Int> ReconstructRoute(Dictionary<Vector2Int, Vector2Int> routeFrom, Vector2Int start, Vector2Int goal)
+    private List<Vector2Int> ReconstructRoute(Dictionary<Vector2Int, Vector2Int> routeFrom, Vector2Int start, Vector2Int goal, bool isInverse)
     {
         List<Vector2Int> route = new List<Vector2Int>();
         Vector2Int current = goal;
@@ -107,6 +126,14 @@ public class RouteSearch : MonoBehaviour
         {
             fieldData.SetColor(i, color);
         }
+
+        if (isInverse)
+        {
+            List<Vector2Int> routeKeep = new List<Vector2Int>(route);
+            routeKeep.Reverse();
+            route.AddRange(routeKeep);
+        }
+
         routed = route;
 
         return route;

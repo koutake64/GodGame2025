@@ -493,7 +493,7 @@ MonoBehaviour:
   fieldSizeX: 25
   fieldSizeY: 25
   princess: {fileID: 6077740110341776202, guid: c36f4f9294a8b2c4ca847a82794edd79, type: 3}
-  player: {fileID: 3663559527937981423, guid: da1bde8e173d92e4a87de3eb15c5a831, type: 3}
+  player: {fileID: 6077740110341776202, guid: 4d73fbba4edadcb429636ebf2971a1bb, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
   obstacle: {fileID: 3556016710770019404, guid: 1d93dbef7d234f940b6a4667d30a01ba, type: 3}
   moveSpeed: 2
