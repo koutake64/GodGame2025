@@ -9,12 +9,16 @@ public class CharacterMoveController : MonoBehaviour
     [Header("スタート座標")]
     [SerializeField] private Vector2Int startPos;
 
-    private FieldDataManager   fieldData;      // _FieldDataManager
+    [Header("キャラクタータイプ")]
+    [SerializeField] private _FieldDataManager.E_FIELDSTATE charaState;
+
+    private _FieldDataManager   fieldData;      // _FieldDataManager
     private SecurityController  security;       // SecurityController
     private GameSystem          system;         // GameSystem
     private RouteSearch         routeSearch;    // routeSearch
     private float               moveSpeed;      // 移動速度
     private Vector2Int          currentPos;     // 現在のマス
+    private Vector2Int          prevPos;        // 過去マス
     private new Transform       transform;      // Transform
     private Vector3             targetPos;      // 目標座標
     private bool                isMove;         // 移動するか
@@ -34,7 +38,7 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
@@ -54,7 +58,7 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
-        currentPos = new Vector2Int(0, 0);
+        prevPos = currentPos = new Vector2Int(0, 0);
         transform = GetComponent<Transform>();
         isMove = false;
         fieldSize = system.GetFieldSize();
@@ -120,15 +124,11 @@ public class CharacterMoveController : MonoBehaviour
     }
     private void UpdateTargetPosition()
     {
-        // 移動先の情報取得
-        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
-
         // 移動先更新
-        targetPos = info.obj.transform.position;
+        targetPos = new Vector3(currentPos.x, 0, currentPos.y);
 
-        // TODO いるマスの更新
-        // ここに自身の情報とcurrentPosでいるマスを設定する
-
+        // 移動先に自身の情報登録
+        fieldData.MoveInfo(prevPos, currentPos, charaState);
     }
 
     public void AddPosX(int num)
@@ -136,27 +136,28 @@ public class CharacterMoveController : MonoBehaviour
         // 移動中・自動移動中なら終了
         if (isMove || isAutoMoving) return;
 
-        // フィールド情報リセット
-        ResetFieldData();
-
+        // 各座標更新
+        Vector2Int _prevPos = prevPos;
+        prevPos = currentPos;
         currentPos.x += num;
 
         // 通れるか判定
-        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
-        if (info.state != FieldDataManager.E_FIELDSTATE.none && 
-            info.state != FieldDataManager.E_FIELDSTATE.cameraRange)
+        if(!fieldData.GetIsThrough(currentPos))
         {
+            prevPos = _prevPos;
             currentPos.x -= num;
             return;
         }
+
+        // 範囲外チェック
         if (currentPos.x < 0)
         {
-            currentPos.x = 0;
+            currentPos.x = prevPos.x = _prevPos.x;
             return;
         }
         if (currentPos.x > fieldSize.x - 1)
         {
-            currentPos.x = fieldSize.x - 1;
+            currentPos.x = prevPos.x = _prevPos.x;
             return;
         }
 
@@ -169,28 +170,28 @@ public class CharacterMoveController : MonoBehaviour
         // 移動中・自動移動中なら終了
         if (isMove || isAutoMoving) return;
 
-        // フィールド情報リセット
-        ResetFieldData();
-
+        // 各座標更新
+        Vector2Int _prevPos = prevPos;
+        prevPos = currentPos;
         currentPos.y += num;
 
         // 通れるか判定
-        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
-        if (info.state != FieldDataManager.E_FIELDSTATE.none &&
-            info.state != FieldDataManager.E_FIELDSTATE.cameraRange)
+        if (!fieldData.GetIsThrough(currentPos))
         {
+            prevPos = _prevPos;
             currentPos.y -= num;
             return;
         }
 
+        // 範囲外チェック
         if (currentPos.y < 0)
         {
-            currentPos.y = 0;
+            currentPos.y = prevPos.y = _prevPos.y;
             return;
         }
         if (currentPos.y > fieldSize.y - 1)
         {
-            currentPos.y = fieldSize.y - 1;
+            currentPos.y = prevPos.y = _prevPos.y;
             return;
         }
 
@@ -209,14 +210,8 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        // 現在位置更新
-        currentPos = pos;
-
-        // 移動先の情報取得
-        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
-
         // 移動可能か判定
-        if (info.state != FieldDataManager.E_FIELDSTATE.none)
+        if (!fieldData.GetIsThrough(pos))
         {
             Debug.LogError(
              "Script:CharacterMoveController.cs \n" +
@@ -226,8 +221,14 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
+        // 過去座標更新
+        prevPos = currentPos;
+
+        // 現在位置更新
+        currentPos = pos;
+
         // 座標設定
-        transform.position = info.obj.transform.position;
+        transform.position = new Vector3(currentPos.x, 0, currentPos.y);
     }
 
     public void StartAutoMove(Vector2Int start, Vector2Int goal)
@@ -249,7 +250,6 @@ public class CharacterMoveController : MonoBehaviour
         moveRoute = new Queue<Vector2Int>(route);
         MoveNextStep();
     }
-
     private void MoveNextStep()
     {
         // ゴール到達
@@ -271,8 +271,8 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
-        // いるマスの情報をリセット
-        ResetFieldData();
+        // 過去座標を更新
+        prevPos = currentPos;
 
         // 次ルートをセット
         Vector2Int next = moveRoute.Dequeue();
@@ -283,18 +283,11 @@ public class CharacterMoveController : MonoBehaviour
         isMove = true;
         UpdateTargetPosition();
     }
-
-    private void ResetFieldData()
-    {
-        // TODO 
-        // ここで一度currentPosを使っている座標をnoneで上書き
-    }
-
+ 
     public void IsAutoMove(bool flg)
     {
         isAutoMoving = flg;
     }
-
     public Vector2Int GetCurrentPos()
     {
         return currentPos;
