@@ -58,10 +58,10 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
-        prevPos = currentPos = startPos;
+        prevPos = currentPos = new Vector2Int(0, 0);
         transform = GetComponent<Transform>();
         isMove = false;
-        fieldSize = system.GetFieldSize();
+        fieldSize = fieldData.GetFieldSize();
         moveRoute = new Queue<Vector2Int>();
         security = GetComponent<SecurityController>();
         isAutoMoving = false;
@@ -74,6 +74,9 @@ public class CharacterMoveController : MonoBehaviour
                "transformがnullです"
             );
         }
+
+        // 座標セット
+        SetPos(startPos);
     }
 
     // Update is called once per frame
@@ -138,14 +141,6 @@ public class CharacterMoveController : MonoBehaviour
         prevPos = currentPos;
         currentPos.x += num;
 
-        // 通れるか判定
-        if(!fieldData.GetIsThrough(currentPos))
-        {
-            prevPos = _prevPos;
-            currentPos.x -= num;
-            return;
-        }
-
         // 範囲外チェック
         if (currentPos.x < 0)
         {
@@ -155,6 +150,14 @@ public class CharacterMoveController : MonoBehaviour
         if (currentPos.x > fieldSize.x - 1)
         {
             currentPos.x = prevPos.x = _prevPos.x;
+            return;
+        }
+
+        // 通れるか判定
+        if(!fieldData.GetIsThrough(currentPos))
+        {
+            prevPos = _prevPos;
+            currentPos.x -= num;
             return;
         }
 
@@ -172,14 +175,6 @@ public class CharacterMoveController : MonoBehaviour
         prevPos = currentPos;
         currentPos.y += num;
 
-        // 通れるか判定
-        if (!fieldData.GetIsThrough(currentPos))
-        {
-            prevPos = _prevPos;
-            currentPos.y -= num;
-            return;
-        }
-
         // 範囲外チェック
         if (currentPos.y < 0)
         {
@@ -192,6 +187,14 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
+        // 通れるか判定
+        if (!fieldData.GetIsThrough(currentPos))
+        {
+            prevPos = _prevPos;
+            currentPos.y -= num;
+            return;
+        }
+
         // 移動情報更新
         isMove = true;
         UpdateTargetPosition();
@@ -199,20 +202,20 @@ public class CharacterMoveController : MonoBehaviour
 
     public void SetPos(Vector2Int pos)
     {
-        if (pos.x < 0 || pos.y < 0)
+        if (pos.x < 0 || pos.x > fieldSize.x - 1 || pos.y < 0 || pos.y > fieldSize.y - 1)
         {
-            Debug.LogError(
+            Debug.Log(
               "Script:CharacterMoveController.cs \n" +
-              gameObject.name + "のスタート座標が範囲外です"
+              gameObject.name + "の座標が範囲外です"
             );
         }
 
         // 移動可能か判定
         if (!fieldData.GetIsThrough(pos))
         {
-            Debug.LogError(
+            Debug.Log(
              "Script:CharacterMoveController.cs \n" +
-             gameObject.name + "のスタート座標が設定不可です"
+             gameObject.name + "の座標が設定不可です"
             );
 
             return;
@@ -250,7 +253,7 @@ public class CharacterMoveController : MonoBehaviour
     private void MoveNextStep()
     {
         // ゴール到達
-        if(moveRoute.Count == 0)
+        if (moveRoute.Count == 0)
         {
             // 移動終了
             isMove = false;
