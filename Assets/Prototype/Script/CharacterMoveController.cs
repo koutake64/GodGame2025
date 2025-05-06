@@ -9,7 +9,7 @@ public class CharacterMoveController : MonoBehaviour
     [Header("スタート座標")]
     [SerializeField] private Vector2Int startPos;
 
-    private _FieldDataManager   fieldData;      // _FieldDataManager
+    private FieldDataManager   fieldData;      // _FieldDataManager
     private SecurityController  security;       // SecurityController
     private GameSystem          system;         // GameSystem
     private RouteSearch         routeSearch;    // routeSearch
@@ -34,7 +34,7 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
