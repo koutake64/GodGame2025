@@ -5,7 +5,7 @@ using UnityEditor.ShaderGraph.Serialization;
 
 public class RouteSearch : MonoBehaviour
 {
-    private FieldDataManager    fieldData;  // FieldDataManager
+    private _FieldDataManager   fieldData;  // FieldDataManager
     private Vector2Int          fieldSize;  // フィールドサイズ
     private SecurityController  security;   // SecurityController
 
@@ -15,7 +15,7 @@ public class RouteSearch : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
@@ -24,21 +24,11 @@ public class RouteSearch : MonoBehaviour
             );
         }
 
-        // フィールドサイズ取得
-        GameSystem system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
-        if (!system)
-        {
-            Debug.LogError(
-               "Script:RouteSearch.cs \n" +
-               "systemがnullです"
-            );
-        }
-
         // 警備員スクリプト取得
         security = GetComponent<SecurityController>();
 
         // フィールドサイズ取得
-        fieldSize = system.GetFieldSize();
+        fieldSize = fieldData.GetFieldSize();
     }
 
     public List<Vector2Int> MoveRouteSearch(Vector2Int start, Vector2Int goal)
@@ -124,7 +114,7 @@ public class RouteSearch : MonoBehaviour
         Color color = Color.red;
         foreach (var i in route)
         {
-            fieldData.SetColor(i, color);
+            //fieldData.SetColor(i, color);
         }
 
         if (isInverse)
@@ -135,34 +125,40 @@ public class RouteSearch : MonoBehaviour
         }
 
         routed = route;
-
         return route;
     }
     private bool IsWalkable(Vector2Int pos)
     {
         // 範囲外チェック
-        if (pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y) return false;
-       
+        if (pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y)
+        {
+            return false;
+        }
+
         // 通れるか確認
-        var info = fieldData.GetInfo(pos);
-        return info.state == FieldDataManager.E_FIELDSTATE.none;
+        if (!fieldData.GetIsThrough(pos))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     // TODO プロト終わったら消す
     public void ResetTileColor()
     {
-        foreach (var i in routed)
-        {
-            int num = i.x + i.y;
-
-            if(num % 2 == 0)
-            {
-                fieldData.SetColor(i, Color.gray);
-            }
-            else
-            {
-                fieldData.SetColor(i, Color.white);
-            }
-        }
+    //    foreach (var i in routed)
+    //    {
+    //        int num = i.x + i.y;
+    //
+    //        if(num % 2 == 0)
+    //        {
+    //            fieldData.SetColor(i, Color.gray);
+    //        }
+    //        else
+    //        {
+    //            fieldData.SetColor(i, Color.white);
+    //        }
+    //    }
     }
 }

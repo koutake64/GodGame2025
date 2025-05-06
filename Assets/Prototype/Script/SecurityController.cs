@@ -14,6 +14,7 @@ public class SecurityController : MonoBehaviour
     private bool                    isEndMovement;  // 目標座標までの移動終了したか
     private int                     currentIndex;   // 配列の何番目か
     private int                     addNum;         // 加算する値
+    Vector2Int                      fieldSize;      // フィールドサイズ
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,6 +40,7 @@ public class SecurityController : MonoBehaviour
         isEndMovement = true;
         currentIndex = 0;
         addNum = 1;
+        fieldSize = fieldData.GetFieldSize();
     }
 
     // Update is called once per frame
@@ -55,7 +57,7 @@ public class SecurityController : MonoBehaviour
 
             // 移動終了フラグを下げる
             isEndMovement = false;
-        }        
+        }
     }
 
     public void EndMovement()
@@ -96,7 +98,15 @@ public class SecurityController : MonoBehaviour
         for(int i = 0; i < monitoringRange; ++i)
         {
             // マス目の情報取得
-            var info = fieldData.GetInfoList(currentPos + direction * (i + 1));
+            Vector2Int pos = currentPos + direction * (i + 1);
+
+            // 範囲外判定
+            if(pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y)
+            {
+                continue;
+            }
+
+            var info = fieldData.GetInfoList(pos);
             for(int j = 0; j < info.Count; ++j)
             {
                 // お姫様を発見
