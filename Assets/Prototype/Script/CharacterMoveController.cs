@@ -9,7 +9,10 @@ public class CharacterMoveController : MonoBehaviour
     [Header("スタート座標")]
     [SerializeField] private Vector2Int startPos;
 
-    private FieldDataManager   fieldData;      // _FieldDataManager
+    [Header("スタート座標")]
+    [SerializeField] private _FieldDataManager.E_FIELDSTATE objState;
+
+    private _FieldDataManager   fieldData;       // _FieldDataManager
     private SecurityController  security;       // SecurityController
     private GameSystem          system;         // GameSystem
     private RouteSearch         routeSearch;    // routeSearch
@@ -34,7 +37,7 @@ public class CharacterMoveController : MonoBehaviour
             );
         }
 
-        fieldData = GameObject.Find("Field").GetComponent<FieldDataManager>();
+        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
         if (!fieldData)
         {
             Debug.LogError(
@@ -121,10 +124,10 @@ public class CharacterMoveController : MonoBehaviour
     private void UpdateTargetPosition()
     {
         // 移動先の情報取得
-        var info = fieldData.GetInfo(new Vector2(currentPos.x, currentPos.y));
+        var info = fieldData.GetInfoList(currentPos);
 
         // 移動先更新
-        targetPos = info.obj.transform.position;
+        targetPos = new Vector3(currentPos.x, 0, currentPos.y);
 
         // TODO いるマスの更新
         // ここに自身の情報とcurrentPosでいるマスを設定する
@@ -149,6 +152,8 @@ public class CharacterMoveController : MonoBehaviour
             currentPos.x -= num;
             return;
         }
+
+        // 範囲外チェック
         if (currentPos.x < 0)
         {
             currentPos.x = 0;
@@ -183,6 +188,7 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
+        // 範囲外チェック
         if (currentPos.y < 0)
         {
             currentPos.y = 0;
@@ -227,7 +233,7 @@ public class CharacterMoveController : MonoBehaviour
         }
 
         // 座標設定
-        transform.position = info.obj.transform.position;
+        transform.position = new Vector3(currentPos.x, 0, currentPos.y);
     }
 
     public void StartAutoMove(Vector2Int start, Vector2Int goal)
