@@ -11,7 +11,7 @@ public class TextManager : MonoBehaviour
     [SerializeField, Header("セリフ表示用")] private Text mainText;
     [SerializeField, Header("Resourcesフォルダにあるテキストファイル名")] private string scenarioFileName = "scenario";
     [SerializeField, Header("1文字ごとの表示速度")] private float charInterval = 0.05f;
-    [SerializeField, Header("１行ごとに待つ時間(秒)")] private float autoDelay = 2.0f;
+    [SerializeField, Header("オートモード時１行ごとに待つ時間(秒)")] private float autoDelay = 2.0f;
     [SerializeField, Header("背景パネル")] private GameObject backgroundPanel;
 
     // 読み込んだテキストの行ごとの配列
@@ -78,25 +78,22 @@ public class TextManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator TypeNextLine()
     {
-        // 最後の行を超えたら終了
-        if (currentLine >= lines.Length)
-        {
-            // パネル非表示
-            if (backgroundPanel != null) backgroundPanel.SetActive(false);
-            yield break;
-        }
+        // 行が終わっていたら終了
+        if (currentLine >= lines.Length) yield break;
 
-        // 状態初期化
+        // 状態を更新
         isTyping = true;
         isSkip = false;
+
+        // 表示欄を初期化
         mainText.text = "";
         nameText.text = "";
 
-        // 現在の行を取得、前後の空白を除去
+        // 現在の行を取得・前後の空白を除去
         string line = lines[currentLine].Trim();
         currentLine++;
 
-        // 名前とセリフに分割
+        // 話者名とセリフに分割（「名前:セリフ」形式）
         string speaker = "";
         string message = line;
 
@@ -107,73 +104,72 @@ public class TextManager : MonoBehaviour
             message = line.Substring(colonIndex + 1).Trim();
         }
 
-        // 名前をUIに表示
+        // 話者名をUIに表示
         nameText.text = speaker;
 
-        // セリフを1文字ずつ表示（タグは非表示で装飾のみに使う）
-        int i = 0;
-        string displayText = ""; // ユーザーに見せるテキスト（タグ含むが<>は非表示）
+        // 表示済みの文字列
+        string displayedText = "";
+
+        // 現在開いているタグを記録するスタック
         Stack<string> tagStack = new Stack<string>();
+
+        // セリフを一文字ずつ表示
+        int i = 0;
         while (i < message.Length)
         {
-            // スキップ時は全文表示して中断
+            // スキップ指定時は全文表示して中断
             if (isSkip)
             {
-                mainText.text = message; // スキップ時はタグごと全文表示
+                mainText.text = message;
                 break;
             }
 
-            // ▼ タグ検出（例: <color=red>）: タグは1文字ずつ表示せず一括で追加する
+            // <タグ>（色指定など）がある場合はまとめて処理
             if (message[i] == '<')
             {
                 int closeIndex = message.IndexOf('>', i);
                 if (closeIndex != -1)
                 {
-                    string tag = message.Substring(i, closeIndex - i + 1); // <～> を抽出
+                    string tag = message.Substring(i, closeIndex - i + 1);
 
-                    if(tag.StartsWith("</"))
-                    {
-                        tagStack.Pop();
-                        displayText += tag;
-                    }
-                    else
+                    // 終了タグ(</...>)ではない場合、スタックに積む
+                    if (!tag.Contains("/"))
                     {
                         tagStack.Push(tag);
-                        displayText += tag;
                     }
+                    else if(tagStack.Count > 0)
+                    {
+                        // 終了タグならスタックから取り出す
+                        tagStack.Pop();
+                    }
+
                     i = closeIndex + 1;
                     continue;
                 }
             }
 
-            // 現在のタグをすべて適応した状態で1文字追加
-            string combined = "";
-            foreach (string tag in tagStack)
-                combined += tag;
+            // 現在の1文字を取得
+            string currentChar = message[i].ToString();
 
-            combined += message[i];
+            // 開いているすべてのタグを再構築
+            string openTags = string.Concat(tagStack.ToArray().Reverse());  // スタックの順序を正してたぐを開く
+            string closeTags = string.Concat(tagStack.Select(t => "</" + t.Substring(1)));  // 対応する終了タグを生成
 
-            foreach(string tag in tagStack.Reverse())
-            {
-                if(tag.StartsWith("<") && !tag.StartsWith("</"))
-                {
-                    string tagName = tag.Substring(1, tag.IndexOf('=') > 0 ? tag.IndexOf('=') - 1 : tag.Length - 2);
-                    combined += $"</{tagName}>";
-                }
-            }
-
-            displayText += combined;
-            mainText.text = displayText;
-            i++;
+            // 表示：開いているタグ + 現在文字 + 閉じタグ
+            mainText.text = openTags + displayedText + currentChar + closeTags;
 
             // 指定間隔待機
             yield return new WaitForSeconds(charInterval);
+
+            // 表示済みテキストに現在の1文字を追加
+            displayedText += currentChar;
+            i++;
         }
 
         // 表示完了
         isTyping = false;
 
-        // オート中なら一定時間後に次の行を自動で表示
+        // Autoモード中なら一定時間後に次の行を自動で表示
         if (isAuto)
         {
             yield return new WaitForSeconds(autoDelay);
