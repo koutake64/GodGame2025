@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c759a7b50724084fb47b1eb03eb1e8d, type: 2}
+  - {fileID: 2100000, guid: 1ea6e4873e315ac43850b5c46ae4dc44, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 14678996455793842}
   - component: {fileID: 4072175560239113654}
   m_Layer: 0
-  m_Name: Princess 1
+  m_Name: Security
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
