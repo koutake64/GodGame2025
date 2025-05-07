@@ -89,6 +89,9 @@ public class _FieldDataManager : MonoBehaviour
     [Header("展示台(横か縦に長いオブジェクト)")]
     [SerializeField] private GameObject exhibitionStand;
 
+    [Header("お宝のプレハブ")]
+    [SerializeField] private GameObject goal;
+
     private void Start()
     {
         // --- ヌルチェック
@@ -167,13 +170,16 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.wall);
         AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.wall);
         AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(2, 11), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.wall);
 
-        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(3, 10), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.pillar);
@@ -193,6 +199,7 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.exhibitionStand);
         AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.exhibitionStand);
         AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.exhibitionStand);
+        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.exhibitionStand);
 
         AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up, 0);
         AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right, 1);
@@ -344,13 +351,15 @@ public class _FieldDataManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (updateCnt > 1)
+        updateCnt++;
+
+        if (updateCnt > 2)
         {
             return;
         }
 
         // TODO フィールドデータをもとにオブジェクト生成
-        if (updateCnt == 0)
+        if (updateCnt == 1)
         {
             Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
             GameObject obj = null;
@@ -398,6 +407,11 @@ public class _FieldDataManager : MonoBehaviour
                             case E_FIELDSTATE.start:
                                 break;
                             case E_FIELDSTATE.goal:
+                                obj = Instantiate(
+                                    goal,
+                                    instPos,
+                                    instRot
+                                    );
                                 break;
                             case E_FIELDSTATE.pillar:
                                 obj = Instantiate(
@@ -447,6 +461,13 @@ public class _FieldDataManager : MonoBehaviour
                                     instPos,
                                     instRot
                                     );
+
+                                SurveillanceCamera sc = obj.transform.GetComponent<SurveillanceCamera>();
+                                if ( sc != null )
+                                {
+                                    sc.SetCameraDir(fieldData[x, y][i].dir);
+                                }
+
                                 break;
                             case E_FIELDSTATE.sc_searchRange:
                                 break;
@@ -476,10 +497,8 @@ public class _FieldDataManager : MonoBehaviour
 
             }
 
-            updateCnt++;
-
         }
-        else if (updateCnt == 1)
+        else if (updateCnt == 2)
         {
             for (int i = 0; i < moveGameObjList.Count; ++i)
             {
@@ -491,7 +510,6 @@ public class _FieldDataManager : MonoBehaviour
                 cmc.SetPos(new Vector2Int((int)moveGameObjList[i].transform.position.x, (int)moveGameObjList[i].transform.position.y));
             }
 
-            updateCnt++;
         }
 
     }
