@@ -1,0 +1,185 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class _PrincessDecideTargetPos : MonoBehaviour
+{
+    private const int searchRange = 4;
+
+    private Vector2Int nextTargetPos;
+    private Vector2Int prevTargetPos;
+
+    private List<Vector2Int> searchRangePosList = new List<Vector2Int>();
+
+    private _FieldDataManager fdMng;
+
+    private Vector2Int prevEdgeTargetPos = new Vector2Int(int.MinValue, int.MinValue);
+
+    private CharacterMoveController cmController;
+
+    private void Start()
+    {
+        cmController = GetComponent<CharacterMoveController>();
+
+        fdMng = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
+        if (fdMng == null)
+        {
+            Debug.Log("owari");
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            SetSearchRange();
+            DecideTargetPos();
+            cmController.StartAutoMove(cmController.GetCurrentPos(), nextTargetPos);
+            Debug.Log(
+                "nextTargetPos : " + nextTargetPos
+                );
+        }
+    }
+
+    private void SetSearchRange()
+    {
+        searchRangePosList.Clear();
+
+        Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
+        Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+
+        Vector2Int direction = goalPos - princessPos;
+
+        Vector2Int offset = new Vector2Int();
+        offset.x = direction.x >= 0 ? (searchRange - 1) * -1 : 0;
+        offset.y = direction.y >= 0 ? (searchRange - 1) * -1 : 0;
+
+        Vector2Int start = princessPos + offset;
+
+        for (int y = 0; y < searchRange; ++y)
+        {
+            for (int x = 0; x < searchRange; ++x)
+            {
+                Vector2Int p = start + new Vector2Int(x, y);
+                searchRangePosList.Add(p);
+            }
+        }
+
+    }
+
+    private void DecideTargetPos()
+    {
+        Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
+        List<Vector2Int> pillarPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.pillar);
+        List<Vector2Int> wallPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.wall);
+        List<Vector2Int> exhibitionStandPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.exhibitionStand);
+
+        Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+
+        Dictionary<int, List<_FieldDataManager.S_FIELDINFO>> alignmentGroups = new Dictionary<int, List<_FieldDataManager.S_FIELDINFO>>();
+
+        void GroupByAlignment(List<Vector2Int> positions)
+        {
+            foreach (var pos in positions)
+            {
+                var infoList = fdMng.GetInfoList(pos);
+                foreach (var info in infoList)
+                {
+                    if (info.alignmentID == -1) continue;
+                    if (!alignmentGroups.ContainsKey(info.alignmentID))
+                        alignmentGroups[info.alignmentID] = new List<_FieldDataManager.S_FIELDINFO>();
+                    alignmentGroups[info.alignmentID].Add(info);
+                }
+            }
+        }
+
+        GroupByAlignment(wallPos);
+        GroupByAlignment(exhibitionStandPos);
+
+        foreach (var kv in alignmentGroups)
+        {
+            var group = kv.Value;
+            if (group.Count < 2) continue;
+
+            bool isHorizontal = group[0].dir == CommonSE_Proto.E_DIRECTION.right || group[0].dir == CommonSE_Proto.E_DIRECTION.left;
+            group.Sort((a, b) => isHorizontal ? a.pos.x.CompareTo(b.pos.x) : a.pos.y.CompareTo(b.pos.y));
+            Vector2Int first = group[0].pos;
+            Vector2Int last = group[^1].pos;
+
+            if (princessPos == first && last != prevEdgeTargetPos)
+            {
+                prevTargetPos = nextTargetPos;
+                nextTargetPos = last;
+                prevEdgeTargetPos = first;
+                return;
+            }
+            else if (princessPos == last && first != prevEdgeTargetPos)
+            {
+                prevTargetPos = nextTargetPos;
+                nextTargetPos = first;
+                prevEdgeTargetPos = last;
+                return;
+            }
+        }
+
+        List<Vector2Int> candidatePosList = new List<Vector2Int>();
+        candidatePosList.Add(goalPos);
+
+        foreach (var pillar in pillarPos)
+        {
+            candidatePosList.Add(pillar + Vector2Int.up);
+            candidatePosList.Add(pillar + Vector2Int.right);
+            candidatePosList.Add(pillar + Vector2Int.down);
+            candidatePosList.Add(pillar + Vector2Int.left);
+        }
+
+        void AddAroundWithAlignmentCheck(List<Vector2Int> baseList)
+        {
+            foreach (var pos in baseList)
+            {
+                var infoList = fdMng.GetInfoList(pos);
+                foreach (var info in infoList)
+                {
+                    if (info.alignmentID == -1) continue;
+                    candidatePosList.Add(info.pos + Vector2Int.up);
+                    candidatePosList.Add(info.pos + Vector2Int.right);
+                    candidatePosList.Add(info.pos + Vector2Int.down);
+                    candidatePosList.Add(info.pos + Vector2Int.left);
+                }
+            }
+        }
+
+        AddAroundWithAlignmentCheck(wallPos);
+        AddAroundWithAlignmentCheck(exhibitionStandPos);
+
+        int minDistToPrincess = int.MaxValue;
+        int minDistToGoal = int.MaxValue;
+        Vector2Int bestTarget = princessPos;
+
+        foreach (var pos in candidatePosList)
+        {
+            if (pos == princessPos)
+            {
+                continue;
+            }
+
+            int distToPrincess = Mathf.Abs(pos.x - princessPos.x) + Mathf.Abs(pos.y - princessPos.y);
+            int distToGoal = Mathf.Abs(pos.x - goalPos.x) + Mathf.Abs(pos.y - goalPos.y);
+
+            if (distToPrincess < minDistToPrincess ||
+                (distToPrincess == minDistToPrincess && distToGoal < minDistToGoal))
+            {
+                minDistToPrincess = distToPrincess;
+                minDistToGoal = distToGoal;
+                bestTarget = pos;
+            }
+        }
+
+        prevTargetPos = nextTargetPos;
+        nextTargetPos = bestTarget;
+
+        Debug.Log(
+            "bestTarget : " + bestTarget
+            );
+    }
+
+}
