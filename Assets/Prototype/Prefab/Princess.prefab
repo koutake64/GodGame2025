@@ -96,9 +96,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5390205005539967196}
-  - component: {fileID: 4085686648157495865}
   - component: {fileID: 8206917897248256617}
   - component: {fileID: 14678996455793842}
+  - component: {fileID: 1645171572909329598}
   m_Layer: 0
   m_Name: Princess
   m_TagString: Untagged
@@ -122,18 +122,6 @@ Transform:
   - {fileID: 4585427126266175129}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4085686648157495865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6077740110341776202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c489c91bec2914944bd53d3653039a52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8206917897248256617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 0}
-  isAutoMove: 1
+  charaState: 0
 --- !u!114 &14678996455793842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +146,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7920a2328f646bf4481ee6c2f5b3a504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1645171572909329598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6077740110341776202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebdb6a4bde1c965408be40d4ea8e8f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8167232287864194219
