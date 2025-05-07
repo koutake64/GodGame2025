@@ -116,7 +116,11 @@ public class CharacterMoveController : MonoBehaviour
             // 移動終了
             if (Vector3.Distance(transform.position, targetPos) <= 0.1f)
             {
+                // 移動フラグを下げる
                 isMove = false;
+
+                // 移動先に自身の情報登録
+                fieldData.MoveInfo(prevPos, currentPos, charaState);
 
                 MoveNextStep();
             }
@@ -126,9 +130,6 @@ public class CharacterMoveController : MonoBehaviour
     {
         // 移動先更新
         targetPos = new Vector3(currentPos.x, 0, currentPos.y);
-
-        // 移動先に自身の情報登録
-        fieldData.MoveInfo(prevPos, currentPos, charaState);
     }
 
     public void AddPosX(int num)
@@ -137,26 +138,24 @@ public class CharacterMoveController : MonoBehaviour
         if (isMove || isAutoMoving) return;
 
         // 各座標更新
-        Vector2Int _prevPos = prevPos;
         prevPos = currentPos;
         currentPos.x += num;
 
         // 範囲外チェック
         if (currentPos.x < 0)
         {
-            currentPos.x = prevPos.x = _prevPos.x;
+            currentPos.x = prevPos.x;
             return;
         }
-        if (currentPos.x > fieldSize.x - 1)
+        if (currentPos.x >= fieldSize.x)
         {
-            currentPos.x = prevPos.x = _prevPos.x;
+            currentPos.x = prevPos.x;
             return;
         }
 
         // 通れるか判定
         if(!fieldData.GetIsThrough(currentPos))
         {
-            prevPos = _prevPos;
             currentPos.x -= num;
             return;
         }
@@ -171,26 +170,24 @@ public class CharacterMoveController : MonoBehaviour
         if (isMove || isAutoMoving) return;
 
         // 各座標更新
-        Vector2Int _prevPos = prevPos;
         prevPos = currentPos;
         currentPos.y += num;
 
         // 範囲外チェック
         if (currentPos.y < 0)
         {
-            currentPos.y = prevPos.y = _prevPos.y;
+            currentPos.y = prevPos.y;
             return;
         }
-        if (currentPos.y > fieldSize.y - 1)
+        if (currentPos.y >= fieldSize.y)
         {
-            currentPos.y = prevPos.y = _prevPos.y;
+            currentPos.y = prevPos.y;
             return;
         }
 
         // 通れるか判定
         if (!fieldData.GetIsThrough(currentPos))
         {
-            prevPos = _prevPos;
             currentPos.y -= num;
             return;
         }
@@ -202,7 +199,7 @@ public class CharacterMoveController : MonoBehaviour
 
     public void SetPos(Vector2Int pos)
     {
-        if (pos.x < 0 || pos.x > fieldSize.x - 1 || pos.y < 0 || pos.y > fieldSize.y - 1)
+        if (pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y)
         {
             Debug.Log(
               "Script:CharacterMoveController.cs \n" +
