@@ -507,7 +507,7 @@ public class _FieldDataManager : MonoBehaviour
                     "Position" + moveGameObjList[i].transform.position
                     );
                 CharacterMoveController cmc = moveGameObjList[i].transform.GetComponent<CharacterMoveController>();
-                cmc.SetPos(new Vector2Int((int)moveGameObjList[i].transform.position.x, (int)moveGameObjList[i].transform.position.y));
+                cmc.SetPos(new Vector2Int((int)moveGameObjList[i].transform.position.x, (int)moveGameObjList[i].transform.position.z));
             }
 
         }
