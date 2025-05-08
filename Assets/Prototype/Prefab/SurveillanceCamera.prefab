@@ -348,6 +348,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8513119782857303277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d66799085b2a3e942bd2903d8fcd3cb5, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d3a164e12bd0d24c8f8f69547ef43c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camPos: {x: 0, y: 0}
+  fieldManager: {fileID: 0}
