@@ -1,20 +1,31 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
+using TMPro;
 
 public class TextManager : MonoBehaviour
 {
-    [Header("ƒXƒy[ƒXƒL[‚ÅŸ‚Ìs‚ÖAAƒL[‚ÅƒI[ƒgØ‚è‘Ö‚¦")]
-    [SerializeField, Header("–¼‘O•\¦—p")] private Text nameText;
-    [SerializeField, Header("ƒZƒŠƒt•\¦—p")] private Text mainText;
-    [SerializeField, Header("Resources/TextsƒtƒHƒ‹ƒ_‚É‚ ‚éƒeƒLƒXƒgƒtƒ@ƒCƒ‹–¼")] private string scenarioFile = "Texts/Scenario";
-    [SerializeField, Header("1•¶š‚²‚Æ‚Ì•\¦‘¬“x")] private float charInterval = 0.05f;
-    //[SerializeField, Header("ƒI[ƒgƒ‚[ƒh‚Ps‚²‚Æ‚É‘Ò‚ÂŠÔ(•b)")] private float autoDelay = 2.0f;
-    [SerializeField, Header("”wŒiƒpƒlƒ‹")] private GameObject backgroundPanel;
+    [Header("ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ã§æ¬¡ã®è¡Œã¸ã€Aã‚­ãƒ¼ã§ã‚ªãƒ¼ãƒˆåˆ‡ã‚Šæ›¿ãˆ")]
+    [SerializeField, Header("åå‰è¡¨ç¤ºç”¨")] private Text nameText;
+    [SerializeField, Header("ã‚»ãƒªãƒ•è¡¨ç¤ºç”¨")] private Text mainText;
+    [SerializeField, Header("åå‰è¡¨ç¤ºç”¨(TextMeshProç‰ˆ)")] TMP_Text nameText_Pro = null;
+    [SerializeField, Header("ã‚»ãƒªãƒ•è¡¨ç¤ºç”¨(TextMeshProç‰ˆ)")] TMP_Text mainText_Pro = null;
+    [SerializeField, Header("Resources/Textsãƒ•ã‚©ãƒ«ãƒ€ã«ã‚ã‚‹ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«å")] private string scenarioFile = "Texts/Scenario";
+    [SerializeField, Header("1æ–‡å­—ã”ã¨ã®è¡¨ç¤ºé€Ÿåº¦")] private float charInterval = 0.05f;
+    [SerializeField, Header("TMProç‰ˆã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã¯ãƒã‚§ãƒƒã‚¯ã‚’å…¥ã‚Œã‚‹")] private bool isUseTMPro = false;
+    //[SerializeField, Header("ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰æ™‚ï¼‘è¡Œã”ã¨ã«å¾…ã¤æ™‚é–“(ç§’)")] private float autoDelay = 2.0f;
+    [Header("å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
+    [SerializeField, Header("èƒŒæ™¯ãƒ‘ãƒãƒ«")] private GameObject backgroundPanel;
+    [SerializeField, Header("ãƒ¡ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ")] private GameObject mainTextObj;
+    [SerializeField, Header("åå‰ãƒ†ã‚­ã‚¹ãƒˆ")] private GameObject nameTextObj;
+    [SerializeField, Header("ãƒ¡ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ(TMPro)")] private GameObject mainiTextProObj;
+    [SerializeField, Header("åå‰ãƒ†ã‚­ã‚¹ãƒˆ(TMPro)")] private GameObject nameTextProObj;
 
-    private Queue<char> _charQueue; // •¶š—ñ‚ğŠi”[‚·‚éƒLƒ…[
+    private Queue<char> _charQueue; // æ–‡å­—åˆ—ã‚’æ ¼ç´ã™ã‚‹ã‚­ãƒ¥ãƒ¼
     private Queue<string> _pageQueue;
+    private Queue<RichChar> _richCharQueue;
 
     private const string CHARACTER_IMAGE_PREFAB = "CharacterImage";
 
@@ -22,20 +33,20 @@ public class TextManager : MonoBehaviour
 
 
 
-    // \‘¢‘Ì’è‹`
-    
+    // æ§‹é€ ä½“å®šç¾©
+
     /// <summary>
-    /// ‹æØ‚è•¶š
+    /// åŒºåˆ‡ã‚Šæ–‡å­—
     /// </summary>
     private readonly struct S_Separate
     {
-        public readonly static char MainStart = 'u';
-        public readonly static char MainEnd = 'v';
+        public readonly static char MainStart = 'ã€Œ';
+        public readonly static char MainEnd = 'ã€';
         public readonly static char NextPage = '&';
     }
 
     /// <summary>
-    /// ƒRƒ}ƒ“ƒh
+    /// ã‚³ãƒãƒ³ãƒ‰
     /// </summary>
     private readonly struct S_Command
     {
@@ -43,6 +54,28 @@ public class TextManager : MonoBehaviour
         public readonly static string Position = "_pos";
         public readonly static string Size = "_size";
         public readonly static string Rotation = "_rotate";
+    }
+
+    /// <summary>
+    /// 1æ–‡å­—ã¨ãã®å‰å¾Œã®ã‚¿ã‚°ã‚’ä¿æŒã™ã‚‹æ§‹é€ ä½“
+    /// </summary>
+    private struct RichChar
+    {
+        public string visibleChar;  // å®Ÿéš›ã«è¡¨ç¤ºã•ã‚Œã‚‹æ–‡å­—
+        public string prefixTag;    // å‰ã«ã¤ã‘ã‚‹ã‚¿ã‚°
+        public string suffixTag;    // é–‰ã˜ã‚¿ã‚°
+
+        public RichChar(string visible, string prefix = "", string suffix = "")
+        {
+            visibleChar = visible;
+            prefixTag = prefix;
+            suffixTag = suffix;
+        }
+
+        public override string ToString()
+        {
+            return $"{prefixTag}{visibleChar}{suffixTag}";
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -59,62 +92,78 @@ public class TextManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     private void Init()
     {
         _text = LoadTextFile(scenarioFile);
         _pageQueue = SeparateString(_text, S_Separate.NextPage);
         ShowNextPage();
-        
+
     }
 
-    //============== •¶š—ñŠÖ˜Aˆ— ===============
+    //============== æ–‡å­—åˆ—é–¢é€£å‡¦ç† ===============
 
     /// <summary>
-    /// 1s‚ğ“Ç‚İo‚·ŠÖ”
+    /// 1è¡Œã‚’èª­ã¿å‡ºã™é–¢æ•°
     /// </summary>
     /// <param name="text"></param>
     private void ReadLine(string text)
     {
-        // 'u'‚ÌˆÊ’u‚Å•¶š—ñ‚ğ•ªŠ„
+        // 'ã€Œ'ã®ä½ç½®ã§æ–‡å­—åˆ—ã‚’åˆ†å‰²
         string[] ts = text.Split(S_Separate.MainStart);
-        if(ts.Length < 2)
+        if (ts.Length < 2)
         {
-            Debug.Log("‘z’è‚³‚ê‚éŒ`®‚Å‚Í‚È‚¢‚Ì‚ÅScenarioƒtƒ@ƒCƒ‹‚ğ‘‚«’¼‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.Log("æƒ³å®šã•ã‚Œã‚‹å½¢å¼ã§ã¯ãªã„ã®ã§Scenarioãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãç›´ã—ã¦ãã ã•ã„ã€‚");
         }
-        // •ª‚¯‚ÄÅ‰‚Ì’lA–¼‘O‚ğ‘ã“ü
+        // åˆ†ã‘ã¦æœ€åˆã®å€¤ã€åå‰ã‚’ä»£å…¥
         string name = ts[0];
-        // –¼‘O‚ÌŸ‚Ì’lAuv‚ÅˆÍ‚í‚ê‚½•¶š‚ª‘ã“ü‚³‚ê‚é
+        // åå‰ã®æ¬¡ã®å€¤ã€ã€Œã€ã§å›²ã‚ã‚ŒãŸæ–‡å­—ãŒä»£å…¥ã•ã‚Œã‚‹
         string main = ts[1].Remove(ts[1].LastIndexOf(S_Separate.MainEnd));
-        nameText.text = name;
-        mainText.text = "";
-        _charQueue = SeparateString(main);
+
+
+        if (!isUseTMPro)
+        {
+            nameTextProObj.SetActive(false);
+            mainiTextProObj.SetActive(false);
+            nameText.text = name;
+            mainText.text = "";
+            _charQueue = SeparateString(main);
+        }
+        else
+        {
+            nameTextObj.SetActive(false);
+            mainTextObj.SetActive(false);
+            nameText_Pro.text = name;
+            mainText_Pro.text = "";
+            _richCharQueue = SeparateRichString(main);
+        }
+
         StartCoroutine(ShowChars(charInterval));
     }
 
     /// <summary>
-    /// •¶‚ğ1•¶š‚²‚Æ‚É‹æØ‚Á‚ÄAƒLƒ…[‚ÉŠi”[‚µ‚½‚à‚Ì‚ğ•Ô‚·
+    /// æ–‡ã‚’1æ–‡å­—ã”ã¨ã«åŒºåˆ‡ã£ã¦ã€ã‚­ãƒ¥ãƒ¼ã«æ ¼ç´ã—ãŸã‚‚ã®ã‚’è¿”ã™
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
     private Queue<char> SeparateString(string str)
     {
-        // •¶š—ñ‚ğcharŒ^‚Ì”z—ñ‚ÉŠi”[1•¶š‚²‚Æ‚É‹æØ‚é
+        // æ–‡å­—åˆ—ã‚’charå‹ã®é…åˆ—ã«æ ¼ç´ï¼1æ–‡å­—ã”ã¨ã«åŒºåˆ‡ã‚‹
         char[] chars = str.ToCharArray();
         Queue<char> charQueue = new Queue<char>();
-        // ”z—ñ‚ÉŠi”[‚³‚ê‚½•¶š‚ğ‚·‚×‚Äæ‚èo‚µ‚ÄƒLƒ…[‚É‰Á‚¦‚é
+        // é…åˆ—ã«æ ¼ç´ã•ã‚ŒãŸæ–‡å­—ã‚’ã™ã¹ã¦å–ã‚Šå‡ºã—ã¦ã‚­ãƒ¥ãƒ¼ã«åŠ ãˆã‚‹
         foreach (char c in chars) charQueue.Enqueue(c);
         return charQueue;
     }
 
     /// <summary>
-    /// •¶š—ñ‚ğ‹æØ‚è•¶š‚²‚Æ‚É‹æØ‚Á‚ÄAƒLƒ…[‚ÉŠi”[‚µ‚½‚à‚Ì‚ğ•Ô‚·
+    /// æ–‡å­—åˆ—ã‚’åŒºåˆ‡ã‚Šæ–‡å­—ã”ã¨ã«åŒºåˆ‡ã£ã¦ã€ã‚­ãƒ¥ãƒ¼ã«æ ¼ç´ã—ãŸã‚‚ã®ã‚’è¿”ã™
     /// </summary>
     /// <param name="str"></param>
     /// <param name="sep"></param>
     /// <returns></returns>
-    private Queue<string> SeparateString(string str,char sep)
+    private Queue<string> SeparateString(string str, char sep)
     {
         string[] strs = str.Split(sep);
         Queue<string> queue = new Queue<string>();
@@ -122,60 +171,143 @@ public class TextManager : MonoBehaviour
         return queue;
     }
 
+    private Queue<RichChar> SeparateRichString(string str)
+    {
+        Queue<RichChar> richQueue = new Queue<RichChar>();
+        int i = 0;
+        string currentTag = "";
+        Stack<string> tagStack = new Stack<string>();
+
+        while (i < str.Length)
+        {
+            if (str[i] == '<')
+            {
+                int closeIndex = str.IndexOf('>', i);
+                if (closeIndex == -1) break;
+
+                string tag = str.Substring(i, closeIndex - i + 1);
+                if (!tag.Contains("</"))
+                {
+                    if (tagStack.Count > 0) tagStack.Pop();
+                }
+                else
+                {
+                    tagStack.Push(tag);
+                }
+
+                i = closeIndex + 1;
+            }
+            else
+            {
+                string currentChar = str[i].ToString();
+                string combiedPrefix = string.Concat(tagStack.ToArray());
+
+                string closingTags = "";
+                foreach (var t in tagStack)
+                {
+                    if (t.StartsWith("<") && !t.StartsWith("</"))
+                    {
+                        int spaceIndex = t.IndexOf(' ');
+                        int equalIndex = t.IndexOf('=');
+                        int tagNameEnd = spaceIndex != -1 ? spaceIndex : (equalIndex != -1 ? equalIndex : t.IndexOf('>'));
+                        if (tagNameEnd > 0)
+                        {
+                            string tagName = t.Substring(1, tagNameEnd - 1);
+                            closingTags = $"</{tagName}>" + closingTags;
+                        }
+                    }
+                }
+
+                richQueue.Enqueue(new RichChar
+                {
+                    visibleChar = currentChar,
+                    prefixTag = combiedPrefix,
+                    suffixTag = closingTags
+                });
+                i++;
+            }
+
+
+        }
+        return richQueue;
+    }
+
     /// <summary>
-    /// 1•¶š‚ğo—Í
+    /// 1æ–‡å­—ã‚’å‡ºåŠ›
     /// </summary>
     private bool OutPutChar()
     {
-        // ƒLƒ…[‚É‰½‚àŠi”[‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Îfalse‚ğ•Ô‚·
-        if (_charQueue.Count <= 0) return false;
-        mainText.text += _charQueue.Dequeue();
+        if (!isUseTMPro)
+        {
+            // ã‚­ãƒ¥ãƒ¼ã«ä½•ã‚‚æ ¼ç´ã•ã‚Œã¦ã„ãªã‘ã‚Œã°falseã‚’è¿”ã™
+            if (_charQueue.Count <= 0) return false;
+            mainText.text += _charQueue.Dequeue();
+        }
+        else
+        {
+            if (_richCharQueue.Count <= 0) return false;
+            mainText_Pro.text += _richCharQueue.Dequeue().ToString();
+        }
         return true;
     }
 
     /// <summary>
-    /// •¶š‘—‚èƒRƒ‹[ƒ`ƒ“
+    /// æ–‡å­—é€ã‚Šã‚³ãƒ«ãƒ¼ãƒãƒ³
     /// </summary>
     /// <param name="wait"></param>
     /// <returns></returns>
     private IEnumerator ShowChars(float wait)
     {
-        // ƒLƒ…[‚ª‹ó‚É‚È‚é‚Ü‚Åƒ‹[ƒv
+        // ã‚­ãƒ¥ãƒ¼ãŒç©ºã«ãªã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
         while (OutPutChar())
-            // wait•ª‘Ò‹@
+            // waitåˆ†å¾…æ©Ÿ
             yield return new WaitForSeconds(wait);
-        // ƒRƒ‹[ƒ`ƒ“‚ğ”²‚¯‚é
+        // ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’æŠœã‘ã‚‹
         yield break;
     }
 
     /// <summary>
-    /// ‘S•¶•\¦
+    /// å…¨æ–‡è¡¨ç¤º
     /// </summary>
     private void OutputAllChar()
     {
-        // ƒRƒ‹[ƒ`ƒ“ƒXƒgƒbƒv
+        // ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚¹ãƒˆãƒƒãƒ—
         StopCoroutine(ShowChars(charInterval));
-        // ƒLƒ…[‚ª‹ó‚É‚È‚é‚Ü‚Å•\¦
+        // ã‚­ãƒ¥ãƒ¼ãŒç©ºã«ãªã‚‹ã¾ã§è¡¨ç¤º
         while (OutPutChar()) ;
     }
 
     /// <summary>
-    /// ƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚Ìˆ—
+    /// ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã®å‡¦ç†
     /// </summary>
     private void OnClick()
     {
-        if(_charQueue.Count > 0)
-            OutputAllChar();
+        if (!isUseTMPro)
+        {
+            if (_charQueue.Count > 0)
+                OutputAllChar();
+            else
+            {
+                if (!ShowNextPage())
+                    // UIã‚’éè¡¨ç¤ºã«ã™ã‚‹
+                    backgroundPanel.SetActive(false);
+            }
+        }
         else
         {
-            if (!ShowNextPage())
-                // UI‚ğ”ñ•\¦‚É‚·‚é
-                backgroundPanel.SetActive(false);
+            if (_richCharQueue.Count > 0)
+                OutputAllChar();
+            else
+            {
+                if (!ShowNextPage())
+                    // UIã‚’éè¡¨ç¤ºã«ã™ã‚‹
+                    backgroundPanel.SetActive(false);
+            }
         }
     }
 
     /// <summary>
-    /// Ÿ‚Ìƒy[ƒW•\¦
+    /// æ¬¡ã®ãƒšãƒ¼ã‚¸è¡¨ç¤º
     /// </summary>
     /// <returns></returns>
     private bool ShowNextPage()
@@ -188,12 +320,31 @@ public class TextManager : MonoBehaviour
     private string LoadTextFile(string fname)
     {
         TextAsset textAsset = Resources.Load<TextAsset>(fname);
-        if(textAsset==null)
+        if (textAsset == null)
         {
-            Debug.Log("ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            Debug.Log("ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
         }
         return textAsset.text.Replace("\n", "").Replace("\r", "");
     }
 
-    //============== ƒRƒ}ƒ“ƒhEƒpƒ‰ƒ[ƒ^İ’è ===============
+    //============== ã‚³ãƒãƒ³ãƒ‰ãƒ»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨­å®š ===============
+
+    private string ConvertColorTags(string input)
+    {
+        Dictionary<string, string> tagDict = new Dictionary<string, string>()
+        {
+            {"!red","<color=red>" },
+            {"!green","<color=green>" },
+            {"!blue","<color=blue>" },
+            {"!yellow","<color=yellow>" },
+            {"!black","</color>" },
+            {"!end","</color>" },
+        };
+
+        foreach (var pair in tagDict)
+        {
+            input = input.Replace(pair.Key, pair.Value);
+        }
+        return input;
+    }
 }

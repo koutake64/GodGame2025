@@ -954,9 +954,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 1237518193}
   mainText: {fileID: 563647273}
+  nameText_Pro: {fileID: 0}
+  mainText_Pro: {fileID: 0}
   scenarioFile: Texts/Scenario
   charInterval: 0.1
+  isUseTMPro: 0
   backgroundPanel: {fileID: 748128809}
+  mainTextObj: {fileID: 0}
+  nameTextObj: {fileID: 0}
+  mainiTextProObj: {fileID: 0}
+  nameTextProObj: {fileID: 0}
 --- !u!1 &1628049947
 GameObject:
   m_ObjectHideFlags: 0
