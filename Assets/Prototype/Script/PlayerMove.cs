@@ -22,8 +22,6 @@ public class PlayerMove : MonoBehaviour
             else if (Input.GetKey(KeyCode.A)) moveController.AddPosX(-1);
         }
 
-        if (Input.GetKey(KeyCode.P)) moveController.StartAutoMove(moveController.GetCurrentPos(), new Vector2Int(24,24));
-
         if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
         {
             this.gameObject.SetActive(false);

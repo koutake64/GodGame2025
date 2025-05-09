@@ -28,10 +28,6 @@ public class CharacterMoveController : MonoBehaviour
 
     void Start()
     {
-
-        Debug.Log(gameObject.name + "Start");
-
-
         system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
         // nullチェック
         if(!system)
@@ -203,8 +199,6 @@ public class CharacterMoveController : MonoBehaviour
 
     public void SetPos(Vector2Int pos)
     {
-        Debug.Log(gameObject.name +"SetPos");
-
         if (pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y)
         {
             Debug.Log(
@@ -224,8 +218,6 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
-        Debug.Log(gameObject.name + "座標確認完了");
-
         // 過去座標更新
         prevPos = currentPos;
 
@@ -236,13 +228,13 @@ public class CharacterMoveController : MonoBehaviour
         transform.position = new Vector3(currentPos.x, 0, currentPos.y);
     }
 
-    public void StartAutoMove(Vector2Int start, Vector2Int goal)
+    public void StartAutoMove(Vector2Int goal)
     {
         // 自動移動中フラグをあげる
         isAutoMoving = true;
 
         // 経路探索
-        List<Vector2Int> route = new List<Vector2Int>(routeSearch.MoveRouteSearch(start, goal));
+        List<Vector2Int> route = new List<Vector2Int>(routeSearch.MoveRouteSearch(currentPos, goal));
 
         // 探索経路セット
         SetMoveRoute(route);

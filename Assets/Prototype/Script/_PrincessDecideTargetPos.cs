@@ -33,7 +33,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         {
             SetSearchRange();
             DecideTargetPos();
-            cmController.StartAutoMove(cmController.GetCurrentPos(), nextTargetPos);
+            cmController.StartAutoMove(nextTargetPos);
             Debug.Log(
                 "nextTargetPos : " + nextTargetPos
                 );
@@ -68,15 +68,25 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private void DecideTargetPos()
     {
+        // ゴール座標をセット
         Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
+
+        // 柱座標取得
         List<Vector2Int> pillarPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.pillar);
+
+        // 壁座標取得
         List<Vector2Int> wallPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.wall);
+
+        // 展示台座標取得
         List<Vector2Int> exhibitionStandPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.exhibitionStand);
 
+        // 自身の座標
         Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
+        // Dictionaryで配列を確保
         Dictionary<int, List<_FieldDataManager.S_FIELDINFO>> alignmentGroups = new Dictionary<int, List<_FieldDataManager.S_FIELDINFO>>();
 
+        // IDごとに配列に格納
         void GroupByAlignment(List<Vector2Int> positions)
         {
             foreach (var pos in positions)
@@ -84,14 +94,22 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 var infoList = fdMng.GetInfoList(pos);
                 foreach (var info in infoList)
                 {
+                    // IDが入っていなければ次へ
                     if (info.alignmentID == -1) continue;
+
+                    // 一度もそのIDで配列確保されていなければIDの添字で配列確保
                     if (!alignmentGroups.ContainsKey(info.alignmentID))
+                    {
                         alignmentGroups[info.alignmentID] = new List<_FieldDataManager.S_FIELDINFO>();
+                    }
+
+                    // IDの添字に情報追加
                     alignmentGroups[info.alignmentID].Add(info);
                 }
             }
         }
 
+        // IDごとに配列に格納
         GroupByAlignment(wallPos);
         GroupByAlignment(exhibitionStandPos);
 
@@ -176,6 +194,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
+
 
         Debug.Log(
             "bestTarget : " + bestTarget

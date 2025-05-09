@@ -53,7 +53,7 @@ public class SecurityController : MonoBehaviour
         if (isEndMovement && targetArray.Count > 0)
         {
             // 移動先を指定
-            moveController.StartAutoMove(moveController.GetCurrentPos(), targetArray[currentIndex]);
+            moveController.StartAutoMove(targetArray[currentIndex]);
 
             // 移動終了フラグを下げる
             isEndMovement = false;
@@ -112,7 +112,6 @@ public class SecurityController : MonoBehaviour
                 // お姫様を発見
                 if (info[j].state == _FieldDataManager.E_FIELDSTATE.princess)
                 {
-
                 }
 
                 // 貫通しないオブジェクトの場合
@@ -124,5 +123,10 @@ public class SecurityController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void FoundPrincess(Vector2Int targetPos)
+    {
+        moveController.StartAutoMove(targetPos);
     }
 }
