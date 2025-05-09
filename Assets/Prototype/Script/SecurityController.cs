@@ -14,7 +14,8 @@ public class SecurityController : MonoBehaviour
     private bool                    isEndMovement;  // 目標座標までの移動終了したか
     private int                     currentIndex;   // 配列の何番目か
     private int                     addNum;         // 加算する値
-    Vector2Int                      fieldSize;      // フィールドサイズ
+    private Vector2Int              fieldSize;      // フィールドサイズ
+    public bool                    isFoundPrincess;// お嬢様見つけたフラグ
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,6 +42,7 @@ public class SecurityController : MonoBehaviour
         currentIndex = 0;
         addNum = 1;
         fieldSize = fieldData.GetFieldSize();
+        isFoundPrincess = false;
     }
 
     // Update is called once per frame
@@ -127,6 +129,19 @@ public class SecurityController : MonoBehaviour
 
     public void FoundPrincess(Vector2Int targetPos)
     {
+        isFoundPrincess = true;
         moveController.StartAutoMove(targetPos);
+        currentIndex += addNum * -1;
+        isEndMovement = false;
+    }
+
+    public bool GetIsFoundPrincess()
+    {
+        return isFoundPrincess;
+    }
+
+    public void SetIsFoundPrincess(bool flg)
+    {
+        isFoundPrincess = flg;
     }
 }

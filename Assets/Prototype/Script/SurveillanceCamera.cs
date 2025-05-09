@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static CommonSE_Proto;
 
@@ -17,6 +18,9 @@ public class SurveillanceCamera : MonoBehaviour
         Center,
         Right,
     }
+
+    [Header("警備員の呼び出し範囲")]
+    [SerializeField] int callRange = 0;
 
     // 現在の監視状態（初期は中央）
     private E_WATCHSTATE watchState = E_WATCHSTATE.Center;
@@ -48,7 +52,7 @@ public class SurveillanceCamera : MonoBehaviour
     {
 
 
-       
+
 
 
 
@@ -64,11 +68,11 @@ public class SurveillanceCamera : MonoBehaviour
 
         SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
-        
+
 
         Debug.Log($"カメラ位置（マス座標）: ({SurveillanceCameraPos}");
 
-       
+
         float yRotation = transform.eulerAngles.y;
         if (Mathf.Approximately(yRotation, 0f))
             forward = Vector2.up;
@@ -116,12 +120,12 @@ public class SurveillanceCamera : MonoBehaviour
 
         Vector2Int playerGridPos = new Vector2Int((int)playerPos.x, (int)playerPos.z);
 
-        int PlayerInRangeY = Mathf.Abs(playerGridPos.y - SurveillanceCameraPos.y)+1;
-        int PlayerInRangeX = Mathf.Abs(playerGridPos.x - SurveillanceCameraPos.x)+1;
-        Debug.Log($"カメラとプレイヤーとの距離X" + ( PlayerInRangeX ));
-        Debug.Log($"カメラとプレイヤーとの距離Y" + ( PlayerInRangeY ));
-        if (( PlayerInRangeX < 1)&&
-            ( PlayerInRangeY < 1))
+        int PlayerInRangeY = Mathf.Abs(playerGridPos.y - SurveillanceCameraPos.y) + 1;
+        int PlayerInRangeX = Mathf.Abs(playerGridPos.x - SurveillanceCameraPos.x) + 1;
+        Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
+        Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
+        if ((PlayerInRangeX < 1) &&
+            (PlayerInRangeY < 1))
         {
             isPlayerInRange = true;
             Debug.Log("カメラの向きが変えられる");
@@ -132,9 +136,9 @@ public class SurveillanceCamera : MonoBehaviour
             Debug.Log("カメラの向きが変えられません");
         }
 
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.Return)) 
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.Return))
         {
-           
+
 
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
@@ -203,7 +207,7 @@ public class SurveillanceCamera : MonoBehaviour
             RotateVisualObject();
             Debug.Log("→ 現在の監視状態：" + watchState + SurveillanceCameraPos);
         }
-        
+
         // 監視範囲の状態をリセット
         ResetCameraRange();
 
@@ -261,18 +265,21 @@ public class SurveillanceCamera : MonoBehaviour
             offsetValue = -2;
             this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + 45, 0f);
         }
-      
+
 
 
         // スライド方向を現在の向きに回転
         Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
-        
+
 
         // 索敵範囲の中心位置を計算（カメラの2マス先＋スライド方向）
         Vector2 center = SurveillanceCameraPos + forward * 2 + slideDir;
 
         Vector2Int max = fieldDataManager.GetFieldSize();
-        
+
+        // お嬢様がいるか確認する座標を配列に格納
+        List<Vector2Int> checkList = new List<Vector2Int>(); 
+
         // 3×3の範囲を走査
         for (int dx = -1; dx <= 1; dx++)
         {
@@ -292,34 +299,96 @@ public class SurveillanceCamera : MonoBehaviour
                 }
 
                 Vector2Int pos = new Vector2Int(tx, ty);
-                var info = fieldDataManager.GetInfoList(pos);
 
-                Vector2Int princessGridPos = new Vector2Int((int)princessPos.x, (int)princessPos.z);
+                // 確認リストに追加
+                checkList.Add(pos);
+            }
+        }
 
-                if (pos == princessGridPos)
+        // お嬢様の座標
+        Vector2Int princessGridPos = new Vector2Int((int)princessPos.x, (int)princessPos.z);
+
+
+
+        // 対象タグの全オブジェクトを取得
+        List<GameObject> securityObj = new List<GameObject>(GameObject.FindGameObjectsWithTag("Security"));
+
+        // お嬢様が完全に範囲外か確認
+        int rangeCount = checkList.Count;   // 座標確認数
+
+        foreach (var checkPos in checkList)
+        {
+            // 座標がお嬢様と座標が違うなら
+            if (checkPos != princessGridPos)
+            {
+                // 確認済み
+                rangeCount--;
+                continue;
+            }
+
+            // 対象の範囲内にいるか判定
+            foreach (var obj in securityObj)
+            {
+                // CharacterMoveControllerが無い場合次へ
+                var charaMove = obj.GetComponent<CharacterMoveController>();
+                if (!charaMove) continue;
+
+                // 対象オブジェクトの座標取得
+                Vector2Int secyrityPos = charaMove.GetCurrentPos();
+                Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
+
+                // 座標の差の絶対値を計算
+                Vector2Int differencePos =
+                    new Vector2Int(Mathf.Abs(secyrityPos.x - cameraPos.x), Mathf.Abs(secyrityPos.y - cameraPos.y));
+
+                // 影響範囲内なら
+                if (differencePos.x <= callRange && differencePos.y <= callRange)
                 {
-                    Debug.Log("ぷりんせすがいます");
+                    // SecurityConrtollerが無いなら次へ
+                    var security = obj.GetComponent<SecurityController>();
+                    if (!security) continue;
+
+                    // すでに通知済みなら次へ
+                    if (security.GetIsFoundPrincess())
+                        continue;
+
+                    Debug.Log("通知");
+
+                    security.FoundPrincess(checkPos);
                 }
+            }
+        }
 
+        // 確認座標の全てにお嬢様がいない場合通知済みフラグを下げる
+        if(rangeCount == 0)
+        {
+            foreach(var obj in securityObj)
+            {
+                // SecurityConrtollerが無いなら次へ
+                var security = obj.GetComponent<SecurityController>();
+                if (!security) continue;
 
-                /*//if (info[].state == _FieldDataManager.E_FIELDSTATE.sc_searchRange)
-                //{
-                //}*/
-                /* Vector2Int pos = new Vector2Int(tx, ty);
-                 var info = fieldDataManager.GetInfoList(pos);
-
-                 for (int i = 0; i < info.Count; i++)
-                 {
-                     if (info[i].state == _FieldDataManager.E_FIELDSTATE.sc_searchRange)
-                     { 
-                       //  ChangeColor(Color.red);
-                     }
-                 }
-                */
+                security.SetIsFoundPrincess(false);
+                Debug.Log("A");
             }
         }
     }
 
+            /*//if (info[].state == _FieldDataManager.E_FIELDSTATE.sc_searchRange)
+            //{
+            //}*/
+            /* Vector2Int pos = new Vector2Int(tx, ty);
+             var info = fieldDataManager.GetInfoList(pos);
+
+             for (int i = 0; i < info.Count; i++)
+             {
+                 if (info[i].state == _FieldDataManager.E_FIELDSTATE.sc_searchRange)
+                 { 
+                   //  ChangeColor(Color.red);
+                 }
+             }
+            */
+     
     /// <summary>
     /// 前フレームに設定されたカメラの索敵範囲をリセットし、元の色に戻す
     /// </summary>
@@ -495,6 +564,4 @@ public class SurveillanceCamera : MonoBehaviour
     {
         return obj.CompareTag("Wall"); // 壁には"Wall"タグをつけておく
     }
-
-   
 }
