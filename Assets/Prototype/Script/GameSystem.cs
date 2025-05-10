@@ -27,9 +27,5 @@ public class GameSystem : MonoBehaviour
         return rotateSpeed;
     }
 
-    public void GameOver()
-    {
-        // TODO ゲームオーバーの処理
-    }
 
 }

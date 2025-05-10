@@ -41,10 +41,11 @@ public class _FieldDataManager : MonoBehaviour
     [System.Serializable]
     public struct S_FIELDINFO
     {
-        public int alignmentID;        // 連携番号
-        public Vector2Int pos;         // 位置
+        public GameObject obj;          // ゲームオブジェクト
+        public int alignmentID;         // 連携番号
+        public Vector2Int pos;          // 位置
         public CommonSE_Proto.E_DIRECTION dir;  // 方向
-        public E_FIELDSTATE state;     // 状態
+        public E_FIELDSTATE state;      // 状態
     }
 
     /// <summary>
@@ -68,6 +69,9 @@ public class _FieldDataManager : MonoBehaviour
     [Header("床にするプレハブ(2種類)")]
     [SerializeField] private GameObject tileA;
     [SerializeField] private GameObject tileB;
+
+    [Header("フィールドを囲う壁のプレハブ")]
+    [SerializeField] private GameObject fieldWall;
 
     [Header("お姫様のプレハブ")]
     [SerializeField] private GameObject princess;
@@ -157,6 +161,32 @@ public class _FieldDataManager : MonoBehaviour
             }
 
         }
+
+
+        Vector3 fwPos = Vector3.zero;
+        Vector3 fwScl = Vector3.one;
+
+        // 奥左
+        fwPos = new Vector3 ((fieldSizeX / 2.0f) - 0.5f, 0.0f, fieldSizeY);
+
+        obj = Instantiate(
+            fieldWall,
+            fwPos,
+            Quaternion.identity
+            );
+
+        obj.transform.localScale = new Vector3 (fieldSizeX, 1.0f, 1.0f);
+
+        // 奥右
+        fwPos = new Vector3(fieldSizeX, 0.0f, (fieldSizeY / 2.0f) - 0.5f);
+
+        obj = Instantiate(
+            fieldWall,
+            fwPos,
+            Quaternion.identity
+            );
+
+        obj.transform.localScale = new Vector3(1.0f, 1.0f, fieldSizeY);
 
         // プロトタイプ用のステージ作成
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
@@ -479,6 +509,7 @@ public class _FieldDataManager : MonoBehaviour
 
                         if (obj)
                         {
+
                             obj.transform.SetParent(field.transform);
                         }
 
