@@ -130,7 +130,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             Vector2Int first = group[0].pos;
             Vector2Int last = group[^1].pos;
 
-            // 対象がグループの端にいて、過去座標ともう一方の端座標が違う場合、もう一歩の端をターゲットに設定
+            // 対象がグループの端にいて、過去座標ともう一方の端座標が違う場合、もう一方の端をターゲットに設定
             if (princessPos == first && last != prevEdgeTargetPos)
             {
                 prevTargetPos = nextTargetPos;
@@ -217,10 +217,8 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
 
-
         Debug.Log(
             "bestTarget : " + bestTarget
             );
     }
-
 }

@@ -50,12 +50,6 @@ public class SurveillanceCamera : MonoBehaviour
 
     private void Start()
     {
-
-
-
-
-
-
         // フィールドマネージャーを取得
         fieldDataManager = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
         if (!fieldDataManager)
@@ -68,10 +62,7 @@ public class SurveillanceCamera : MonoBehaviour
 
         SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
-
-
         Debug.Log($"カメラ位置（マス座標）: ({SurveillanceCameraPos}");
-
 
         float yRotation = transform.eulerAngles.y;
         if (Mathf.Approximately(yRotation, 0f))
@@ -122,18 +113,18 @@ public class SurveillanceCamera : MonoBehaviour
 
         int PlayerInRangeY = Mathf.Abs(playerGridPos.y - SurveillanceCameraPos.y) + 1;
         int PlayerInRangeX = Mathf.Abs(playerGridPos.x - SurveillanceCameraPos.x) + 1;
-        Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
-        Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
+        //Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
+        //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
         if ((PlayerInRangeX < 1) &&
             (PlayerInRangeY < 1))
         {
             isPlayerInRange = true;
-            Debug.Log("カメラの向きが変えられる");
+            //Debug.Log("カメラの向きが変えられる");
         }
         else
         {
             isPlayerInRange = false;
-            Debug.Log("カメラの向きが変えられません");
+            //Debug.Log("カメラの向きが変えられません");
         }
 
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.Return))
@@ -205,7 +196,7 @@ public class SurveillanceCamera : MonoBehaviour
                 }
 
             RotateVisualObject();
-            Debug.Log("→ 現在の監視状態：" + watchState + SurveillanceCameraPos);
+            //Debug.Log("→ 現在の監視状態：" + watchState + SurveillanceCameraPos);
         }
 
         // 監視範囲の状態をリセット
@@ -266,8 +257,6 @@ public class SurveillanceCamera : MonoBehaviour
             this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + 45, 0f);
         }
 
-
-
         // スライド方向を現在の向きに回転
         Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
 
@@ -308,10 +297,46 @@ public class SurveillanceCamera : MonoBehaviour
         // お嬢様の座標
         Vector2Int princessGridPos = new Vector2Int((int)princessPos.x, (int)princessPos.z);
 
+        // 呼び出し通知オブジェクトリスト
+        List<SecurityController> securityObj = new List<SecurityController>();
 
+        // 自身の座標
+        Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
 
-        // 対象タグの全オブジェクトを取得
-        List<GameObject> securityObj = new List<GameObject>(GameObject.FindGameObjectsWithTag("Security"));
+        // 呼び始めの座標用
+        Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
+
+        // 通知範囲内にいる警備員を取得
+        for (int y = 0; y < callRange; ++y)
+        {
+            for(int x = 0; x < callRange; ++x)
+            {
+                // 範囲内のリスト取得
+                Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
+
+                // 範囲外確認
+                if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
+                    continue;
+
+                // 対象座標のリスト取得
+                var list = fieldDataManager.GetInfoList(callPos);
+
+                if (list.Count != 0)
+                {                
+                    // リストの中に警備員がいたら取得
+                    foreach (var obj in list)
+                    {
+                        if (!obj.obj) continue;
+                        var security = obj.obj.GetComponent<SecurityController>();
+                        if (!security) continue;
+
+                        // リストに追加
+                        securityObj.Add(security);
+                    }
+                }
+            }
+        }
+
 
         // お嬢様が完全に範囲外か確認
         int rangeCount = checkList.Count;   // 座標確認数
@@ -326,49 +351,31 @@ public class SurveillanceCamera : MonoBehaviour
                 continue;
             }
 
-            // 対象の範囲内にいるか判定
-            foreach (var obj in securityObj)
+            if (securityObj.Count != 0)
             {
-                // CharacterMoveControllerが無い場合次へ
-                var charaMove = obj.GetComponent<CharacterMoveController>();
-                if (!charaMove) continue;
-
-                // 対象オブジェクトの座標取得
-                Vector2Int secyrityPos = charaMove.GetCurrentPos();
-                Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
-
-                // 座標の差の絶対値を計算
-                Vector2Int differencePos =
-                    new Vector2Int(Mathf.Abs(secyrityPos.x - cameraPos.x), Mathf.Abs(secyrityPos.y - cameraPos.y));
-
-                // 影響範囲内なら
-                if (differencePos.x <= callRange && differencePos.y <= callRange)
+                // 対象の範囲内にいるか判定
+                foreach (var obj in securityObj)
                 {
-                    // SecurityConrtollerが無いなら次へ
-                    var security = obj.GetComponent<SecurityController>();
-                    if (!security) continue;
-
                     // すでに通知済みなら次へ
-                    if (security.GetIsFoundPrincess())
+                    if (obj.GetIsFoundPrincess())
                         continue;
 
                     Debug.Log("通知");
 
-                    security.FoundPrincess(checkPos);
+                    obj.FoundPrincess(checkPos);
                 }
             }
         }
 
         // 確認座標の全てにお嬢様がいない場合通知済みフラグを下げる
-        if(rangeCount == 0)
+        if(rangeCount == 0 && securityObj.Count != 0)
         {
             foreach(var obj in securityObj)
             {
-                // SecurityConrtollerが無いなら次へ
-                var security = obj.GetComponent<SecurityController>();
-                if (!security) continue;
+                // フラグが立っていないならfalseにする必要なので次へ
+                if (!obj.GetIsFoundPrincess()) continue;
 
-                security.SetIsFoundPrincess(false);
+                obj.SetIsFoundPrincess(false);
             }
         }
     }
