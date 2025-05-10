@@ -1229,9 +1229,16 @@ MonoBehaviour:
   mainText: {fileID: 563647273}
   nameText_Pro: {fileID: 135802327}
   mainText_Pro: {fileID: 811968041}
-  scenarioFile: Texts/Scenario
+  scenarioFile:
+  - Texts/Scenario
+  - Texts/Scenario_1
+  - 
+  - 
+  - 
   charInterval: 0.1
   isUseTMPro: 1
+  autoDelay: 2
+  isAuto: 1
   backgroundPanel: {fileID: 748128809}
   mainTextObj: {fileID: 563647271}
   nameTextObj: {fileID: 1237518191}
@@ -1571,7 +1578,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: def8ae52f7ea5f740854d80264866d10, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7fe51a82a5ae13a4bb72d70fc0f24063, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

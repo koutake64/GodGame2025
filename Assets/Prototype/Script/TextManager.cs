@@ -7,15 +7,16 @@ using TMPro;
 
 public class TextManager : MonoBehaviour
 {
-    [Header("スペースキーで次の行へ、Aキーでオート切り替え")]
+    [Header("スペースキー,マウスクリックで次のセリフへ進む")]
     [SerializeField, Header("名前表示用")] private Text nameText;
     [SerializeField, Header("セリフ表示用")] private Text mainText;
     [SerializeField, Header("名前表示用(TextMeshPro版)")] TMP_Text nameText_Pro = null;
     [SerializeField, Header("セリフ表示用(TextMeshPro版)")] TMP_Text mainText_Pro = null;
-    [SerializeField, Header("Resources/Textsフォルダにあるテキストファイル名")] private string scenarioFile = "Texts/Scenario";
+    [SerializeField, Header("Resources/Textsフォルダにあるテキストファイルリスト")] private List<string> scenarioFile;
     [SerializeField, Header("1文字ごとの表示速度")] private float charInterval = 0.05f;
     [SerializeField, Header("TMPro版を使用する場合はチェックを入れる")] private bool isUseTMPro = false;
-    //[SerializeField, Header("オートモード時１行ごとに待つ時間(秒)")] private float autoDelay = 2.0f;
+    [SerializeField, Header("オートモード時１行ごとに待つ時間(秒)")] private float autoDelay = 2.0f;
+    [SerializeField, Header("オートモードに切り替え(Tabキーで変えられる)")] private bool isAuto;
     [Header("各オブジェクト")]
     [SerializeField, Header("背景パネル")] private GameObject backgroundPanel;
     [SerializeField, Header("メインテキスト")] private GameObject mainTextObj;
@@ -87,8 +88,16 @@ public class TextManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
-            OnClick();
+
+        if (!isAuto && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
+            OnClick(false);
+
+        // Tabキーでオートモード切り替え
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            isAuto = !isAuto;
+            Debug.Log("モードを切り替えました。オートモード:" + isAuto);
+        }
     }
 
     /// <summary>
@@ -96,11 +105,29 @@ public class TextManager : MonoBehaviour
     /// </summary>
     private void Init()
     {
-        _text = LoadTextFile(scenarioFile);
+        _text = LoadTextFile(scenarioFile[1].ToString());
         _pageQueue = SeparateString(_text, S_Separate.NextPage);
         ShowNextPage();
 
     }
+
+    //============== 外部スクリプトから呼び出す用 ================
+    /// <summary>
+    /// 外部用　会話のスタート
+    /// </summary>
+    /// <param name="talkNum"></param>
+    public void StartTalk(int talkNum)
+    {
+        backgroundPanel.SetActive(true);
+        if (scenarioFile[talkNum] == null)
+            _text = LoadTextFile(scenarioFile[talkNum].ToString());
+        else
+            Debug.LogError($"テキストファイルリスト番号{talkNum}番のテキストファイルがリストに登録されていません。");
+        _pageQueue = SeparateString(_text, S_Separate.NextPage);
+        ShowNextPage();
+    }
+
+
 
     //============== 文字列関連処理 ===============
 
@@ -262,6 +289,12 @@ public class TextManager : MonoBehaviour
         while (OutPutChar())
             // wait分待機
             yield return new WaitForSeconds(wait);
+        if(isAuto)
+        {
+            yield return new WaitForSeconds(autoDelay);
+            OnClick(false);
+        }
+
         // コルーチンを抜ける
         yield break;
     }
@@ -280,8 +313,9 @@ public class TextManager : MonoBehaviour
     /// <summary>
     /// クリックしたときの処理
     /// </summary>
-    private void OnClick()
+    private void OnClick(bool auto)
     {
+
         if (!isUseTMPro)
         {
             if (_charQueue.Count > 0)
