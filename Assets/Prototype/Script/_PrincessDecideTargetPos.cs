@@ -86,7 +86,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         // Dictionaryで配列を確保
         Dictionary<int, List<_FieldDataManager.S_FIELDINFO>> alignmentGroups = new Dictionary<int, List<_FieldDataManager.S_FIELDINFO>>();
 
-        // IDごとに配列に格納
+        // IDごとにグループ化
         void GroupByAlignment(List<Vector2Int> positions)
         {
             foreach (var pos in positions)
@@ -116,13 +116,21 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         foreach (var kv in alignmentGroups)
         {
             var group = kv.Value;
+
+            // グループ内の要素数が2未満の場合は次へ
             if (group.Count < 2) continue;
 
+            // 方向が左右のどちらかならtrue
             bool isHorizontal = group[0].dir == CommonSE_Proto.E_DIRECTION.right || group[0].dir == CommonSE_Proto.E_DIRECTION.left;
+
+            // 方向に応じてソート
             group.Sort((a, b) => isHorizontal ? a.pos.x.CompareTo(b.pos.x) : a.pos.y.CompareTo(b.pos.y));
+
+            // グループの端の座標を取得
             Vector2Int first = group[0].pos;
             Vector2Int last = group[^1].pos;
 
+            // 対象がグループの端にいて、過去座標ともう一方の端座標が違う場合、もう一歩の端をターゲットに設定
             if (princessPos == first && last != prevEdgeTargetPos)
             {
                 prevTargetPos = nextTargetPos;
@@ -139,9 +147,11 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             }
         }
 
+        // ターゲット候補の座標リストにゴール座標を追加
         List<Vector2Int> candidatePosList = new List<Vector2Int>();
         candidatePosList.Add(goalPos);
 
+        // 柱の周囲4箇所を移動候補リストに追加
         foreach (var pillar in pillarPos)
         {
             candidatePosList.Add(pillar + Vector2Int.up);
@@ -157,7 +167,10 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 var infoList = fdMng.GetInfoList(pos);
                 foreach (var info in infoList)
                 {
+                    // IDがない場合は次へ
                     if (info.alignmentID == -1) continue;
+
+                    // 指定座標の周囲4箇所を移動候補リストに追加
                     candidatePosList.Add(info.pos + Vector2Int.up);
                     candidatePosList.Add(info.pos + Vector2Int.right);
                     candidatePosList.Add(info.pos + Vector2Int.down);
@@ -166,13 +179,16 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             }
         }
 
+        // 壁と展示台の周囲の座標を移動候補リストに追加
         AddAroundWithAlignmentCheck(wallPos);
         AddAroundWithAlignmentCheck(exhibitionStandPos);
 
+        // 最適なターゲット座標を算出するための距離
         int minDistToPrincess = int.MaxValue;
         int minDistToGoal = int.MaxValue;
         Vector2Int bestTarget = princessPos;
 
+        // 移動候補リストの中でプリンセスとゴールとの距離を計算しターゲットを決定
         foreach (var pos in candidatePosList)
         {
             if (pos == princessPos)
@@ -180,10 +196,15 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 continue;
             }
 
+            // プリンセスとの距離を計算
             int distToPrincess = Mathf.Abs(pos.x - princessPos.x) + Mathf.Abs(pos.y - princessPos.y);
+            
+            // ゴールとの距離を計算
             int distToGoal = Mathf.Abs(pos.x - goalPos.x) + Mathf.Abs(pos.y - goalPos.y);
 
+            // プリンセスとの距離が一番近い
             if (distToPrincess < minDistToPrincess ||
+            // 設定済みのプリンセスとの距離と同じかつゴールにさらに近い場合は更新
                 (distToPrincess == minDistToPrincess && distToGoal < minDistToGoal))
             {
                 minDistToPrincess = distToPrincess;
@@ -192,6 +213,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             }
         }
 
+        // 過去座標・ターゲット座標更新
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
 

@@ -369,7 +369,6 @@ public class SurveillanceCamera : MonoBehaviour
                 if (!security) continue;
 
                 security.SetIsFoundPrincess(false);
-                Debug.Log("A");
             }
         }
     }
