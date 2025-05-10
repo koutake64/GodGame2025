@@ -509,7 +509,9 @@ public class _FieldDataManager : MonoBehaviour
 
                         if (obj)
                         {
-
+                            S_FIELDINFO temp = fieldData[x, y][i];
+                            temp.obj = obj;
+                            fieldData[x, y][i] = temp;
                             obj.transform.SetParent(field.transform);
                         }
 
