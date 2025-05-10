@@ -337,7 +337,6 @@ public class SurveillanceCamera : MonoBehaviour
             }
         }
 
-
         // お嬢様が完全に範囲外か確認
         int rangeCount = checkList.Count;   // 座標確認数
 
@@ -353,14 +352,11 @@ public class SurveillanceCamera : MonoBehaviour
 
             if (securityObj.Count != 0)
             {
-                // 対象の範囲内にいるか判定
                 foreach (var obj in securityObj)
                 {
                     // すでに通知済みなら次へ
                     if (obj.GetIsFoundPrincess())
                         continue;
-
-                    Debug.Log("通知");
 
                     obj.FoundPrincess(checkPos);
                 }

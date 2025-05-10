@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1706c19d2460d44b41c2b431ac6c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: 1, y: 1}
+  startPos: {x: 2, y: 10}
   charaState: 7
 --- !u!114 &14678996455793842
 MonoBehaviour:
@@ -161,11 +161,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetArray:
-  - {x: 4, y: 0}
-  - {x: 8, y: 8}
-  - {x: 5, y: 1}
-  - {x: 1, y: 1}
+  - {x: 2, y: 10}
   monitoringRange: 5
+  isFoundPrincess: 0
 --- !u!1 &8167232287864194219
 GameObject:
   m_ObjectHideFlags: 0
