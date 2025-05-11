@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
@@ -6,12 +6,12 @@ using UnityEngine;
 using static CommonSE_Proto;
 
 /// <summary>
-/// ŠÄ‹ƒJƒƒ‰‚Ìõ“G”ÍˆÍ‚ğŠÇ—‚·‚éƒXƒNƒŠƒvƒg
-/// ƒJƒƒ‰‚ÌŒü‚«Eõ“Gó‘Ô‚ğØ‚è‘Ö‚¦A‹–ì“à‚Ìƒ}ƒX‚Ìó‘Ô‚âF‚ğ•ÏX‚·‚é
+/// ç›£è¦–ã‚«ãƒ¡ãƒ©ã®ç´¢æ•µç¯„å›²ã‚’ç®¡ç†ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+/// ã‚«ãƒ¡ãƒ©ã®å‘ããƒ»ç´¢æ•µçŠ¶æ…‹ã‚’åˆ‡ã‚Šæ›¿ãˆã€è¦–é‡å†…ã®ãƒã‚¹ã®çŠ¶æ…‹ã‚„è‰²ã‚’å¤‰æ›´ã™ã‚‹
 /// </summary>
 public class SurveillanceCamera : MonoBehaviour
 {
-    // ŠÄ‹ó‘Ô‚Ì—ñ‹“Œ^i¶E’†‰›E‰Ej
+    // ç›£è¦–çŠ¶æ…‹ã®åˆ—æŒ™å‹ï¼ˆå·¦ãƒ»ä¸­å¤®ãƒ»å³ï¼‰
     private enum E_WATCHSTATE
     {
         Left,
@@ -19,57 +19,57 @@ public class SurveillanceCamera : MonoBehaviour
         Right,
     }
 
-    [Header("Œx”õˆõ‚ÌŒÄ‚Ño‚µ”ÍˆÍ")]
+    [Header("è­¦å‚™å“¡ã®å‘¼ã³å‡ºã—ç¯„å›²")]
     [SerializeField] int callRange = 0;
 
-    // Œ»İ‚ÌŠÄ‹ó‘Ôi‰Šú‚Í’†‰›j
+    // ç¾åœ¨ã®ç›£è¦–çŠ¶æ…‹ï¼ˆåˆæœŸã¯ä¸­å¤®ï¼‰
     private E_WATCHSTATE watchState = E_WATCHSTATE.Center;
 
-    // ƒtƒB[ƒ‹ƒhî•ñ‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+    // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
     private _FieldDataManager fieldDataManager;
 
-    // ƒJƒƒ‰‚ÌˆÊ’uiƒ}ƒXÀ•Wj
+    // ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆãƒã‚¹åº§æ¨™ï¼‰
     private Vector2Int SurveillanceCameraPos = new Vector2Int();
 
 
-    // ƒJƒƒ‰‚Ì³–Ê•ûŒüi‰Šú‚Íã•ûŒüj
+    // ã‚«ãƒ¡ãƒ©ã®æ­£é¢æ–¹å‘ï¼ˆåˆæœŸã¯ä¸Šæ–¹å‘ï¼‰
     private Vector2 forward = Vector2.up;
 
-    //ƒvƒŒƒCƒ„[‚ÌÀ•W
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™
     Vector3 playerPos = new Vector3();
 
     private Vector3 princessPos = new Vector3();
 
-    //ƒJƒƒ‰‚ÌŒü‚«‚Ìæ“¾
+    //ã‚«ãƒ¡ãƒ©ã®å‘ãã®å–å¾—
     CommonSE_Proto.E_DIRECTION CameraDir;
 
-    //ƒJƒƒ‰‚Ìü‚è‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚é‚©
+    //ã‚«ãƒ¡ãƒ©ã®å‘¨ã‚Šã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ã‚‹ã‹
     bool isPlayerInRange = false;
 
-    // ƒ}ƒX‚Ìó‘Ôæ“¾—p
+    // ãƒã‚¹ã®çŠ¶æ…‹å–å¾—ç”¨
     FieldDataManager fieldManager;
 
 
 
 
-    //ƒŒƒC—p
-    public float rayLength = 6.0f;   // Ray‚Ì’·‚³i6.0fj
-    public int rayCount = 8;         // Ray‚Ì–{”i—áF6–{‚Åîój
+    //ãƒ¬ã‚¤ç”¨
+    public float rayLength = 6.0f;   // Rayã®é•·ã•ï¼ˆ6.0fï¼‰
+    public int rayCount = 8;         // Rayã®æœ¬æ•°ï¼ˆä¾‹ï¼š6æœ¬ã§æ‰‡çŠ¶ï¼‰
     private void Start()
     {
-        // ƒtƒB[ƒ‹ƒhƒ}ƒl[ƒWƒƒ[‚ğæ“¾
+        // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’å–å¾—
         fieldDataManager = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
         if (!fieldDataManager)
         {
             Debug.LogError(
                 "Script:SurveillanceCamera.cs \n" +
-                "fieldDataManager‚ªnull‚Å‚·"
+                "fieldDataManagerãŒnullã§ã™"
             );
         }
 
         SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
-        Debug.Log($"ƒJƒƒ‰ˆÊ’uiƒ}ƒXÀ•Wj: ({SurveillanceCameraPos}");
+        Debug.Log($"ã‚«ãƒ¡ãƒ©ä½ç½®ï¼ˆãƒã‚¹åº§æ¨™ï¼‰: ({SurveillanceCameraPos}");
 
         float yRotation = transform.eulerAngles.y;
         if (Mathf.Approximately(yRotation, 0f))
@@ -81,9 +81,9 @@ public class SurveillanceCamera : MonoBehaviour
         else if (Mathf.Approximately(yRotation, 270f))
             forward = Vector2.left;
         else
-            Debug.LogWarning($"‘z’èŠO‚ÌŠp“x‚Å‚·: {yRotation}");
+            Debug.LogWarning($"æƒ³å®šå¤–ã®è§’åº¦ã§ã™: {yRotation}");
 
-        // ‰ñ“]‚Æõ“G”ÍˆÍ‚Ì‰Šú•`‰æ‚ğÀs
+        // å›è»¢ã¨ç´¢æ•µç¯„å›²ã®åˆæœŸæç”»ã‚’å®Ÿè¡Œ
         RotateVisualObject();
         SearchRange();
 
@@ -91,28 +91,28 @@ public class SurveillanceCamera : MonoBehaviour
 
     void Update()
     {
-        // ƒvƒŒƒCƒ„[‚Ì GameObject ‚ğg‚Á‚ÄÀ•W‚ğæ“¾
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã® GameObject ã‚’ä½¿ã£ã¦åº§æ¨™ã‚’å–å¾—
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
             playerPos = player.transform.position;
-            //Debug.Log($"ƒvƒŒƒCƒ„[‚ÌˆÊ’u : ({playerPos}");
+            //Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½® : ({playerPos}");
         }
         else
         {
-            Debug.LogError("ƒvƒŒƒCƒ„[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½");
+            Debug.LogError("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ");
         }
 
-        // ƒvƒŠƒ“ƒZƒX‚Ì GameObject ‚ğg‚Á‚ÄÀ•W‚ğæ“¾
+        // ãƒ—ãƒªãƒ³ã‚»ã‚¹ã® GameObject ã‚’ä½¿ã£ã¦åº§æ¨™ã‚’å–å¾—
         GameObject princess = GameObject.FindWithTag("Princess");
         if (princess != null)
         {
             princessPos = princess.transform.position;
-            //Debug.Log($"ƒvƒŒƒCƒ„[‚ÌˆÊ’u : ({princessPos}");
+            //Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½® : ({princessPos}");
         }
         else
         {
-            Debug.LogError("ƒvƒŠƒ“ƒZƒX‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½");
+            Debug.LogError("ãƒ—ãƒªãƒ³ã‚»ã‚¹ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ");
         }
 
 
@@ -120,18 +120,18 @@ public class SurveillanceCamera : MonoBehaviour
 
         int PlayerInRangeY = Mathf.Abs(playerGridPos.y - SurveillanceCameraPos.y) + 1;
         int PlayerInRangeX = Mathf.Abs(playerGridPos.x - SurveillanceCameraPos.x) + 1;
-        //Debug.Log($"ƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚Æ‚Ì‹——£X" + (PlayerInRangeX));
-        //Debug.Log($"ƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚Æ‚Ì‹——£Y" + (PlayerInRangeY));
+        //Debug.Log($"ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢X" + (PlayerInRangeX));
+        //Debug.Log($"ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢Y" + (PlayerInRangeY));
         if ((PlayerInRangeX < 1) &&
             (PlayerInRangeY < 1))
         {
             isPlayerInRange = true;
-            //Debug.Log("ƒJƒƒ‰‚ÌŒü‚«‚ª•Ï‚¦‚ç‚ê‚é");
+            //Debug.Log("ã‚«ãƒ¡ãƒ©ã®å‘ããŒå¤‰ãˆã‚‰ã‚Œã‚‹");
         }
         else
         {
             isPlayerInRange = false;
-            //Debug.Log("ƒJƒƒ‰‚ÌŒü‚«‚ª•Ï‚¦‚ç‚ê‚Ü‚¹‚ñ");
+            //Debug.Log("ã‚«ãƒ¡ãƒ©ã®å‘ããŒå¤‰ãˆã‚‰ã‚Œã¾ã›ã‚“");
         }
 
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.Return))
@@ -139,14 +139,14 @@ public class SurveillanceCamera : MonoBehaviour
 
 
             if (forward == Vector2.up)
-                if (playerPos.x > this.transform.position.x) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì¶‘¤
+                if (playerPos.x > this.transform.position.x) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å·¦å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Right;
                     else if (watchState == E_WATCHSTATE.Left)
                         watchState = E_WATCHSTATE.Center;
                 }
-                else if (playerPos.x < this.transform.position.x) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì‰E‘¤
+                else if (playerPos.x < this.transform.position.x) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å³å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Left;
@@ -155,14 +155,14 @@ public class SurveillanceCamera : MonoBehaviour
                 }
 
             if (forward == Vector2.down)
-                if (playerPos.x < this.transform.position.x) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì¶‘¤
+                if (playerPos.x < this.transform.position.x) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å·¦å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Right;
                     else if (watchState == E_WATCHSTATE.Left)
                         watchState = E_WATCHSTATE.Center;
                 }
-                else if (playerPos.x > this.transform.position.x) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì‰E‘¤
+                else if (playerPos.x > this.transform.position.x) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å³å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Left;
@@ -171,14 +171,14 @@ public class SurveillanceCamera : MonoBehaviour
                 }
 
             if (forward == Vector2.left)
-                if (playerPos.z < this.transform.position.z) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì¶‘¤
+                if (playerPos.z < this.transform.position.z) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å·¦å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Right;
                     else if (watchState == E_WATCHSTATE.Left)
                         watchState = E_WATCHSTATE.Center;
                 }
-                else if (playerPos.z > this.transform.position.z) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì‰E‘¤
+                else if (playerPos.z > this.transform.position.z) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å³å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Left;
@@ -187,14 +187,14 @@ public class SurveillanceCamera : MonoBehaviour
                 }
 
             if (forward == Vector2.right)
-                if (playerPos.z > this.transform.position.z) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì¶‘¤
+                if (playerPos.z > this.transform.position.z) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å·¦å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Right;
                     else if (watchState == E_WATCHSTATE.Left)
                         watchState = E_WATCHSTATE.Center;
                 }
-                else if (playerPos.z < this.transform.position.z) // ƒvƒŒƒCƒ„[‚ªƒJƒƒ‰‚Ì‰E‘¤
+                else if (playerPos.z < this.transform.position.z) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚«ãƒ¡ãƒ©ã®å³å´
                 {
                     if (watchState == E_WATCHSTATE.Center)
                         watchState = E_WATCHSTATE.Left;
@@ -203,18 +203,18 @@ public class SurveillanceCamera : MonoBehaviour
                 }
 
             RotateVisualObject();
-            //Debug.Log("¨ Œ»İ‚ÌŠÄ‹ó‘ÔF" + watchState + SurveillanceCameraPos);
+            //Debug.Log("â†’ ç¾åœ¨ã®ç›£è¦–çŠ¶æ…‹ï¼š" + watchState + SurveillanceCameraPos);
         }
 
-        // ŠÄ‹”ÍˆÍ‚Ìó‘Ô‚ğƒŠƒZƒbƒg
+        // ç›£è¦–ç¯„å›²ã®çŠ¶æ…‹ã‚’ãƒªã‚»ãƒƒãƒˆ
         ResetCameraRange();
 
-        // Œ»İ‚ÌŠÄ‹ó‘Ô‚É‰‚¶‚Äõ“Gˆ—‚ğÀs
+        // ç¾åœ¨ã®ç›£è¦–çŠ¶æ…‹ã«å¿œã˜ã¦ç´¢æ•µå‡¦ç†ã‚’å®Ÿè¡Œ
         SearchRange();
     }
 
     /// <summary>
-    /// ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg‚ÌŒ©‚½–Ú‚ğforward‚ÌŒü‚«‚É‡‚í‚¹‚Ä‰ñ“]‚³‚¹‚é
+    /// ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¦‹ãŸç›®ã‚’forwardã®å‘ãã«åˆã‚ã›ã¦å›è»¢ã•ã›ã‚‹
     /// </summary>
     private void RotateVisualObject()
     {
@@ -242,13 +242,13 @@ public class SurveillanceCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// Œ»İ‚ÌŠÄ‹ó‘Ô‚É‰‚¶‚Ä3~3‚Ìõ“G”ÍˆÍ‚ğİ’è‚µAF‚ğ•ÏX‚·‚é
+    /// ç¾åœ¨ã®ç›£è¦–çŠ¶æ…‹ã«å¿œã˜ã¦3Ã—3ã®ç´¢æ•µç¯„å›²ã‚’è¨­å®šã—ã€è‰²ã‚’å¤‰æ›´ã™ã‚‹
     /// </summary>
     private void SearchRange()
     {
         int offsetValue = 0;
 
-        // ó‘Ô‚É‰‚¶‚ÄƒXƒ‰ƒCƒh•ûŒü‚ğŒˆ’è
+        // çŠ¶æ…‹ã«å¿œã˜ã¦ã‚¹ãƒ©ã‚¤ãƒ‰æ–¹å‘ã‚’æ±ºå®š
         if (watchState == E_WATCHSTATE.Left)
         {
             offsetValue = 2;
@@ -264,55 +264,54 @@ public class SurveillanceCamera : MonoBehaviour
             this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + 45, 0f);
         }
 
-        // ƒXƒ‰ƒCƒh•ûŒü‚ğŒ»İ‚ÌŒü‚«‚É‰ñ“]
+        // ã‚¹ãƒ©ã‚¤ãƒ‰æ–¹å‘ã‚’ç¾åœ¨ã®å‘ãã«å›è»¢
         Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
 
 
-        // õ“G”ÍˆÍ‚Ì’†SˆÊ’u‚ğŒvZiƒJƒƒ‰‚Ì2ƒ}ƒXæ{ƒXƒ‰ƒCƒh•ûŒüj
+        // ç´¢æ•µç¯„å›²ã®ä¸­å¿ƒä½ç½®ã‚’è¨ˆç®—ï¼ˆã‚«ãƒ¡ãƒ©ã®2ãƒã‚¹å…ˆï¼‹ã‚¹ãƒ©ã‚¤ãƒ‰æ–¹å‘ï¼‰
         Vector2 center = SurveillanceCameraPos + forward * 2 + slideDir;
 
         Vector2Int max = fieldDataManager.GetFieldSize();
 
-        // ‚¨ì—l‚ª‚¢‚é‚©Šm”F‚·‚éÀ•W‚ğ”z—ñ‚ÉŠi”[
+        // ãŠå¬¢æ§˜ãŒã„ã‚‹ã‹ç¢ºèªã™ã‚‹åº§æ¨™ã‚’é…åˆ—ã«æ ¼ç´
         List<Vector2Int> checkList = new List<Vector2Int>();
 
-        // ‚¨ì—l‚ÌÀ•W
+        // ãŠå¬¢æ§˜ã®åº§æ¨™
         Vector2Int princessGridPos = new Vector2Int((int)princessPos.x, (int)princessPos.z);
 
 
-        float halfAngle = 90f; // ¶‰E90‹‚¸‚Âi‡Œv180‹j
-        float startAngle = -halfAngle; // ¶’[‚ÌŠp“xi-90‹j
+        float halfAngle = 90f; // å·¦å³90Â°ãšã¤ï¼ˆåˆè¨ˆ180Â°ï¼‰
+        float startAngle = -halfAngle; // å·¦ç«¯ã®è§’åº¦ï¼ˆ-90Â°ï¼‰
 
-        float angleStep = (halfAngle * 2) / (rayCount - 1); // RayŠÔ‚ÌŠp“x·
+        float angleStep = (halfAngle * 2) / (rayCount - 1); // Rayé–“ã®è§’åº¦å·®
 
         for (int i = 0; i < rayCount; i++)
         {
-            // ŠeRay‚Ì”­ËŠp“x
+            // å„Rayã®ç™ºå°„è§’åº¦
             float angle = startAngle + i * angleStep;
 
-            // Šp“x•ª‚¾‚¯‘O•û‚ğY²‚Å‰ñ“] ¨ ”ò‚Î‚·•ûŒü
+            // è§’åº¦åˆ†ã ã‘å‰æ–¹ã‚’Yè»¸ã§å›è»¢ â†’ é£›ã°ã™æ–¹å‘
             Vector3 direction = Quaternion.Euler(0, angle, 0) * transform.forward;
 
-            // Rayì¬
+            // Rayä½œæˆ
             Ray ray = new Ray(transform.position, direction);
 
-            // ƒV[ƒ“ƒrƒ…[ã‚ÉRay‚ğ•`‰æ
+            // ã‚·ãƒ¼ãƒ³ãƒ“ãƒ¥ãƒ¼ä¸Šã«Rayã‚’æç”»
             Debug.DrawRay(ray.origin, ray.direction * rayLength, Color.red);
 
-            // RaycastAll ‚ğg—p‚µ‚Ä‚·‚×‚Ä‚Ìƒqƒbƒg‚ğæ“¾
+            // RaycastAll ã‚’ä½¿ç”¨ã—ã¦ã™ã¹ã¦ã®ãƒ’ãƒƒãƒˆã‚’å–å¾—
             RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, rayLength);
 
-            // ƒqƒbƒg‡‚Éƒ\[ƒgi‹ß‚¢‡j
+            // ãƒ’ãƒƒãƒˆé †ã«ã‚½ãƒ¼ãƒˆï¼ˆè¿‘ã„é †ï¼‰
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
-            //Ray‚ª‰½‚©‚É“–‚½‚Á‚½‚©ƒ`ƒFƒbƒNi‹——£§ŒÀ•t‚«j
-
+            ////RayãŒä½•ã‹ã«å½“ãŸã£ãŸã‹ãƒã‚§ãƒƒã‚¯ï¼ˆè·é›¢åˆ¶é™ä»˜ãï¼‰
             foreach (var hit in hits)
             {
                 if (hit.collider.gameObject == this.gameObject)
-                    continue; // ©•ª©g‚Í–³‹
+                    continue; // è‡ªåˆ†è‡ªèº«ã¯ç„¡è¦–
 
-                // 3~3‚Ì”ÍˆÍ‚ğ‘–¸
+                // 3Ã—3ã®ç¯„å›²ã‚’èµ°æŸ»
                 for (int dx = -1; dx <= 1; dx++)
                 {
                     for (int dy = -1; dy <= 1; dy++)
@@ -324,7 +323,7 @@ public class SurveillanceCamera : MonoBehaviour
                         int tx = (int)targetPos.x;
                         int ty = (int)targetPos.y;
 
-                        // ”ÍˆÍŠO‚Í–³‹
+                        // ç¯„å›²å¤–ã¯ç„¡è¦–
                         if (tx < 0 || tx >= max.x || ty < 0 || ty >= max.y)
                         {
                             continue;
@@ -332,35 +331,26 @@ public class SurveillanceCamera : MonoBehaviour
 
 
                         Vector2Int pos = new Vector2Int(tx, ty);
-                        //// ƒvƒŠƒ“ƒZƒX‚ªŒ©‚¦‚½ê‡
-                        //if (pos == princessGridPos)
-                        //{
-                        //    // ƒvƒŠƒ“ƒZƒX‚ª”ÍˆÍ“à‚É‚¢‚éê‡ƒfƒoƒbƒOƒƒO‚ğ•\¦
-                        //    Debug.Log("ƒvƒŠƒ“ƒZƒX‚ª”ÍˆÍ“à‚É‚¢‚Ü‚·I À•W: " + pos);
-                        //}
-
-
-                        // ƒvƒŠƒ“ƒZƒX‚È‚ç•\¦
+                        // ãƒ—ãƒªãƒ³ã‚»ã‚¹ãªã‚‰è¡¨ç¤º
                         if (hit.collider.CompareTag("Princess"))
                         {
-                            Debug.Log("ƒvƒŠƒ“ƒZƒX”­Œ©I" + hit.collider.gameObject.name);
+                            Debug.Log("ãƒ—ãƒªãƒ³ã‚»ã‚¹ç™ºè¦‹ï¼" + hit.collider.gameObject.name);
                         }
                         else if (hit.collider.CompareTag("Player"))
                         {
-                            Debug.Log("·–”­Œ©I" + hit.collider.gameObject.name);
+                            Debug.Log("åŸ·äº‹ç™ºè¦‹ï¼" + hit.collider.gameObject.name);
                         }
                         else
                         {
-                            Debug.Log("‰½‚©‚Éƒqƒbƒg ¨ " + hit.collider.gameObject.name);
+                            Debug.Log("ä½•ã‹ã«ãƒ’ãƒƒãƒˆ â†’ " + hit.collider.gameObject.name);
                         }
 
 
-                        // Šm”FƒŠƒXƒg‚É’Ç‰Á
+                        // ç¢ºèªãƒªã‚¹ãƒˆã«è¿½åŠ 
                         checkList.Add(pos);
                     }
                 }
             }
-
         }
 
 
@@ -368,55 +358,55 @@ public class SurveillanceCamera : MonoBehaviour
 
 
 
-        // ŒÄ‚Ño‚µ’Ê’mƒIƒuƒWƒFƒNƒgƒŠƒXƒg
+        // å‘¼ã³å‡ºã—é€šçŸ¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªã‚¹ãƒˆ
         List<SecurityController> securityObj = new List<SecurityController>();
 
-        // ©g‚ÌÀ•W
+        // è‡ªèº«ã®åº§æ¨™
         Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
 
-        // ŒÄ‚Ñn‚ß‚ÌÀ•W—p
+        // å‘¼ã³å§‹ã‚ã®åº§æ¨™ç”¨
         Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
 
-        // ’Ê’m”ÍˆÍ“à‚É‚¢‚éŒx”õˆõ‚ğæ“¾
+        // é€šçŸ¥ç¯„å›²å†…ã«ã„ã‚‹è­¦å‚™å“¡ã‚’å–å¾—
         for (int y = 0; y < callRange; ++y)
         {
             for (int x = 0; x < callRange; ++x)
             {
-                // ”ÍˆÍ“à‚ÌƒŠƒXƒgæ“¾
+                // ç¯„å›²å†…ã®ãƒªã‚¹ãƒˆå–å¾—
                 Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
 
-                // ”ÍˆÍŠOŠm”F
+                // ç¯„å›²å¤–ç¢ºèª
                 if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
                     continue;
 
-                // ‘ÎÛÀ•W‚ÌƒŠƒXƒgæ“¾
+                // å¯¾è±¡åº§æ¨™ã®ãƒªã‚¹ãƒˆå–å¾—
                 var list = fieldDataManager.GetInfoList(callPos);
 
                 if (list.Count != 0)
                 {
-                    // ƒŠƒXƒg‚Ì’†‚ÉŒx”õˆõ‚ª‚¢‚½‚çæ“¾
+                    // ãƒªã‚¹ãƒˆã®ä¸­ã«è­¦å‚™å“¡ãŒã„ãŸã‚‰å–å¾—
                     foreach (var obj in list)
                     {
                         if (!obj.obj) continue;
                         var security = obj.obj.GetComponent<SecurityController>();
                         if (!security) continue;
 
-                        // ƒŠƒXƒg‚É’Ç‰Á
+                        // ãƒªã‚¹ãƒˆã«è¿½åŠ 
                         securityObj.Add(security);
                     }
                 }
             }
         }
 
-        // ‚¨ì—l‚ªŠ®‘S‚É”ÍˆÍŠO‚©Šm”F
-        int rangeCount = checkList.Count;   // À•WŠm”F”
+        // ãŠå¬¢æ§˜ãŒå®Œå…¨ã«ç¯„å›²å¤–ã‹ç¢ºèª
+        int rangeCount = checkList.Count;   // åº§æ¨™ç¢ºèªæ•°
 
         foreach (var checkPos in checkList)
         {
-            // À•W‚ª‚¨ì—l‚ÆÀ•W‚ªˆá‚¤‚È‚ç
+            // åº§æ¨™ãŒãŠå¬¢æ§˜ã¨åº§æ¨™ãŒé•ã†ãªã‚‰
             if (checkPos != princessGridPos)
             {
-                // Šm”FÏ‚İ
+                // ç¢ºèªæ¸ˆã¿
                 rangeCount--;
                 continue;
             }
@@ -425,7 +415,7 @@ public class SurveillanceCamera : MonoBehaviour
             {
                 foreach (var obj in securityObj)
                 {
-                    // ‚·‚Å‚É’Ê’mÏ‚İ‚È‚çŸ‚Ö
+                    // ã™ã§ã«é€šçŸ¥æ¸ˆã¿ãªã‚‰æ¬¡ã¸
                     if (obj.GetIsFoundPrincess())
                         continue;
 
@@ -434,12 +424,12 @@ public class SurveillanceCamera : MonoBehaviour
             }
         }
 
-        // Šm”FÀ•W‚Ì‘S‚Ä‚É‚¨ì—l‚ª‚¢‚È‚¢ê‡’Ê’mÏ‚İƒtƒ‰ƒO‚ğ‰º‚°‚é
+        // ç¢ºèªåº§æ¨™ã®å…¨ã¦ã«ãŠå¬¢æ§˜ãŒã„ãªã„å ´åˆé€šçŸ¥æ¸ˆã¿ãƒ•ãƒ©ã‚°ã‚’ä¸‹ã’ã‚‹
         if (rangeCount == 0 && securityObj.Count != 0)
         {
             foreach (var obj in securityObj)
             {
-                // ƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚È‚¢‚È‚çfalse‚É‚·‚é•K—v‚È‚Ì‚ÅŸ‚Ö
+                // ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ãªã„ãªã‚‰falseã«ã™ã‚‹å¿…è¦ãªã®ã§æ¬¡ã¸
                 if (!obj.GetIsFoundPrincess()) continue;
 
                 obj.SetIsFoundPrincess(false);
@@ -449,7 +439,7 @@ public class SurveillanceCamera : MonoBehaviour
 
 
     /// <summary>
-    /// ‘OƒtƒŒ[ƒ€‚Éİ’è‚³‚ê‚½ƒJƒƒ‰‚Ìõ“G”ÍˆÍ‚ğƒŠƒZƒbƒg‚µAŒ³‚ÌF‚É–ß‚·
+    /// å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã«è¨­å®šã•ã‚ŒãŸã‚«ãƒ¡ãƒ©ã®ç´¢æ•µç¯„å›²ã‚’ãƒªã‚»ãƒƒãƒˆã—ã€å…ƒã®è‰²ã«æˆ»ã™
     /// </summary>
     private void ResetCameraRange()
     {
@@ -466,7 +456,7 @@ public class SurveillanceCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒIƒtƒZƒbƒgƒxƒNƒgƒ‹‚ğforward•ûŒü‚É‰‚¶‚Ä‰ñ“]‚³‚¹‚é
+    /// ã‚ªãƒ•ã‚»ãƒƒãƒˆãƒ™ã‚¯ãƒˆãƒ«ã‚’forwardæ–¹å‘ã«å¿œã˜ã¦å›è»¢ã•ã›ã‚‹
     /// </summary>
     private Vector2 RotateOffset(Vector2 offset, Vector2 forward)
     {
@@ -499,7 +489,7 @@ public class SurveillanceCamera : MonoBehaviour
     public void PerformRayBasedSearch()
     {
         List<Vector2Int> searchArea = fieldDataManager.GetStatePos(_FieldDataManager.E_FIELDSTATE.sc_searchRange);
-        Vector3 rayOrigin = GetRayStartPoint(SurveillanceCameraPos, CameraDir); // ‹ß‚¢’¸“_2‚Â‚©‚ç‚Å‚à—Ç‚¢
+        Vector3 rayOrigin = GetRayStartPoint(SurveillanceCameraPos, CameraDir); // è¿‘ã„é ‚ç‚¹2ã¤ã‹ã‚‰ã§ã‚‚è‰¯ã„
 
         foreach (var targetPos in searchArea)
         {
@@ -514,12 +504,12 @@ public class SurveillanceCamera : MonoBehaviour
             {
                 if (IsWall(hit.collider.gameObject))
                 {
-                    // •Ç‚ÉÕ‚ç‚ê‚Ä‚¢‚é
-                    Debug.Log("•Ç‚ª”ÍˆÍ“à‚É‚ ‚è‚Ü‚·B");
+                    // å£ã«é®ã‚‰ã‚Œã¦ã„ã‚‹
+                    Debug.Log("å£ãŒç¯„å›²å†…ã«ã‚ã‚Šã¾ã™ã€‚");
                     continue;
                 }
             }
-            // •Ç‚ÉÕ‚ç‚ê‚Ä‚¢‚È‚¢
+            // å£ã«é®ã‚‰ã‚Œã¦ã„ãªã„
         }
     }
 
@@ -544,12 +534,12 @@ public class SurveillanceCamera : MonoBehaviour
 
     Vector3 GridToWorld(Vector2Int grid)
     {
-        return new Vector3(grid.x, 0, grid.y); // Y‚ª‚‚³AX-Z‚ªƒ}ƒX‚ÌXY
+        return new Vector3(grid.x, 0, grid.y); // YãŒé«˜ã•ã€X-ZãŒãƒã‚¹ã®XY
     }
 
     bool IsWall(GameObject obj)
     {
-        return obj.CompareTag("Wall"); // •Ç‚É‚Í"Wall"ƒ^ƒO‚ğ‚Â‚¯‚Ä‚¨‚­
+        return obj.CompareTag("Wall"); // å£ã«ã¯"Wall"ã‚¿ã‚°ã‚’ã¤ã‘ã¦ãŠã
     }
 
 
