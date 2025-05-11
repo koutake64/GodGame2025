@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4585427126266175129}
   - component: {fileID: 941031343729777821}
   - component: {fileID: 6854549403905683702}
-  - component: {fileID: 1743467301028592328}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -88,27 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1743467301028592328
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5548356762877640945}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6077740110341776202
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,6 +99,7 @@ GameObject:
   - component: {fileID: 8206917897248256617}
   - component: {fileID: 14678996455793842}
   - component: {fileID: 1645171572909329598}
+  - component: {fileID: 3377349836596336551}
   m_Layer: 0
   m_Name: Princess
   m_TagString: Princess
@@ -182,6 +161,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebdb6a4bde1c965408be40d4ea8e8f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &3377349836596336551
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6077740110341776202}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &8167232287864194219
 GameObject:
   m_ObjectHideFlags: 0

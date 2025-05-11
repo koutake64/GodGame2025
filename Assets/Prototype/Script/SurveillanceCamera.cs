@@ -49,8 +49,11 @@ public class SurveillanceCamera : MonoBehaviour
     // マスの状態取得用
     FieldDataManager fieldManager;
 
+    bool foundTarget = false;
+    bool prevFoundTarget = false;
 
-
+    Vector2Int targetPos = new Vector2Int();
+    
 
     //レイ用
     public float rayLength = 6.0f;   // Rayの長さ（6.0f）
@@ -335,6 +338,9 @@ public class SurveillanceCamera : MonoBehaviour
                         if (hit.collider.CompareTag("Princess"))
                         {
                             Debug.Log("プリンセス発見！" + hit.collider.gameObject.name);
+                            prevFoundTarget = foundTarget = true;
+                            targetPos = new Vector2Int(hit.collider.gameObject.name);
+
                         }
                         else if (hit.collider.CompareTag("Player"))
                         {
@@ -342,7 +348,7 @@ public class SurveillanceCamera : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("何かにヒット → " + hit.collider.gameObject.name);
+                            //Debug.Log("何かにヒット → " + hit.collider.gameObject.name);
                         }
 
 
@@ -355,74 +361,78 @@ public class SurveillanceCamera : MonoBehaviour
 
 
 
-
-
-
-        // 呼び出し通知オブジェクトリスト
-        List<SecurityController> securityObj = new List<SecurityController>();
-
-        // 自身の座標
-        Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
-
-        // 呼び始めの座標用
-        Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
-
-        // 通知範囲内にいる警備員を取得
-        for (int y = 0; y < callRange; ++y)
+        if(foundTarget)
         {
-            for (int x = 0; x < callRange; ++x)
+            // 呼び出し通知オブジェクトリスト
+            List<SecurityController> securityObj = new List<SecurityController>();
+
+            // 自身の座標
+            Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
+
+            // 呼び始めの座標用
+            Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
+
+            // 通知範囲内にいる警備員を取得
+            for (int y = 0; y < callRange; ++y)
             {
-                // 範囲内のリスト取得
-                Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
-
-                // 範囲外確認
-                if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
-                    continue;
-
-                // 対象座標のリスト取得
-                var list = fieldDataManager.GetInfoList(callPos);
-
-                if (list.Count != 0)
+                for (int x = 0; x < callRange; ++x)
                 {
-                    // リストの中に警備員がいたら取得
-                    foreach (var obj in list)
-                    {
-                        if (!obj.obj) continue;
-                        var security = obj.obj.GetComponent<SecurityController>();
-                        if (!security) continue;
+                    // 範囲内のリスト取得
+                    Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
 
-                        // リストに追加
-                        securityObj.Add(security);
+                    // 範囲外確認
+                    if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
+                        continue;
+
+                    // 対象座標のリスト取得
+                    var list = fieldDataManager.GetInfoList(callPos);
+
+                    if (list.Count != 0)
+                    {
+                        // リストの中に警備員がいたら取得
+                        foreach (var obj in list)
+                        {
+                            if (!obj.obj) continue;
+                            var security = obj.obj.GetComponent<SecurityController>();
+                            if (!security) continue;
+
+                            // リストに追加
+                            securityObj.Add(security);
+                        }
+                    }
+                    if (securityObj.Count != 0)
+                    {
+                        foreach (var obj in securityObj)
+                        {
+                            // すでに通知済みなら次へ
+                            if (obj.GetIsFoundPrincess())
+                                continue;
+
+                            obj.FoundPrincess(checkPos);
+                        }
                     }
                 }
             }
-        }
 
-        // お嬢様が完全に範囲外か確認
-        int rangeCount = checkList.Count;   // 座標確認数
+            // お嬢様が完全に範囲外か確認
+            int rangeCount = checkList.Count;   // 座標確認数
 
-        foreach (var checkPos in checkList)
-        {
-            // 座標がお嬢様と座標が違うなら
-            if (checkPos != princessGridPos)
+            foreach (var checkPos in checkList)
             {
-                // 確認済み
-                rangeCount--;
-                continue;
-            }
-
-            if (securityObj.Count != 0)
-            {
-                foreach (var obj in securityObj)
+                // 座標がお嬢様と座標が違うなら
+                if (checkPos != princessGridPos)
                 {
-                    // すでに通知済みなら次へ
-                    if (obj.GetIsFoundPrincess())
-                        continue;
-
-                    obj.FoundPrincess(checkPos);
+                    // 確認済み
+                    rangeCount--;
+                    continue;
                 }
+
+                
             }
         }
+
+
+        
 
         // 確認座標の全てにお嬢様がいない場合通知済みフラグを下げる
         if (rangeCount == 0 && securityObj.Count != 0)
