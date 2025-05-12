@@ -309,6 +309,7 @@ public class SurveillanceCamera : MonoBehaviour
             RaycastHit hit;
 
             // Rayが何かに当たったかチェック（距離制限付き）
+            // Rayが最初に当たった物体を調べる
             if (Physics.Raycast(ray.origin, ray.direction * rayLength, out hit))
             {
                 if (hit.collider.gameObject == this.gameObject)
