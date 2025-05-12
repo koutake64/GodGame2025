@@ -53,7 +53,7 @@ public class SurveillanceCamera : MonoBehaviour
     bool prevFoundTarget = false;
 
     Vector2Int targetPos = new Vector2Int();
-    
+
 
     //レイ用
     public float rayLength = 6.0f;   // Rayの長さ（6.0f）
@@ -306,53 +306,66 @@ public class SurveillanceCamera : MonoBehaviour
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
 
-            ////Rayが何かに当たったかチェック（距離制限付き）
-            foreach (var hit in hits)
+            RaycastHit hit;
+
+            // Rayが何かに当たったかチェック（距離制限付き）
+            if (Physics.Raycast(ray.origin, ray.direction * rayLength, out hit))
             {
                 if (hit.collider.gameObject == this.gameObject)
                     continue; // 自分自身は無視
 
-                // 3×3の範囲を走査
-                for (int dx = -1; dx <= 1; dx++)
+                // ヒットポイントをグリッド座標に変換
+                Vector2Int hitPos = new Vector2Int((int)hit.point.x, (int)hit.point.z);
+
+                bool inSightRange = false;
+
+                // 3×3の範囲を走査して、ヒットポイントが含まれているかチェック
+                for (int dx = -1; dx <= 1 && !inSightRange; dx++)
                 {
-                    for (int dy = -1; dy <= 1; dy++)
+                    for (int dy = -1; dy <= 1 && !inSightRange; dy++)
                     {
                         Vector2 offset = new Vector2(dx, dy);
                         Vector2 rotatedOffset = RotateOffset(offset, forward);
-                        Vector2 targetPos = center + rotatedOffset;
+                        Vector2Int checkPos = Vector2Int.RoundToInt(center + rotatedOffset);
 
-                        int tx = (int)targetPos.x;
-                        int ty = (int)targetPos.y;
+                        int tx = checkPos.x;
+                        int ty = checkPos.y;
 
                         // 範囲外は無視
                         if (tx < 0 || tx >= max.x || ty < 0 || ty >= max.y)
-                        {
                             continue;
-                        }
-                        
-                        Vector2Int pos = new Vector2Int(tx, ty);
-                        // プリンセスなら表示
-                        if (hit.collider.CompareTag("Princess"))
-                        {
-                            Debug.Log("プリンセス発見！" + hit.collider.gameObject.name);
-                            prevFoundTarget = foundTarget = true;
-                            targetPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
 
-                        }
-                        else if (hit.collider.CompareTag("Player"))
+                        // ヒットポイントが範囲内にあればフラグを立ててループ終了
+                        if (hitPos == checkPos)
                         {
-                            Debug.Log("執事発見！" + hit.collider.gameObject.name);
-                        }
-                        else
-                        {
-                            //Debug.Log("何かにヒット → " + hit.collider.gameObject.name);
+                            inSightRange = true;
+                            break;
                         }
                     }
+                }
+
+                if (!inSightRange)
+                    continue; // 索敵範囲外なら無視
+
+                // 索敵範囲内だった場合の処理
+                if (hit.collider.CompareTag("Princess"))
+                {
+                    Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
+                    prevFoundTarget = foundTarget = true;
+                    targetPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
+                }
+                else if (hit.collider.CompareTag("Player"))
+                {
+                    Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
+                }
+                else
+                {
+                    //Debug.Log("何かにヒット → " + hit.collider.gameObject.name);
                 }
             }
         }
 
-        if(foundTarget)
+        if (foundTarget)
         {
             // 呼び出し通知オブジェクトリスト
             List<SecurityController> securityObj = new List<SecurityController>();
@@ -460,7 +473,7 @@ public class SurveillanceCamera : MonoBehaviour
                     }
                 }
             }
-        }    
+        }
     }
 
 
