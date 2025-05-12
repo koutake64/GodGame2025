@@ -154,10 +154,22 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         // ’Œ‚ÌüˆÍ4‰ÓŠ‚ğˆÚ“®Œó•âƒŠƒXƒg‚É’Ç‰Á
         foreach (var pillar in pillarPos)
         {
-            candidatePosList.Add(pillar + Vector2Int.up);
-            candidatePosList.Add(pillar + Vector2Int.right);
-            candidatePosList.Add(pillar + Vector2Int.down);
-            candidatePosList.Add(pillar + Vector2Int.left);
+            if (fdMng.GetIsThrough(pillar + Vector2Int.up))
+            {
+                candidatePosList.Add(pillar + Vector2Int.up);
+            }
+            if (fdMng.GetIsThrough(pillar + Vector2Int.right))
+            {
+                candidatePosList.Add(pillar + Vector2Int.right);
+            }
+            if (fdMng.GetIsThrough(pillar + Vector2Int.down))
+            {
+                candidatePosList.Add(pillar + Vector2Int.down);
+            }
+            if (fdMng.GetIsThrough(pillar + Vector2Int.left))
+            {
+                candidatePosList.Add(pillar + Vector2Int.left);
+            }
         }
 
         void AddAroundWithAlignmentCheck(List<Vector2Int> baseList)
