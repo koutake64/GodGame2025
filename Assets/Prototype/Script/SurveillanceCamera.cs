@@ -276,9 +276,6 @@ public class SurveillanceCamera : MonoBehaviour
 
         Vector2Int max = fieldDataManager.GetFieldSize();
 
-        // お嬢様がいるか確認する座標を配列に格納
-        List<Vector2Int> checkList = new List<Vector2Int>();
-
         // お嬢様の座標
         Vector2Int princessGridPos = new Vector2Int((int)princessPos.x, (int)princessPos.z);
 
@@ -308,6 +305,7 @@ public class SurveillanceCamera : MonoBehaviour
             // ヒット順にソート（近い順）
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
+
             ////Rayが何かに当たったかチェック（距離制限付き）
             foreach (var hit in hits)
             {
@@ -331,15 +329,14 @@ public class SurveillanceCamera : MonoBehaviour
                         {
                             continue;
                         }
-
-
+                        
                         Vector2Int pos = new Vector2Int(tx, ty);
                         // プリンセスなら表示
                         if (hit.collider.CompareTag("Princess"))
                         {
                             Debug.Log("プリンセス発見！" + hit.collider.gameObject.name);
                             prevFoundTarget = foundTarget = true;
-                            targetPos = new Vector2Int(hit.collider.gameObject.name);
+                            targetPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
 
                         }
                         else if (hit.collider.CompareTag("Player"))
@@ -350,16 +347,10 @@ public class SurveillanceCamera : MonoBehaviour
                         {
                             //Debug.Log("何かにヒット → " + hit.collider.gameObject.name);
                         }
-
-
-                        // 確認リストに追加
-                        checkList.Add(pos);
                     }
                 }
             }
         }
-
-
 
         if(foundTarget)
         {
@@ -408,43 +399,68 @@ public class SurveillanceCamera : MonoBehaviour
                             if (obj.GetIsFoundPrincess())
                                 continue;
 
-                            obj.FoundPrincess(checkPos);
+                            // ターゲット座標を通知
+                            obj.FoundPrincess(targetPos);
                         }
                     }
                 }
             }
-
-            // お嬢様が完全に範囲外か確認
-            int rangeCount = checkList.Count;   // 座標確認数
-
-            foreach (var checkPos in checkList)
-            {
-                // 座標がお嬢様と座標が違うなら
-                if (checkPos != princessGridPos)
-                {
-                    // 確認済み
-                    rangeCount--;
-                    continue;
-                }
-
-                
-            }
         }
-
-
-        
-
-        // 確認座標の全てにお嬢様がいない場合通知済みフラグを下げる
-        if (rangeCount == 0 && securityObj.Count != 0)
+        // 前フレームと値が変化していたら
+        if (foundTarget != prevFoundTarget)
         {
-            foreach (var obj in securityObj)
-            {
-                // フラグが立っていないならfalseにする必要なので次へ
-                if (!obj.GetIsFoundPrincess()) continue;
+            // 呼び出し通知オブジェクトリスト
+            List<SecurityController> securityObj = new List<SecurityController>();
 
-                obj.SetIsFoundPrincess(false);
+            // 自身の座標
+            Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
+
+            // 呼び始めの座標用
+            Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
+
+            // 通知範囲内にいる警備員を取得
+            for (int y = 0; y < callRange; ++y)
+            {
+                for (int x = 0; x < callRange; ++x)
+                {
+                    // 範囲内のリスト取得
+                    Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
+
+                    // 範囲外確認
+                    if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
+                        continue;
+
+                    // 対象座標のリスト取得
+                    var list = fieldDataManager.GetInfoList(callPos);
+
+                    if (list.Count != 0)
+                    {
+                        // リストの中に警備員がいたら取得
+                        foreach (var obj in list)
+                        {
+                            if (!obj.obj) continue;
+                            var security = obj.obj.GetComponent<SecurityController>();
+                            if (!security) continue;
+
+                            // リストに追加
+                            securityObj.Add(security);
+                        }
+                    }
+                    if (securityObj.Count != 0)
+                    {
+                        foreach (var obj in securityObj)
+                        {
+                            // フラグが立っていなければ次へ
+                            if (!obj.GetIsFoundPrincess())
+                                continue;
+
+                            // お嬢さま発見フラグを下げる
+                            obj.SetIsFoundPrincess(false);
+                        }
+                    }
+                }
             }
-        }
+        }    
     }
 
 
