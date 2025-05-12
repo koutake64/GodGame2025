@@ -171,10 +171,22 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                     if (info.alignmentID == -1) continue;
 
                     // 指定座標の周囲4箇所を移動候補リストに追加
-                    candidatePosList.Add(info.pos + Vector2Int.up);
-                    candidatePosList.Add(info.pos + Vector2Int.right);
-                    candidatePosList.Add(info.pos + Vector2Int.down);
-                    candidatePosList.Add(info.pos + Vector2Int.left);
+                    if (fdMng.GetIsThrough(info.pos + Vector2Int.up))
+                    {
+                        candidatePosList.Add(info.pos + Vector2Int.up);
+                    }
+                    if (fdMng.GetIsThrough(info.pos + Vector2Int.right))
+                    {
+                        candidatePosList.Add(info.pos + Vector2Int.right);
+                    }
+                    if (fdMng.GetIsThrough(info.pos + Vector2Int.down))
+                    {
+                        candidatePosList.Add(info.pos + Vector2Int.down);
+                    }
+                    if (fdMng.GetIsThrough(info.pos + Vector2Int.left))
+                    {
+                        candidatePosList.Add(info.pos + Vector2Int.left);
+                    }
                 }
             }
         }
@@ -187,6 +199,15 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         int minDistToPrincess = int.MaxValue;
         int minDistToGoal = int.MaxValue;
         Vector2Int bestTarget = princessPos;
+
+        int cnt = 0;
+        foreach (var pos in candidatePosList)
+        {
+            cnt++;
+            Debug.Log(
+                "座標 : " + pos + cnt + "個目"
+                );
+        }
 
         // 移動候補リストの中でプリンセスとゴールとの距離を計算しターゲットを決定
         foreach (var pos in candidatePosList)

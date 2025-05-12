@@ -202,7 +202,7 @@ public class TextManager : MonoBehaviour
     {
         Queue<RichChar> richQueue = new Queue<RichChar>();
         int i = 0;
-        string currentTag = "";
+        //string currentTag = "";
         Stack<string> tagStack = new Stack<string>();
 
         while (i < str.Length)

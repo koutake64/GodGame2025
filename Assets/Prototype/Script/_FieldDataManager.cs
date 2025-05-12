@@ -287,6 +287,11 @@ public class _FieldDataManager : MonoBehaviour
 
     public bool GetIsThrough(Vector2Int pos)
     {
+        if (pos.x < 0 || pos.y < 0 || pos.x >= fieldData.GetLength(0) || pos.y >= fieldData.GetLength(1))
+        {
+            return false;
+        }
+
         int cnt = fieldData[pos.x, pos.y].Count;
 
         for (int i = 0; i < cnt; ++i)
