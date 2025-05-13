@@ -13,13 +13,9 @@ public class CharacterMoveController : MonoBehaviour
     [Header("キャラクタータイプ")]
     [SerializeField] private _FieldDataManager.E_FIELDSTATE charaState;
 
-    [SerializeField, Header("お嬢朝")] private GameObject noonModel = null;
-    [SerializeField, Header("お嬢夜")] private GameObject nightModel = null;
-
     private _FieldDataManager   fieldData;      // _FieldDataManager
     private SecurityController  security;       // SecurityController
     private GameSystem          system;         // GameSystem
-    private TimeManager         timeManager;    // TimeManager
     private RouteSearch         routeSearch;    // routeSearch
     private float               moveSpeed;      // 移動速度
     private Vector2Int          currentPos;     // 現在のマス
@@ -82,11 +78,7 @@ public class CharacterMoveController : MonoBehaviour
 
         // 座標セット
         SetPos(startPos);
-
-		// 時間関係
-		timeManager = FindFirstObjectByType<TimeManager>();
-		UpdateModel();
-	}
+    }
 
     // Update is called once per frame
     private void Update()
@@ -123,8 +115,8 @@ public class CharacterMoveController : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
 
             // 移動終了
-            if (Vector3.Distance(transform.position, targetPos) <= 0.001f)
-            {
+            if (Vector3.Distance(transform.position, targetPos) <= 0.1f)
+            {   
                 // 移動フラグを下げる
                 isMove = false;
 
@@ -133,10 +125,7 @@ public class CharacterMoveController : MonoBehaviour
 
                 MoveNextStep();
             }
-
         }
-        UpdateModel();
-
     }
     private void UpdateTargetPosition()
     {
@@ -301,20 +290,4 @@ public class CharacterMoveController : MonoBehaviour
     {
         return currentPos;
     }
-
-    private void UpdateModel()
-    {
-        if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
-        {
-            if (noonModel != null) noonModel.SetActive(false);
-			if (nightModel != null) nightModel.SetActive(true);
-        }
-        else
-        {
-			if (noonModel != null) noonModel.SetActive(true);
-            if (nightModel != null) nightModel.SetActive(false);
-        }
-    }
-
-
 }

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using static UnityEditor.PlayerSettings;
+using UnityEditor.Experimental.GraphView;
 
 public class _PrincessDecideTargetPos : MonoBehaviour
 {
@@ -45,7 +47,8 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         searchRangePosList.Clear();
 
         Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
-        Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        //        Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        Vector2Int princessPos = GetComponent<CharacterMoveController>().GetCurrentPos();
 
         Vector2Int direction = goalPos - princessPos;
 
@@ -81,7 +84,11 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         List<Vector2Int> exhibitionStandPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.exhibitionStand);
 
         // 自身の座標
-        Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        //Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        Vector2Int princessPos = GetComponent<CharacterMoveController>().GetCurrentPos();
+
+        // ゴールとの距離を計算
+        int princessToGoal = Mathf.Abs(princessPos.x - goalPos.x) + Mathf.Abs(princessPos.y - goalPos.y);
 
         // Dictionaryで配列を確保
         Dictionary<int, List<_FieldDataManager.S_FIELDINFO>> alignmentGroups = new Dictionary<int, List<_FieldDataManager.S_FIELDINFO>>();
@@ -127,15 +134,54 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             group.Sort((a, b) => isHorizontal ? a.pos.x.CompareTo(b.pos.x) : a.pos.y.CompareTo(b.pos.y));
 
             // グループの端の座標を取得
-            Vector2Int first = group[0].pos;
-            Vector2Int last = group[^1].pos;
+            List<Vector2Int> first = new List<Vector2Int>();
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.up))
+                first.Add(group[0].pos + Vector2Int.up);
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.right))
+                first.Add(group[0].pos + Vector2Int.right);
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.down))
+                first.Add(group[0].pos + Vector2Int.down);
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.left))
+                first.Add(group[0].pos + Vector2Int.left);
+
+           List<Vector2Int> last = new List<Vector2Int>();
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.up))
+                first.Add(group[^1].pos + Vector2Int.up);
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.right))
+                first.Add(group[^1].pos + Vector2Int.right);
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.down))
+                first.Add(group[^1].pos + Vector2Int.down);
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.left))
+                first.Add(group[^1].pos + Vector2Int.left);
+
+            for(int j = 0; j < first.Count; ++j)
+            {
+                for(int i = 0; i < last.Count; ++i)
+                {
+                    if(princessPos == first[j] && prevEdgeTargetPos != last[i])
+                    {
+                        if (j < 2)
+                        {
+                            prevTargetPos = nextTargetPos;
+                            nextTargetPos = last[j];
+                            prevEdgeTargetPos = first[j];
+                        }
+                        else
+                        {
+                            prevTargetPos = nextTargetPos;
+                            nextTargetPos = last[j];
+                            prevEdgeTargetPos = first[j];
+                        }
+
+                    }
+
+                }
+
+            }
 
             // 対象がグループの端にいて、過去座標ともう一方の端座標が違う場合、もう一方の端をターゲットに設定
             if (princessPos == first && last != prevEdgeTargetPos)
             {
-                prevTargetPos = nextTargetPos;
-                nextTargetPos = last;
-                prevEdgeTargetPos = first;
                 return;
             }
             else if (princessPos == last && first != prevEdgeTargetPos)
@@ -229,6 +275,11 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 continue;
             }
 
+            if (pos.x == 7 && pos.y == 0)
+            {
+                int i = 0;
+            }
+
             // プリンセスとの距離を計算
             int distToPrincess = Mathf.Abs(pos.x - princessPos.x) + Mathf.Abs(pos.y - princessPos.y);
             
@@ -238,7 +289,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             // プリンセスとの距離が一番近い
             if (distToPrincess < minDistToPrincess ||
             // 設定済みのプリンセスとの距離と同じかつゴールにさらに近い場合は更新
-                (distToPrincess == minDistToPrincess && distToGoal < minDistToGoal))
+                (distToPrincess == minDistToPrincess && distToGoal < minDistToGoal && distToGoal < princessToGoal))
             {
                 minDistToPrincess = distToPrincess;
                 minDistToGoal = distToGoal;
