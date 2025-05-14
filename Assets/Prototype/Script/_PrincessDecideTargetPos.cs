@@ -16,7 +16,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private CharacterMoveController cmController;
 
-    private int key = -1;
+    private int currentKey = -1;
 
     private void Start()
     {
@@ -193,32 +193,42 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
         // ターゲット候補の座標リストにゴール座標を追加
         //List<Vector2Int> candidatePosDic = new List<Vector2Int>();
-        Dictionary<int, Vector2Int> candidatePosDic = new Dictionary<int, Vector2Int>();
-        candidatePosDic.Add(0, goalPos);
+        Dictionary<int, List<Vector2Int>> candidatePosDic = new Dictionary<int, List<Vector2Int>>();
+        List<Vector2Int> goalPosList = new List<Vector2Int>();
+        goalPosList.Add(goalPos);
+        candidatePosDic.Add(0, goalPosList);
         int cnt = 1;
 
         // 柱の周囲4箇所を移動候補リストに追加
         foreach (var pillar in pillarPos)
         {
+            List<Vector2Int> targetList = new List<Vector2Int>();
+
             if (fdMng.GetIsThrough(pillar + Vector2Int.up))
             {
-                candidatePosDic.Add(cnt, pillar + Vector2Int.up);
+                targetList.Add(pillar + Vector2Int.up);
             }
             if (fdMng.GetIsThrough(pillar + Vector2Int.right))
             {
-                candidatePosDic.Add(cnt, pillar + Vector2Int.right);
+                targetList.Add(pillar + Vector2Int.right);
             }
             if (fdMng.GetIsThrough(pillar + Vector2Int.down))
             {
-                candidatePosDic.Add(cnt, pillar + Vector2Int.down);
+                targetList.Add(pillar + Vector2Int.down);
             }
             if (fdMng.GetIsThrough(pillar + Vector2Int.left))
             {
-                candidatePosDic.Add(cnt, pillar + Vector2Int.left);
+                targetList.Add(pillar + Vector2Int.left);
             }
 
-            cnt++;
+            if(targetList.Count == 0)
+            {
+                continue;
+            }
 
+            candidatePosDic.Add(cnt, targetList);
+
+            cnt++;
         }
 
         //void AddAroundWithAlignmentCheck(List<Vector2Int> baseList)
@@ -260,39 +270,45 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         int minDistToPrincess = int.MaxValue;
         int minDistToGoal = int.MaxValue;
         Vector2Int bestTarget = princessPos;
+        int key = 0;
 
         // 移動候補リストの中でプリンセスとゴールとの距離を計算しターゲットを決定
-        foreach (var pos in candidatePosDic)
+        foreach (var list in candidatePosDic)
         {
-            if (pos.Value == princessPos || pos.Key == key)
+            foreach (var pos in list.Value)
             {
-                continue;
-            }
+                if (pos == princessPos || list.Key == currentKey)
+                {
+                    continue;
+                }
 
-            // プリンセスとの距離を計算
-            int distToPrincess = Mathf.Abs(pos.Value.x - princessPos.x) + Mathf.Abs(pos.Value.y - princessPos.y);
-            
-            // ゴールとの距離を計算
-            int distToGoal = Mathf.Abs(pos.Value.x - goalPos.x) + Mathf.Abs(pos.Value.y - goalPos.y);
+                // プリンセスとの距離を計算
+                int distToPrincess = Mathf.Abs(pos.x - princessPos.x) + Mathf.Abs(pos.y - princessPos.y);
 
-            // プリンセスとの距離が一番近い
-            if (distToPrincess < minDistToPrincess ||
-            // 設定済みのプリンセスとの距離と同じかつゴールにさらに近い場合は更新
-                (distToPrincess == minDistToPrincess && distToGoal < minDistToGoal))
-            {
-                minDistToPrincess = distToPrincess;
-                minDistToGoal = distToGoal;
-                bestTarget = pos.Value;
-                key = pos.Key;
+                // ゴールとの距離を計算
+                int distToGoal = Mathf.Abs(pos.x - goalPos.x) + Mathf.Abs(pos.y - goalPos.y);
+
+                // プリンセスとの距離が一番近い
+                if (distToPrincess < minDistToPrincess ||
+                    // 設定済みのプリンセスとの距離と同じかつゴールにさらに近い場合は更新
+                    (distToPrincess == minDistToPrincess && distToGoal < minDistToGoal))
+                {
+                    minDistToPrincess = distToPrincess;
+                    minDistToGoal = distToGoal;
+                    bestTarget = pos;
+                    key = list.Key;
+                }
             }
         }
+
+        currentKey = key;
 
         // 過去座標・ターゲット座標更新
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
 
         Debug.Log(
-            "bestTarget : " + bestTarget
+            "key : " + currentKey
             );
     }
 }
