@@ -127,24 +127,66 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             group.Sort((a, b) => isHorizontal ? a.pos.x.CompareTo(b.pos.x) : a.pos.y.CompareTo(b.pos.y));
 
             // グループの端の座標を取得
-            Vector2Int first = group[0].pos;
-            Vector2Int last = group[^1].pos;
+            List<Vector2Int> first = new List<Vector2Int>();
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.up))
+                first.Add(group[0].pos + Vector2Int.up);
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.right))
+                first.Add(group[0].pos + Vector2Int.right);
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.down))
+                first.Add(group[0].pos + Vector2Int.down);
+            if (fdMng.GetIsThrough(group[0].pos + Vector2Int.left))
+                first.Add(group[0].pos + Vector2Int.left);
+
+           List<Vector2Int> last = new List<Vector2Int>();
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.up))
+                first.Add(group[^1].pos + Vector2Int.up);
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.right))
+                first.Add(group[^1].pos + Vector2Int.right);
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.down))
+                first.Add(group[^1].pos + Vector2Int.down);
+            if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.left))
+                first.Add(group[^1].pos + Vector2Int.left);
+
+            for(int j = 0; j < first.Count; ++j)
+            {
+                for (int i = 0; i < last.Count; ++i)
+                {
+                    if (princessPos == first[j] && prevEdgeTargetPos != last[i])
+                    {
+                        if (j < 2)
+                        {
+                            prevTargetPos = nextTargetPos;
+                            nextTargetPos = last[j];
+                            prevEdgeTargetPos = first[j];
+                        }
+                        else
+                        {
+                            prevTargetPos = nextTargetPos;
+                            nextTargetPos = last[j];
+                            prevEdgeTargetPos = first[j];
+                        }
+                    }
+                }
+            }
+
+
+            //if (princessPos == first && last != prevEdgeTargetPos)
+            //{
+            //    return;
+            //}
 
             // 対象がグループの端にいて、過去座標ともう一方の端座標が違う場合、もう一方の端をターゲットに設定
-            if (princessPos == first && last != prevEdgeTargetPos)
-            {
-                prevTargetPos = nextTargetPos;
-                nextTargetPos = last;
-                prevEdgeTargetPos = first;
-                return;
-            }
-            else if (princessPos == last && first != prevEdgeTargetPos)
-            {
-                prevTargetPos = nextTargetPos;
-                nextTargetPos = first;
-                prevEdgeTargetPos = last;
-                return;
-            }
+            //if (princessPos == first && last != prevEdgeTargetPos)
+            //{
+            //    return;
+            //}
+            //else if (princessPos == last && first != prevEdgeTargetPos)
+            //{
+            //    prevTargetPos = nextTargetPos;
+            //    nextTargetPos = first;
+            //    prevEdgeTargetPos = last;
+            //    return;
+            //}
         }
 
         // ターゲット候補の座標リストにゴール座標を追加
