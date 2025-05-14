@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3304635285064378666}
   m_Layer: 0
   m_Name: NightModel
-  m_TagString: Untagged
+  m_TagString: Princess
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 262501938650978239}
   m_Layer: 0
   m_Name: NoonModel
-  m_TagString: Untagged
+  m_TagString: Princess
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
