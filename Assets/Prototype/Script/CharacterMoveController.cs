@@ -302,6 +302,11 @@ public class CharacterMoveController : MonoBehaviour
         return currentPos;
     }
 
+    public Vector2Int GetPrevPos()
+    {
+        return prevPos;
+    }
+
     private void UpdateModel()
     {
         if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
