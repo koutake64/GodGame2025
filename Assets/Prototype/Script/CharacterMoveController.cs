@@ -309,16 +309,22 @@ public class CharacterMoveController : MonoBehaviour
 
     private void UpdateModel()
     {
-        if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
+        if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.morning)
+        {
+			if (noonModel != null) noonModel.SetActive(true);
+            if (nightModel != null) nightModel.SetActive(false);
+        }
+        else if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
         {
             if (noonModel != null) noonModel.SetActive(false);
 			if (nightModel != null) nightModel.SetActive(true);
         }
         else
         {
-			if (noonModel != null) noonModel.SetActive(true);
-            if (nightModel != null) nightModel.SetActive(false);
-        }
+			if (noonModel != null) noonModel.SetActive(false);
+			if (nightModel != null) nightModel.SetActive(false);
+		}
+        
     }
 
 
