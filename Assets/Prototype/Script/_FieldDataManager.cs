@@ -194,60 +194,57 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.butler, startInfo.dir);
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.princess, startInfo.dir);
 
-        //AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
         AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
+        AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.pillar);
         AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(2, 11), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.right);
-        AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar);
 
         AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.pillar);
 
-        //AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right, 0);
-        AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right, 0);
-        AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(19, 3), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up, 1);
-        AddInfo(new Vector2Int(19, 3), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(19, 4), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up);
-        //AddInfo(new Vector2Int(19, 5), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up);
-        //AddInfo(new Vector2Int(19, 6), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up);
-        //AddInfo(new Vector2Int(19, 7), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up);
-        //AddInfo(new Vector2Int(19, 8), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up);
-        //AddInfo(new Vector2Int(19, 9), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.up, 1);
-        AddInfo(new Vector2Int(19, 9), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right, 2);
-        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.pillar);
-        //AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right);
-        //AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.exhibitionStand, CommonSE_Proto.E_DIRECTION.right, 2);
+        AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.wall);
+
+        AddInfo(new Vector2Int(17, 6), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.wall);
+
+        AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.wall);
+
+        AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.wall);
+
+        AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(2, 11), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar);
+
+        AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall);
+
+        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall);
         AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.pillar);
 
-        AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up, 0);
-        AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right, 1);
-        AddInfo(new Vector2Int(15, 12), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right, 2);
-        AddInfo(new Vector2Int(9, 13), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.down, 3);
+        AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up);
+        AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
+        AddInfo(new Vector2Int(15, 12), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
+        AddInfo(new Vector2Int(9, 13), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.down);
 
-        AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up, 0);
-        AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right, 1);
+        AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up);
+        AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right);
 
         AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
 

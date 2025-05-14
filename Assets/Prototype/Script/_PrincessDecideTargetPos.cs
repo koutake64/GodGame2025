@@ -18,6 +18,8 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private int currentKey = -1;
 
+    List<int> keyList = new List<int>();
+
     private void Start()
     {
         cmController = GetComponent<CharacterMoveController>();
@@ -27,11 +29,14 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         {
             Debug.Log("owari");
         }
+
+        keyList.Add(5);
+
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKey(KeyCode.I) && !cmController.GetAutoMove())
         {
             SetSearchRange();
             DecideTargetPos();
@@ -275,8 +280,14 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         // 移動候補リストの中でプリンセスとゴールとの距離を計算しターゲットを決定
         foreach (var list in candidatePosDic)
         {
+            if(keyList.Contains(list.Key))
+            {
+                continue;
+            }
+
             foreach (var pos in list.Value)
             {
+                
                 if (pos == princessPos || list.Key == currentKey)
                 {
                     continue;
@@ -302,6 +313,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         }
 
         currentKey = key;
+        keyList.Add(currentKey);
 
         // 過去座標・ターゲット座標更新
         prevTargetPos = nextTargetPos;

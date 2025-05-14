@@ -297,6 +297,12 @@ public class CharacterMoveController : MonoBehaviour
     {
         isAutoMoving = flg;
     }
+
+    public bool GetAutoMove()
+    {
+        return isAutoMoving;
+    }
+
     public Vector2Int GetCurrentPos()
     {
         return currentPos;
