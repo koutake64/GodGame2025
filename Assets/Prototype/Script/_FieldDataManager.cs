@@ -172,10 +172,10 @@ public class _FieldDataManager : MonoBehaviour
         obj = Instantiate(
             fieldWall,
             fwPos,
-            Quaternion.identity
+            Quaternion.Euler(0, -180, 0)
             );
 
-        obj.transform.localScale = new Vector3 (fieldSizeX, 1.0f, 1.0f);
+        obj.transform.localScale = new Vector3 (30f, 1.0f, 1.0f);
 
         // 奥右
         fwPos = new Vector3(fieldSizeX, 0.0f, (fieldSizeY / 2.0f) - 0.5f);
@@ -186,7 +186,7 @@ public class _FieldDataManager : MonoBehaviour
             Quaternion.identity
             );
 
-        obj.transform.localScale = new Vector3(1.0f, 1.0f, fieldSizeY);
+        obj.transform.localScale = new Vector3(1.0f, 1.0f, 30f);
 
         // プロトタイプ用のステージ作成
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);

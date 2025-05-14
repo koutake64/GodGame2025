@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7354150554304522362}
   - component: {fileID: 3140910202405507252}
   - component: {fileID: 1382966141928206503}
+  - component: {fileID: -7862021564453789894}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -128,6 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 1}
   charaState: 0
+  noonModel: {fileID: 0}
+  nightModel: {fileID: 0}
 --- !u!65 &1382966141928206503
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -149,3 +152,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2.0637963, z: 1}
   m_Center: {x: 0.000000029802322, y: 1.0318981, z: 0}
+--- !u!114 &-7862021564453789894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3663559527937981423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9710a30bf5f5c534ea4ae0607fa74d82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
