@@ -14,7 +14,7 @@ public class TransparencyObject : MonoBehaviour
     void Start()
     {
         cameraTransform = this.GetComponent<Transform>();
-        if(cameraTransform)
+        if(!cameraTransform)
         {
             Debug.LogError(
                "Script:TransparencyObject.cs \n" +
