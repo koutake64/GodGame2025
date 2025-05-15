@@ -1,30 +1,54 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
-    private CharacterMoveController moveController;
+	private CharacterMoveController moveController;
 	private TimeManager timeManager;
 
-	void Start()
-    {
-        moveController = GetComponent<CharacterMoveController>();
-        timeManager = FindFirstObjectByType<TimeManager>();
+	private Vector2 moveInput; // “ü—Í’l
+	private float inputCooldown = 0.2f; // “ü—ÍŠÔŠu
+	private float inputTimer = 0f;
+
+	public void OnMove(InputAction.CallbackContext context)
+	{
+		moveInput = context.ReadValue<Vector2>();
 	}
 
+	void Start()
+	{
+		moveController = GetComponent<CharacterMoveController>();
+		timeManager = FindFirstObjectByType<TimeManager>();
+	}
 
-    void Update()
-    {
-        if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.noon)
-        {
-            if (Input.GetKey(KeyCode.W)) moveController.AddPosY(1);
-            else if (Input.GetKey(KeyCode.S)) moveController.AddPosY(-1);
-            else if (Input.GetKey(KeyCode.D)) moveController.AddPosX(1);
-            else if (Input.GetKey(KeyCode.A)) moveController.AddPosX(-1);
-        }
+	void Update()
+	{
+		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon)
+			return;
 
-        if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
-        {
-            this.gameObject.SetActive(false);
-        }
-    }
+		inputTimer -= Time.deltaTime;
+		if (inputTimer > 0) return;
+
+		// —Dæ‡ˆÊFã‰º¨¶‰E
+		if (moveInput.y > 0.5f)
+		{
+			moveController.AddPosY(1);
+			inputTimer = inputCooldown;
+		}
+		else if (moveInput.y < -0.5f)
+		{
+			moveController.AddPosY(-1);
+			inputTimer = inputCooldown;
+		}
+		else if (moveInput.x > 0.5f)
+		{
+			moveController.AddPosX(1);
+			inputTimer = inputCooldown;
+		}
+		else if (moveInput.x < -0.5f)
+		{
+			moveController.AddPosX(-1);
+			inputTimer = inputCooldown;
+		}
+	}
 }
