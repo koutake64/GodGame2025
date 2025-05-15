@@ -13,7 +13,7 @@ public class TransparencyObject : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        cameraTransform = GameObject.FindWithTag("MainCamera").GetComponent<Transform>();
+        cameraTransform = this.GetComponent<Transform>();
         if(cameraTransform)
         {
             Debug.LogError(
@@ -42,14 +42,22 @@ public class TransparencyObject : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(cameraTransform.position, direction, distance);
         foreach (var hit in hits)
         {
+            // 透明化しないオブジェクト確認
+            GameObject hitObject = hit.collider.gameObject;
+
+            if (hitObject.tag == "Player" || hitObject.tag == "Princess" || hitObject.tag == "Security")
+            {
+                continue;
+            }
+
             // 重複していないか確認
-            if(!transparentList.Contains(hit.collider.gameObject))
+            if (!transparentList.Contains(hitObject))
             {
                 // リストに追加
-                transparentList.Add(hit.collider.gameObject);
+                transparentList.Add(hitObject);
 
                 // 透明化
-                MeshRenderer mesh = hit.collider.gameObject.GetComponent<MeshRenderer>();
+                MeshRenderer mesh = hitObject.GetComponent<MeshRenderer>();
                 if (mesh)
                 {
                     Color color = mesh.material.color;
@@ -59,7 +67,7 @@ public class TransparencyObject : MonoBehaviour
             }
 
             // このフレームで衝突したリストに追加
-            currentHits.Add(hit.collider.gameObject);
+            currentHits.Add(hitObject);
         }
 
         // 透明解除オブジェクトを確認
