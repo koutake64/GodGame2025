@@ -121,26 +121,37 @@ public class SurveillanceCamera : MonoBehaviour
 
         Vector2Int playerGridPos = new Vector2Int((int)playerPos.x, (int)playerPos.z);
 
-        int PlayerInRangeY = Mathf.Abs(playerGridPos.y - SurveillanceCameraPos.y) + 1;
-        int PlayerInRangeX = Mathf.Abs(playerGridPos.x - SurveillanceCameraPos.x) + 1;
-        //Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
-        //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
-        if ((PlayerInRangeX < 1) &&
-            (PlayerInRangeY < 1))
+        int PlayerInRangeY = (playerGridPos.y - SurveillanceCameraPos.y) + 1;
+        int PlayerInRangeX = (playerGridPos.x - SurveillanceCameraPos.x) + 1;
+
+        if (forward == Vector2.up || forward == Vector2.down)
         {
-            isPlayerInRange = true;
-            //Debug.Log("カメラの向きが変えられる");
+            if(PlayerInRangeY < 1)
+            {
+
+                isPlayerInRange = true;
+                Debug.Log("カメラの向きが変えられる");
+            }
+        }
+        else if(forward == Vector2.right || forward == Vector2.left)
+        {
+            if(PlayerInRangeX < 1)
+            {
+                isPlayerInRange = true;
+                Debug.Log("カメラの向きが変えられる");
+            }
         }
         else
         {
             isPlayerInRange = false;
             //Debug.Log("カメラの向きが変えられません");
         }
+        //Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
+        //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
+        
 
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.Return))
         {
-
-
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
                 {
@@ -255,7 +266,7 @@ public class SurveillanceCamera : MonoBehaviour
         if (watchState == E_WATCHSTATE.Left)
         {
             offsetValue = 2;
-            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y - 45, 0f);
+            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y +  225, 0f);
         }
         else if (watchState == E_WATCHSTATE.Center)
         {
@@ -264,7 +275,7 @@ public class SurveillanceCamera : MonoBehaviour
         else if (watchState == E_WATCHSTATE.Right)
         {
             offsetValue = -2;
-            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + 45, 0f);
+            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + 135, 0f);
         }
 
         // スライド方向を現在の向きに回転
