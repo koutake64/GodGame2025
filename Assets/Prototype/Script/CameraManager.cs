@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour
 	[SerializeField, SelectTag, Header("追従対象のタグ")] private string princessTag;
 	[SerializeField, Header("プレイヤーとの相対位置")] private Vector3 offsetPosition;
 	[SerializeField, Header("カメラの固定角度")] private Vector3 fixedRotation;
+	[SerializeField, Header("カメラの固定角度")] private TransparencyObject transparencyObject;
 
 	private Transform playerTransform;
 	private Transform princessTransform;
@@ -27,7 +28,10 @@ public class CameraManager : MonoBehaviour
 				{
 					GameObject princessObj = GameObject.FindWithTag(princessTag);
 					if (princessObj != null)
+					{
 						princessTransform = princessObj.transform;
+						transparencyObject.SetTargetTransform(princessTransform);
+					}
 					else
 						Debug.LogWarning("princessが見つかりませんでした。タグを確認してください。");
 				}
@@ -43,7 +47,10 @@ public class CameraManager : MonoBehaviour
 				{
 					GameObject playerObj = GameObject.FindWithTag(playerTag);
 					if (playerObj != null)
+					{
 						playerTransform = playerObj.transform;
+						transparencyObject.SetTargetTransform(playerTransform);
+					}
 					else
 						Debug.LogWarning("プレイヤーが見つかりませんでした。タグを確認してください。");
 				}

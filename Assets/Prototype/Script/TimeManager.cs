@@ -8,13 +8,14 @@ using UnityEditor;
 public class TimeManager : MonoBehaviour
 {
     // ====== シリアライズ =====
-    [SerializeField, Header("昼開始時刻(秒)")]     private float noonTime;
-    [SerializeField, Header("夕方背景時刻(秒)")]   private float afterNoonTime;
-    [SerializeField, Header("夜開始時刻(秒)")]     private float nightTime;
-	[SerializeField, Header("フェード時間(秒)")]   private float fadeDuration = 5f;
-	[SerializeField, Header("時間表示テキスト")]   private Text timeText;
-    [SerializeField, Header("状態テキスト")]       private Text levelText;
-    [SerializeField, Header("太陽光")]             private GameObject sun;
+    [SerializeField, Header("昼開始時刻(秒)")]		private float noonTime;
+    [SerializeField, Header("夕方背景時刻(秒)")]	private float afterNoonTime;
+    [SerializeField, Header("夜開始時刻(秒)")]		private float nightTime;
+	[SerializeField, Header("フェード時間(秒)")]	private float fadeDuration = 5f;
+	[SerializeField, Header("時間表示テキスト")]	private Text timeText;
+    [SerializeField, Header("状態テキスト")]		private Text levelText;
+    [SerializeField, Header("太陽光")]				private GameObject sun;
+	[SerializeField, Header("ゲーム内速度"), Range(0, 2)] private float gameSpeed;
 
     // --- 変数 ---
     private float time = 0; // 時間管理
@@ -25,10 +26,13 @@ public class TimeManager : MonoBehaviour
     {
         levelText.text = time.ToString("朝");
         SunMove(0f);
+		SetTimeScale(gameSpeed);
     }
 
     private void Update()
     {
+		
+
         prevState = currentState;
 
         time += Time.deltaTime;
@@ -165,4 +169,8 @@ public class TimeManager : MonoBehaviour
 		return false;
 	}
 
+	public void SetTimeScale(float num)
+	{
+		Time.timeScale = num;
+	}
 }

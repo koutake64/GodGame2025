@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 94649804299236929}
   m_Layer: 0
   m_Name: Security
-  m_TagString: Untagged
+  m_TagString: Security
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,9 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169158708a75ecd439e481f4e1789433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetArray: []
   monitoringRange: 5
-  isFoundPrincess: 0
 --- !u!65 &94649804299236929
 BoxCollider:
   m_ObjectHideFlags: 0
