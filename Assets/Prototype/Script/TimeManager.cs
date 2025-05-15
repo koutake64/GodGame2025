@@ -148,4 +148,14 @@ public class TimeManager : MonoBehaviour
 	}
 #endif
 
+	public CommonSE_Proto.E_TIMEOFDAY GetCurState()
+	{
+		return currentState;
+	}
+
+	public bool IsChangeState()
+	{
+		return prevState != currentState;
+	}
+
 }

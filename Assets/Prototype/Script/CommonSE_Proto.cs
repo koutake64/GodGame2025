@@ -5,6 +5,8 @@ using UnityEngine;
 /// </summary>
 public static class CommonSE_Proto
 {
+    public const int maxTimeOfDay = 4;
+
     public enum E_DIRECTION
     { 
         up,
