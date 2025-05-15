@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 2154546239d722748b0d199c1818e0c8
+guid: f79b75aaae76942488b0ccb01d9edbcb
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blinn1
+    second: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -33,7 +38,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 50
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -88,7 +93,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.5
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

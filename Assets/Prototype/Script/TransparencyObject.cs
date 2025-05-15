@@ -6,9 +6,14 @@ public class TransparencyObject : MonoBehaviour
     [Header("透明度")]
     [SerializeField, Range(0.0f, 1.0f)] private float alpha;
 
+    [Header("マテリアル")]
+    [SerializeField] private Material transparentMaterial;
+    [SerializeField] private Material opaqueMaterial;
+
     private Transform cameraTransform;
     private Transform cameraTargetTransform;
     private List<GameObject> transparentList = new List<GameObject>();  // 透明オブジェクトリスト
+    private Dictionary<GameObject, Material> originalMaterials = new Dictionary<GameObject, Material>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -59,16 +64,23 @@ public class TransparencyObject : MonoBehaviour
             // 重複していないか確認
             if (!transparentList.Contains(hitObject))
             {
-                // リストに追加
-                transparentList.Add(hitObject);
-
                 // 透明化
                 MeshRenderer mesh = hitObject.transform.GetChild(0).GetComponent<MeshRenderer>();
                 if (mesh)
                 {
+                    // 元のマテリアルを保存
+                    if (!originalMaterials.ContainsKey(hitObject))
+                    {
+                        originalMaterials[hitObject] = mesh.material;
+                    }
+
+                    mesh.material = new Material(transparentMaterial);
                     Color color = mesh.material.color;
                     color.a = alpha;
                     mesh.material.color = color;
+
+                    // リストに追加
+                    transparentList.Add(hitObject);
                 }
             }
 
@@ -89,17 +101,14 @@ public class TransparencyObject : MonoBehaviour
         // α値を元に戻す
         foreach(var obj in restore)
         {
-            // 透明化リストから排除
-            transparentList.Remove(obj);
-
-            // 透明化解除
-            MeshRenderer mesh = obj.transform.GetChild(0).GetComponent<MeshRenderer>(); GetComponent<MeshRenderer>();
-            if (mesh)
+            MeshRenderer mesh = obj.transform.GetChild(0).GetComponent<MeshRenderer>();
+            if (mesh && originalMaterials.ContainsKey(obj))
             {
-                Color color = mesh.material.color;
-                color.a = 1.0f;
-                mesh.material.color = color;
+                mesh.material = originalMaterials[obj]; // 元の Opaque マテリアルに戻す
             }
+
+            transparentList.Remove(obj);
+            originalMaterials.Remove(obj);
         }
     }
     public void SetTargetTransform(Transform target)

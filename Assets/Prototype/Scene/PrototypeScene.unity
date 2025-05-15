@@ -628,7 +628,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073db33e8d973da48ab1f14f426a2432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alpha: 0.5
+  alpha: 0.1
+  transparentMaterial: {fileID: 2100000, guid: 36d0b40ed36aee546bec63e303cfd7ae, type: 2}
+  opaqueMaterial: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
 --- !u!1 &324205370
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,7 +730,7 @@ MonoBehaviour:
   player: {fileID: 3663559527937981423, guid: da1bde8e173d92e4a87de3eb15c5a831, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
-  pillar: {fileID: 2340155496182456024, guid: 869833592a0bf5c4998cefcc3210a207, type: 3}
+  pillar: {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}
   wall: {fileID: 3556016710770019404, guid: 90ee446a018e2434891a7bc72d1f553c, type: 3}
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal: {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
