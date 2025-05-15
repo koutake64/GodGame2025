@@ -449,7 +449,7 @@ public class _FieldDataManager : MonoBehaviour
                                 obj = Instantiate(
                                     goal,
                                     instPos,
-                                    instRot
+                                    Quaternion.identity
                                     );
                                 break;
                             case E_FIELDSTATE.pillar:
