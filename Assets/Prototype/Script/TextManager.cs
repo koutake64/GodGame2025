@@ -351,6 +351,11 @@ public class TextManager : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// テキストファイルを読みこむ
+    /// </summary>
+    /// <param name="fname"></param>
+    /// <returns></returns>
     private string LoadTextFile(string fname)
     {
         TextAsset textAsset = Resources.Load<TextAsset>(fname);
@@ -358,7 +363,7 @@ public class TextManager : MonoBehaviour
         {
             Debug.Log("テキストファイルが見つかりません");
         }
-        return textAsset.text.Replace("\n", "").Replace("\r", "");
+        return textAsset.text.Replace("\\n", "\n").Replace("\r", "");
     }
 
     //============== コマンド・パラメータ設定 ===============
