@@ -366,10 +366,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492964ca88c9db14ea3531abaf3848fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noonTime: 10
-  afterNoonTime: 20
-  nightTime: 30
-  fadeDuration: 1
+  noonTime: 60
+  afterNoonTime: 180
+  nightTime: 240
+  fadeDuration: 5
   timeText: {fileID: 227084327}
   levelText: {fileID: 1628049948}
   sun: {fileID: 2082979514}
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTag: Player
-  princessTag: 
+  princessTag: Princess
   offsetPosition: {x: 0, y: 10, z: -10}
   fixedRotation: {x: 40, y: 0, z: 0}
 --- !u!1 &324205370
@@ -727,7 +727,7 @@ MonoBehaviour:
   player: {fileID: 3663559527937981423, guid: da1bde8e173d92e4a87de3eb15c5a831, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
-  pillar: {fileID: 2340155496182456024, guid: 057aa4caa49228f4089db3ed374afb81, type: 3}
+  pillar: {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}
   wall: {fileID: 3556016710770019404, guid: 90ee446a018e2434891a7bc72d1f553c, type: 3}
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal: {fileID: 4653855792750116627, guid: f0c28d69e7434d24fba4c3f65528a6a7, type: 3}
