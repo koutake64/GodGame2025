@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
 
     private Animator memoAnimator;  // メモUIアニメーター
+    private TimeManager timeMng;
 
     private bool useMemo;       // メモを開いているかどうか
     private bool currentFlag;   // 現在のフラグ状況
@@ -28,6 +29,13 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("UI_MenoにAnimatorコンポーネントを追加してください。");
         }
+
+        // TimeManagerの取得
+        timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
+        if(!timeMng)
+        {
+            Debug.LogError("CanvasにTimeManagerがありません。");
+        }
     }
 
     // Update is called once per frame
@@ -35,6 +43,7 @@ public class UIManager : MonoBehaviour
     {
         InputUpdate();
         UpdateAnimator();
+        UpdateTimeScale();
 
         // 過去フラグ状況の更新
         prevFlag = currentFlag;
@@ -75,11 +84,12 @@ public class UIManager : MonoBehaviour
         // ここの条件はUIを開いている間、裏のゲーム自体を止めたい場合
         if(useMemo)
         {
-
+            timeMng.SetTimeScale(0.0f);
         }
         else
         {
             // それ以外は裏で動いていても大丈夫
+            timeMng.SetTimeScale(1.0f);
         }
     }
 }
