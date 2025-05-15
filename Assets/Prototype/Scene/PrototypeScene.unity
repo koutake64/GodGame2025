@@ -790,9 +790,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: ead11427d1a05144497817ba069f2cd5, type: 3}
+    m_FontSize: 50
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 100
@@ -1160,8 +1160,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1320,9 +1320,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: ead11427d1a05144497817ba069f2cd5, type: 3}
     m_FontSize: 50
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 5
     m_MaxSize: 50
@@ -1394,15 +1394,15 @@ MonoBehaviour:
   nameText_Pro: {fileID: 135802327}
   mainText_Pro: {fileID: 811968041}
   scenarioFile:
-  - Texts/Scenario
-  - Texts/Scenario_1
+  - Texts/Sceneario_1
+  - Texts/ozyousamatext
   - 
   - 
   - 
   charInterval: 0.1
   isUseTMPro: 1
   autoDelay: 2
-  isAuto: 1
+  isAuto: 0
   backgroundPanel: {fileID: 748128809}
   mainTextObj: {fileID: 563647271}
   nameTextObj: {fileID: 1237518191}
