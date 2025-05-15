@@ -27,7 +27,6 @@ public class CharacterMoveController : MonoBehaviour
     private Vector2Int          fieldSize;      // フィールドサイズ
     private Queue<Vector2Int>   moveRoute;      // 移動経路
     private bool                isAutoMoving;   // 自動移動中か   
-
     void Start()
     {
         system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
@@ -60,8 +59,8 @@ public class CharacterMoveController : MonoBehaviour
 
         // 移動系変数の初期化
         moveSpeed = system.GetCharacterMoveSpeed();
-        prevPos = currentPos = new Vector2Int(0, 0);
         transform = GetComponent<Transform>();
+        prevPos = currentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         isMove = false;
         fieldSize = fieldData.GetFieldSize();
         moveRoute = new Queue<Vector2Int>();
@@ -287,11 +286,6 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
     }
  
-    public void SetCurrentPos(Vector2Int pos)
-    {
-        currentPos = pos;
-    }
-
     public bool GetAutoMove()
     {
         return isAutoMoving;
