@@ -10,15 +10,14 @@ public class CharacterMoveController : MonoBehaviour
     [Header("キャラクタータイプ")]
     [SerializeField] private _FieldDataManager.E_FIELDSTATE charaState;
 
-    //[SerializeField, Header("お嬢朝")] private GameObject noonModel = null;
-    //[SerializeField, Header("お嬢夜")] private GameObject nightModel = null;
+    [Header("移動速度")]
+    [SerializeField] private float moveSpeed = 2.0f;
 
     private _FieldDataManager   fieldData;      // _FieldDataManager
     private SecurityController  security;       // SecurityController
     private GameSystem          system;         // GameSystem
     private TimeManager         timeManager;    // TimeManager
     private RouteSearch         routeSearch;    // routeSearch
-    private float               moveSpeed;      // 移動速度
     private Vector2Int          currentPos;     // 現在のマス
     private Vector2Int          prevPos;        // 過去マス
     private new Transform       transform;      // Transform
@@ -29,16 +28,6 @@ public class CharacterMoveController : MonoBehaviour
     private bool                isAutoMoving;   // 自動移動中か   
     void Start()
     {
-        system = GameObject.Find("GameSystem").GetComponent<GameSystem>();
-        // nullチェック
-        if(!system)
-        {
-            Debug.LogError(
-               "Script:CharacterMoveController.cs \n" +
-               "systemがnullです"
-            );
-        }
-
         fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
         if (!fieldData)
         {
@@ -58,7 +47,6 @@ public class CharacterMoveController : MonoBehaviour
         }
 
         // 移動系変数の初期化
-        moveSpeed = system.GetCharacterMoveSpeed();
         transform = GetComponent<Transform>();
         prevPos = currentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         isMove = false;
@@ -78,7 +66,6 @@ public class CharacterMoveController : MonoBehaviour
 
 		// 時間関係
 		timeManager = FindFirstObjectByType<TimeManager>();
-		//UpdateModel();
 	}
 
     // Update is called once per frame
@@ -300,26 +287,4 @@ public class CharacterMoveController : MonoBehaviour
     {
         return prevPos;
     }
-
-  //  private void UpdateModel()
-  //  {
-  //      if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.morning)
-  //      {
-		//	if (noonModel != null) noonModel.SetActive(true);
-  //          if (nightModel != null) nightModel.SetActive(false);
-  //      }
-  //      else if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
-  //      {
-  //          if (noonModel != null) noonModel.SetActive(false);
-		//	if (nightModel != null) nightModel.SetActive(true);
-  //      }
-  //      else
-  //      {
-		//	if (noonModel != null) noonModel.SetActive(false);
-		//	if (nightModel != null) nightModel.SetActive(false);
-		//}
-        
-  //  }
-
-
 }
