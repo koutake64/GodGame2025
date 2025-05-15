@@ -57,12 +57,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 3763099405672948176}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f437e08b1d973b443be3684e321579c8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f437e08b1d973b443be3684e321579c8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f437e08b1d973b443be3684e321579c8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -96,10 +108,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6067185528594298527, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
+    - target: {fileID: -3316209038747775882, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
+    - target: {fileID: -425565630206218756, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
     - target: {fileID: 919132149155446097, guid: f437e08b1d973b443be3684e321579c8, type: 3}
       propertyPath: m_Name
       value: kamera_totyuu
       objectReference: {fileID: 0}
+    - target: {fileID: 1170970068873931921, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
+    - target: {fileID: 2586607309129781981, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
+    - target: {fileID: 2929640277652407947, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
+    - target: {fileID: 3566390031902043909, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 38bba319f7a14244ba142b8eb5f659e6, type: 2}
+    - target: {fileID: 5901893356585517859, guid: f437e08b1d973b443be3684e321579c8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f8920a5f7f368b844a3fe157e68a71ac, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
