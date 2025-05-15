@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -7101145991404292804}
   - component: {fileID: -822803094658215449}
   - component: {fileID: -8190681965290742688}
+  - component: {fileID: 94649804299236929}
   m_Layer: 0
   m_Name: Security
   m_TagString: Untagged
@@ -47,10 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1706c19d2460d44b41c2b431ac6c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPos: {x: 1, y: 13}
   charaState: 7
-  noonModel: {fileID: 0}
-  nightModel: {fileID: 0}
 --- !u!114 &-822803094658215449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +76,27 @@ MonoBehaviour:
   targetArray: []
   monitoringRange: 5
   isFoundPrincess: 0
+--- !u!65 &94649804299236929
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2175653325360876618}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2605318928210268432
 GameObject:
   m_ObjectHideFlags: 0
