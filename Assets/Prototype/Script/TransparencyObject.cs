@@ -35,11 +35,17 @@ public class TransparencyObject : MonoBehaviour
         List<GameObject> currentHits = new List<GameObject>();
 
         // 方向と距離を計算
-        Vector3 direction = (cameraTransform.position - cameraTargetTransform.position).normalized;
+        Vector3 direction = (cameraTargetTransform.position - cameraTransform.position).normalized;
         float distance = Vector3.Distance(cameraTransform.position, cameraTargetTransform.position);
 
         // レイを作成し衝突オブジェクトを検知
         RaycastHit[] hits = Physics.RaycastAll(cameraTransform.position, direction, distance);
+
+        // シーンビュー上にRayを描画
+        // Ray作成
+        Ray ray = new Ray(cameraTransform.position, direction);
+        Debug.DrawRay(ray.origin, ray.direction * distance, Color.blue);
+        
         foreach (var hit in hits)
         {
             // 透明化しないオブジェクト確認
@@ -57,7 +63,7 @@ public class TransparencyObject : MonoBehaviour
                 transparentList.Add(hitObject);
 
                 // 透明化
-                MeshRenderer mesh = hitObject.GetComponent<MeshRenderer>();
+                MeshRenderer mesh = hitObject.transform.GetChild(0).GetComponent<MeshRenderer>();
                 if (mesh)
                 {
                     Color color = mesh.material.color;
@@ -87,7 +93,7 @@ public class TransparencyObject : MonoBehaviour
             transparentList.Remove(obj);
 
             // 透明化解除
-            MeshRenderer mesh = obj.GetComponent<MeshRenderer>();
+            MeshRenderer mesh = obj.transform.GetChild(0).GetComponent<MeshRenderer>(); GetComponent<MeshRenderer>();
             if (mesh)
             {
                 Color color = mesh.material.color;
