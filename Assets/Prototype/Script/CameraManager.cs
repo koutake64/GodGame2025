@@ -3,36 +3,55 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
 	[SerializeField, SelectTag, Header("追従対象のタグ")] private string playerTag;
-	[SerializeField, Header("プレイヤーとの相対位置")]	  private Vector3 offsetPosition;
-	[SerializeField, Header("カメラの固定角度")]		  private Vector3 fixedRotation;
+	[SerializeField, SelectTag, Header("追従対象のタグ")] private string princessTag;
+	[SerializeField, Header("プレイヤーとの相対位置")] private Vector3 offsetPosition;
+	[SerializeField, Header("カメラの固定角度")] private Vector3 fixedRotation;
 
 	private Transform playerTransform;
+	private Transform princessTransform;
+	private TimeManager timeManager;
 
 	void Start()
 	{
-		// カメラの角度を固定
 		transform.eulerAngles = fixedRotation;
+		timeManager = FindFirstObjectByType<TimeManager>();
 	}
 
 	void LateUpdate()
 	{
-		// To Do 
-		// 後にStartで探すように
-		// プレイヤーをタグで探す（プレハブは "Player" タグをつけておくこと）
-		GameObject playerObj = GameObject.FindWithTag(playerTag);
-		if (playerObj != null)
+		// 朝、昼、夜でカメラ切り替え
+		switch (timeManager.CurrentState)
 		{
-			playerTransform = playerObj.transform;
-		}
-		else
-		{
-			Debug.LogWarning("プレイヤーが見つかりませんでした。タグを確認してください。");
-		}
+			case CommonSE_Proto.E_TIMEOFDAY.night:
+				if (princessTransform == null)
+				{
+					GameObject princessObj = GameObject.FindWithTag(princessTag);
+					if (princessObj != null)
+						princessTransform = princessObj.transform;
+					else
+						Debug.LogWarning("princessが見つかりませんでした。タグを確認してください。");
+				}
 
-		if (playerTransform != null)
-		{
-			// プレイヤーに追従（角度は固定）
-			transform.position = playerTransform.position + offsetPosition;
+				if (princessTransform != null)
+					transform.position = princessTransform.position + offsetPosition;
+
+				break;
+
+			case CommonSE_Proto.E_TIMEOFDAY.morning:
+			case CommonSE_Proto.E_TIMEOFDAY.noon:
+				if (playerTransform == null)
+				{
+					GameObject playerObj = GameObject.FindWithTag(playerTag);
+					if (playerObj != null)
+						playerTransform = playerObj.transform;
+					else
+						Debug.LogWarning("プレイヤーが見つかりませんでした。タグを確認してください。");
+				}
+
+				if (playerTransform != null)
+					transform.position = playerTransform.position + offsetPosition;
+
+				break;
 		}
 	}
 }
