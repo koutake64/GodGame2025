@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6174438523242370213}
   - component: {fileID: 9150404605411139768}
   - component: {fileID: 3304635285064378666}
-  - component: {fileID: 2643914579401695290}
   m_Layer: 0
   m_Name: NightModel
   m_TagString: Princess
@@ -87,27 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2643914579401695290
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 634146386834456790}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.10054075, y: 0.18653026, z: 0.10344008}
-  m_Center: {x: 0, y: 0.09326513, z: -0.017337404}
 --- !u!1 &5313751143026213530
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,6 +99,7 @@ GameObject:
   - component: {fileID: 6048409081123563580}
   - component: {fileID: 5206167562989884859}
   - component: {fileID: -4678091510080457411}
+  - component: {fileID: 6403248166331595440}
   m_Layer: 0
   m_Name: Princess
   m_TagString: Princess
@@ -196,6 +175,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9710a30bf5f5c534ea4ae0607fa74d82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &6403248166331595440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5313751143026213530}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7943210271205403191
 GameObject:
   m_ObjectHideFlags: 0
