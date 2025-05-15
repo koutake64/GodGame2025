@@ -610,6 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTag: Player
+  princessTag: 
   offsetPosition: {x: 0, y: 10, z: -10}
   fixedRotation: {x: 40, y: 0, z: 0}
 --- !u!1 &324205370
@@ -720,7 +721,8 @@ MonoBehaviour:
   fieldSizeY: 15
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
   tileB: {fileID: 7211354190082184439, guid: 60ee7b33ea9f96e4684d479de684389e, type: 3}
-  fieldWall: {fileID: 5005356049458970362, guid: 238194aa5eac8b643aa4397208afa30b, type: 3}
+  fieldWall: {fileID: 1850335846313603325, guid: 950b8c40df5dae14f9cedd37405877cb, type: 3}
+  fieldWallWindow: {fileID: 1850335846313603325, guid: 369ef5e7898fc554e8a152eed3d3c993, type: 3}
   princess: {fileID: 5313751143026213530, guid: 355b5c3373031da41920e8a53d2bdc86, type: 3}
   player: {fileID: 3663559527937981423, guid: da1bde8e173d92e4a87de3eb15c5a831, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
