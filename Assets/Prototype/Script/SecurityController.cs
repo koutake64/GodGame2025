@@ -1,21 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class SecurityController : MonoBehaviour
 {
-    [Header("移動ターゲットリスト")]
-    [SerializeField] private List<Vector2Int> targetArray = new List<Vector2Int>();
-
     [Header("前方監視範囲")]
     [SerializeField] private int monitoringRange;
 
+    private List<Vector2Int>        targetArray = new List<Vector2Int>();
     private CharacterMoveController moveController; // CharacterMoveController
     private _FieldDataManager       fieldData;      // _FieldDataManager
     private bool                    isEndMovement;  // 目標座標までの移動終了したか
     private int                     currentIndex;   // 配列の何番目か
     private int                     addNum;         // 加算する値
     private Vector2Int              fieldSize;      // フィールドサイズ
-    public bool                    isFoundPrincess;// お嬢様見つけたフラグ
+    private bool                    isFoundPrincess;// お嬢様見つけたフラグ
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -64,6 +63,12 @@ public class SecurityController : MonoBehaviour
 
     public void EndMovement()
     {
+        if(targetArray.Count == 0)
+        {
+            Debug.Log("巡回ルートがありません");
+            return;
+        }
+
         // 巡回するように配列番号を更新
         currentIndex = (currentIndex + addNum) % targetArray.Count;
 
@@ -143,5 +148,10 @@ public class SecurityController : MonoBehaviour
     public void SetIsFoundPrincess(bool flg)
     {
         isFoundPrincess = flg;
+    }
+
+    public void AddTargetPos(Vector2Int pos)
+    {
+        targetArray.Add(pos);
     }
 }
