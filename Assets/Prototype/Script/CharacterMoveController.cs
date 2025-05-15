@@ -7,9 +7,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class CharacterMoveController : MonoBehaviour
 {
-    [Header("スタート座標")]
-    [SerializeField] private Vector2Int startPos;
-
     [Header("キャラクタータイプ")]
     [SerializeField] private _FieldDataManager.E_FIELDSTATE charaState;
 
@@ -79,9 +76,6 @@ public class CharacterMoveController : MonoBehaviour
                "transformがnullです"
             );
         }
-
-        // 座標セット
-        SetPos(startPos);
 
 		// 時間関係
 		timeManager = FindFirstObjectByType<TimeManager>();
@@ -293,9 +287,9 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
     }
  
-    public void IsAutoMove(bool flg)
+    public void SetCurrentPos(Vector2Int pos)
     {
-        isAutoMoving = flg;
+        currentPos = pos;
     }
 
     public bool GetAutoMove()
