@@ -41,9 +41,9 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             SetSearchRange();
             DecideTargetPos();
             cmController.StartAutoMove(nextTargetPos);
-            Debug.Log(
-                "nextTargetPos : " + nextTargetPos
-                );
+            //Debug.Log(
+            //    "nextTargetPos : " + nextTargetPos
+            //    );
         }
     }
 
@@ -319,8 +319,8 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
 
-        Debug.Log(
-            "key : " + currentKey
-            );
+        //Debug.Log(
+        //    "key : " + currentKey
+        //    );
     }
 }

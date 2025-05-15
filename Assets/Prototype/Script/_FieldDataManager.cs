@@ -527,10 +527,10 @@ public class _FieldDataManager : MonoBehaviour
                         if (obj.GetComponent<CharacterMoveController>() != null)
                         {
                             moveGameObjList.Add(obj);
-                            Debug.Log(
-                                "GameObject" + obj + "\n" +
-                                "Position" + obj.transform.position
-                                );
+                            //Debug.Log(
+                            //    "GameObject" + obj + "\n" +
+                            //    "Position" + obj.transform.position
+                            //    );
                         }
 
                     }
@@ -544,10 +544,10 @@ public class _FieldDataManager : MonoBehaviour
         {
             for (int i = 0; i < moveGameObjList.Count; ++i)
             {
-                Debug.Log(
-                    "GameObject" + moveGameObjList[i].name + "\n" +
-                    "Position" + moveGameObjList[i].transform.position
-                    );
+                //Debug.Log(
+                //    "GameObject" + moveGameObjList[i].name + "\n" +
+                //    "Position" + moveGameObjList[i].transform.position
+                //    );
                 CharacterMoveController cmc = moveGameObjList[i].transform.GetComponent<CharacterMoveController>();
                 cmc.SetPos(new Vector2Int((int)moveGameObjList[i].transform.position.x, (int)moveGameObjList[i].transform.position.z));
             }

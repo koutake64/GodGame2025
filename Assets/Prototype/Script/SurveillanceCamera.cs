@@ -72,7 +72,7 @@ public class SurveillanceCamera : MonoBehaviour
 
         SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
-        Debug.Log($"カメラ位置（マス座標）: ({SurveillanceCameraPos}");
+        //Debug.Log($"カメラ位置（マス座標）: ({SurveillanceCameraPos}");
 
         float yRotation = transform.eulerAngles.y;
         if (Mathf.Approximately(yRotation, 0f))

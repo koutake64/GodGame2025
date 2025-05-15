@@ -366,10 +366,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492964ca88c9db14ea3531abaf3848fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noonTime: 60
-  afterNoonTime: 180
-  nightTime: 240
-  fadeDuration: 5
+  noonTime: 10
+  afterNoonTime: 20
+  nightTime: 30
+  fadeDuration: 1
   timeText: {fileID: 227084327}
   levelText: {fileID: 1628049948}
   sun: {fileID: 2082979514}

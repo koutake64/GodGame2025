@@ -29,7 +29,9 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-		time += Time.deltaTime;
+        prevState = currentState;
+
+        time += Time.deltaTime;
 		timeText.text = time.ToString("0" + "•b");
 
 		float sunAngle = 0f;
@@ -77,7 +79,6 @@ public class TimeManager : MonoBehaviour
 		if (currentState != prevState)
 		{
 			UpdateLevelText();
-			prevState = currentState;
 		}
 
 		SunMove(sunAngle);
@@ -122,7 +123,7 @@ public class TimeManager : MonoBehaviour
 	public void ForceChangeState(CommonSE_Proto.E_TIMEOFDAY newState)
 	{
 		currentState = newState;
-		prevState = newState;
+		//prevState = newState;
 
 		switch (newState)
 		{
@@ -155,7 +156,13 @@ public class TimeManager : MonoBehaviour
 
 	public bool IsChangeState()
 	{
-		return prevState != currentState;
+		if (currentState != prevState)
+		{
+			Debug.Log("change");
+			return true;
+		}
+
+		return false;
 	}
 
 }

@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class ModelShiftByTime : MonoBehaviour
 {
-    [Header("タイムマネージャー")]
-    [SerializeField] private TimeManager timeMng = null;
+    private TimeManager timeMng = null;
+
+    //[Header("対象タグ")]
+    //[SerializeField, SelectTag] private string tag;
 
     [Header("本体のゲームオブジェクト")]
     [SerializeField] private GameObject mainObj = null;
@@ -16,6 +18,8 @@ public class ModelShiftByTime : MonoBehaviour
 
     private GameObject[] models = new GameObject[CommonSE_Proto.maxTimeOfDay];
 
+    private bool startOnce = true;
+
     private void Start()
     {
         if (!mainObj)
@@ -25,6 +29,8 @@ public class ModelShiftByTime : MonoBehaviour
                 "本体のオブジェクトがセットされていません"
                 );
         }
+
+        timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
         if (!timeMng)
         {
             Debug.Log(
@@ -40,13 +46,15 @@ public class ModelShiftByTime : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         // --- 時間帯が変わった時だけ処理を行う
-        if (!timeMng.IsChangeState())
+        if (!timeMng.IsChangeState() && !startOnce)
         {
             return;
         }
+
+        startOnce = false;
 
         // --- 本体と各モデルをすべて非アクティブにする
         mainObj.SetActive(false);
@@ -76,15 +84,20 @@ public class ModelShiftByTime : MonoBehaviour
                 mainObj.SetActive(true);
                 return;
             }
+
         }
 
+        
     }
 
     private void ModelActive(CommonSE_Proto.E_TIMEOFDAY time)
     {
+        Debug.Log("今は" + time + "です");
+
         if (models[(int)time])
         {
             models[(int)time].SetActive(true);
+            Debug.Log(time + "のモデルがアクティブになりました");
         }
     }
 

@@ -10,8 +10,8 @@ public class CharacterMoveController : MonoBehaviour
     [Header("キャラクタータイプ")]
     [SerializeField] private _FieldDataManager.E_FIELDSTATE charaState;
 
-    [SerializeField, Header("お嬢朝")] private GameObject noonModel = null;
-    [SerializeField, Header("お嬢夜")] private GameObject nightModel = null;
+    //[SerializeField, Header("お嬢朝")] private GameObject noonModel = null;
+    //[SerializeField, Header("お嬢夜")] private GameObject nightModel = null;
 
     private _FieldDataManager   fieldData;      // _FieldDataManager
     private SecurityController  security;       // SecurityController
@@ -78,7 +78,7 @@ public class CharacterMoveController : MonoBehaviour
 
 		// 時間関係
 		timeManager = FindFirstObjectByType<TimeManager>();
-		UpdateModel();
+		//UpdateModel();
 	}
 
     // Update is called once per frame
@@ -128,7 +128,7 @@ public class CharacterMoveController : MonoBehaviour
             }
 
         }
-        UpdateModel();
+        //UpdateModel();
 
     }
     private void UpdateTargetPosition()
@@ -301,25 +301,25 @@ public class CharacterMoveController : MonoBehaviour
         return prevPos;
     }
 
-    private void UpdateModel()
-    {
-        if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.morning)
-        {
-			if (noonModel != null) noonModel.SetActive(true);
-            if (nightModel != null) nightModel.SetActive(false);
-        }
-        else if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
-        {
-            if (noonModel != null) noonModel.SetActive(false);
-			if (nightModel != null) nightModel.SetActive(true);
-        }
-        else
-        {
-			if (noonModel != null) noonModel.SetActive(false);
-			if (nightModel != null) nightModel.SetActive(false);
-		}
+  //  private void UpdateModel()
+  //  {
+  //      if(timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.morning)
+  //      {
+		//	if (noonModel != null) noonModel.SetActive(true);
+  //          if (nightModel != null) nightModel.SetActive(false);
+  //      }
+  //      else if (timeManager.CurrentState == CommonSE_Proto.E_TIMEOFDAY.night)
+  //      {
+  //          if (noonModel != null) noonModel.SetActive(false);
+		//	if (nightModel != null) nightModel.SetActive(true);
+  //      }
+  //      else
+  //      {
+		//	if (noonModel != null) noonModel.SetActive(false);
+		//	if (nightModel != null) nightModel.SetActive(false);
+		//}
         
-    }
+  //  }
 
 
 }
