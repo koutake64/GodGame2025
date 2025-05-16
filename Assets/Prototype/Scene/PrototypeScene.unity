@@ -488,7 +488,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 316948676}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &316948678
 Camera:
   m_ObjectHideFlags: 0
@@ -1958,8 +1958,8 @@ MonoBehaviour:
   gameBGM: {fileID: 0}
   resultBGM: {fileID: 0}
   clickSE: {fileID: 8300000, guid: 5d5bc6ceafd7959448834c0dd2c6ceaa, type: 3}
-  decideButtonSE: {fileID: 0}
-  cancelButtonSE: {fileID: 0}
+  decideButtonSE: {fileID: 8300000, guid: 5d5bc6ceafd7959448834c0dd2c6ceaa, type: 3}
+  cancelButtonSE: {fileID: 8300000, guid: 5d5bc6ceafd7959448834c0dd2c6ceaa, type: 3}
 --- !u!4 &1892366280
 Transform:
   m_ObjectHideFlags: 0
