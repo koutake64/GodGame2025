@@ -55,8 +55,8 @@ public class SurveillanceCamera : MonoBehaviour
 
     Vector2Int targetPos = new Vector2Int();
 
-    //朝昼夜のやつ
-    private CommonSE_Proto.E_TIMEOFDAY TimeOfDay = E_TIMEOFDAY.morning;
+    // タイムマネージャー
+    private TimeManager timeManager;
     
     //監視カメラの向き
     private float angleY = 0f;
@@ -75,6 +75,17 @@ public class SurveillanceCamera : MonoBehaviour
                 "fieldDataManagerがnullです"
             );
         }
+
+        // タイムマネージャー取得
+        timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
+        if (!timeManager)
+        {
+            Debug.LogError(
+               "Script:CharacterMoveController.cs \n" +
+               "timeManagerがnullです"
+            );
+        }
+
 
         SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
@@ -384,15 +395,16 @@ public class SurveillanceCamera : MonoBehaviour
 
                 if (!inSightRange)
                     continue; // 索敵範囲外なら無視
-                if (TimeOfDay == E_TIMEOFDAY.afternoon)
+                if (timeManager.GetCurState() == E_TIMEOFDAY.noon && timeManager.GetCurState() == E_TIMEOFDAY.afternoon)
                 {
                     // 索敵範囲内だった場合の処理
                     if (hit.collider.CompareTag("Player"))
                     {
+                        /// ※ここに執事がアクションした場合に警備員が向かう処理を書く
                         Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                     }
                 }
-                if (TimeOfDay == E_TIMEOFDAY.afternoon)
+                if (timeManager.GetCurState() == E_TIMEOFDAY.night)
                 {
                     // 索敵範囲内だった場合の処理
                     if (hit.collider.CompareTag("Princess"))
