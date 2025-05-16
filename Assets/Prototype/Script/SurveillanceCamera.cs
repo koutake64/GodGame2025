@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static CommonSE_Proto;
 
 /// <summary>
@@ -55,6 +56,8 @@ public class SurveillanceCamera : MonoBehaviour
     Vector2Int targetPos = new Vector2Int();
 
 
+    private float angleY = 0f;
+
     //レイ用
     public float rayLength = 6.0f;   // Rayの長さ（6.0f）
     public int rayCount = 8;         // Rayの本数（例：6本で扇状）
@@ -90,8 +93,9 @@ public class SurveillanceCamera : MonoBehaviour
         RotateVisualObject();
         SearchRange();
 
+        // 初期向きを記録しておく
+       
     }
-
     void Update()
     {
         // プレイヤーの GameObject を使って座標を取得
@@ -121,36 +125,33 @@ public class SurveillanceCamera : MonoBehaviour
 
         Vector2Int playerGridPos = new Vector2Int((int)playerPos.x, (int)playerPos.z);
 
-        int PlayerInRangeY = (playerGridPos.y - SurveillanceCameraPos.y) + 1;
-        int PlayerInRangeX = (playerGridPos.x - SurveillanceCameraPos.x) + 1;
+        int PlayerInRangeY = (playerGridPos.y - SurveillanceCameraPos.y);
+        int PlayerInRangeX = (playerGridPos.x - SurveillanceCameraPos.x);
+        isPlayerInRange = false; // 一度リセット
 
         if (forward == Vector2.up || forward == Vector2.down)
         {
-            if(PlayerInRangeY < 1)
-            {
-
-                isPlayerInRange = true;
-                Debug.Log("カメラの向きが変えられる");
-            }
-        }
-        else if(forward == Vector2.right || forward == Vector2.left)
-        {
-            if(PlayerInRangeX < 1)
+            // 左右（X軸方向）1マス離れているならOK
+            if ((PlayerInRangeX == 1 || PlayerInRangeX == -1) && PlayerInRangeY == 0)
             {
                 isPlayerInRange = true;
-                Debug.Log("カメラの向きが変えられる");
+                Debug.Log("カメラの向きが変えられる（左右）");
             }
         }
-        else
+        else if (forward == Vector2.right || forward == Vector2.left)
         {
-            isPlayerInRange = false;
-            //Debug.Log("カメラの向きが変えられません");
+            // 上下（Y軸方向）1マス離れているならOK
+            if ((PlayerInRangeY == 1 || PlayerInRangeY == -1) && PlayerInRangeX == 0)
+            {
+                isPlayerInRange = true;
+                Debug.Log("カメラの向きが変えられる（上下）");
+            }
         }
         //Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
         //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
-        
 
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.Return))
+
+        if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return))
         {
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
@@ -233,7 +234,7 @@ public class SurveillanceCamera : MonoBehaviour
     private void RotateVisualObject()
     {
 
-        float angleY = 0f;
+        
 
         if (forward == Vector2.up)
         {
@@ -261,23 +262,45 @@ public class SurveillanceCamera : MonoBehaviour
     private void SearchRange()
     {
         int offsetValue = 0;
-
         // 状態に応じてスライド方向を決定
-        if (watchState == E_WATCHSTATE.Left)
+        if (forward == Vector2.right || forward == Vector2.left)
         {
-            offsetValue = 2;
-            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y +  225, 0f);
-        }
-        else if (watchState == E_WATCHSTATE.Center)
-        {
-            offsetValue = 0;
-        }
-        else if (watchState == E_WATCHSTATE.Right)
-        {
-            offsetValue = -2;
-            this.transform.rotation = Quaternion.Euler(0f, this.transform.rotation.y + 135, 0f);
-        }
 
+            if (watchState == E_WATCHSTATE.Left)
+            {
+                offsetValue = 2;
+                transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
+            }
+            else if (watchState == E_WATCHSTATE.Center)
+            {
+                offsetValue = 0;
+                transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+            }
+            else if (watchState == E_WATCHSTATE.Right)
+            {
+                offsetValue = -2;
+                transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
+            }
+        }
+        if (forward == Vector2.up || forward == Vector2.down)
+        {
+
+            if (watchState == E_WATCHSTATE.Left)
+            {
+                offsetValue = 2;
+                transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
+            }
+            else if (watchState == E_WATCHSTATE.Center)
+            {
+                offsetValue = 0;
+                transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+            }
+            else if (watchState == E_WATCHSTATE.Right)
+            {
+                offsetValue = -2;
+                transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
+            }
+        }
         // スライド方向を現在の向きに回転
         Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
 
