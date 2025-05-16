@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class TransparencyObject : MonoBehaviour
 {
@@ -10,27 +11,48 @@ public class TransparencyObject : MonoBehaviour
     [SerializeField] private Material transparentMaterial;
     [SerializeField] private Material opaqueMaterial;
 
-    private Transform cameraTransform;
-    private List<Transform> cameraTargetTransform = new List<Transform>();
-    private List<GameObject> transparentList = new List<GameObject>();  // 透明オブジェクトリスト
-    private Dictionary<GameObject, Material> originalMaterials = new Dictionary<GameObject, Material>();
+    private Transform                           cameraTransform;                                            // カメラTransform
+    private List<Transform>                     cameraTargetTransform = new List<Transform>();              // レイを生成するターゲット
+    private List<GameObject>                    transparentList = new List<GameObject>();                   // 透明オブジェクトリスト
+    private Dictionary<GameObject, Material>    originalMaterials = new Dictionary<GameObject, Material>(); // Matetial保存
+    private TimeManager                         timeManager;                                                // TimeManager
+    private CommonSE_Proto.E_TIMEOFDAY          timeZone;                                                   // 現在の時間
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         cameraTransform = this.GetComponent<Transform>();
-        if(!cameraTransform)
+        if (!cameraTransform)
         {
             Debug.LogError(
                "Script:TransparencyObject.cs \n" +
                "cameraTransformがnullです"
             );
         }
+
+        timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
+        if (!timeManager)
+        {
+            Debug.LogError(
+               "Script:TransparencyObject.cs \n" +
+               "timeManagerがnullです"
+            );
+        }
+        else
+        {
+            // 一番最初に実行させたいので朝以外の時間で初期化
+            timeZone = CommonSE_Proto.E_TIMEOFDAY.night;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (timeManager)
+        {
+            SetTargetList();
+        }
+
         if (cameraTargetTransform.Count == 0 || !cameraTransform)
         {
             return;
@@ -122,13 +144,44 @@ public class TransparencyObject : MonoBehaviour
             originalMaterials.Remove(obj);
         }
     }
-    public void AddTargetTransform(Transform target)
+    private void SetTargetList()
     {
-        cameraTargetTransform.Add(target);
-    }
+        if (timeZone == timeManager.GetCurState()) return;
 
-    public void ClearTargetTransformList()
-    {
+        // 最新の時間を取得
+        timeZone = timeManager.GetCurState();
+
+        // 一度リストをクリア
         cameraTargetTransform.Clear();
+
+        switch (timeZone)
+        {
+            case CommonSE_Proto.E_TIMEOFDAY.morning:
+                {
+                    Transform princess = GameObject.FindWithTag("Princess").transform;
+                    if (princess) cameraTargetTransform.Add(princess);
+                    Transform player = GameObject.FindWithTag("Player").transform;
+                    if (player) cameraTargetTransform.Add(player);
+                }
+                break;
+            case CommonSE_Proto.E_TIMEOFDAY.noon:
+                {
+                    Transform player = GameObject.FindWithTag("Player").transform;
+                    if (player) cameraTargetTransform.Add(player);
+                }
+                break;
+            case CommonSE_Proto.E_TIMEOFDAY.afternoon:
+                {
+                    Transform player = GameObject.FindWithTag("Player").transform;
+                    if (player) cameraTargetTransform.Add(player);
+                }
+                break;
+            case CommonSE_Proto.E_TIMEOFDAY.night:
+                {
+                    Transform princess = GameObject.FindWithTag("Princess").transform;
+                    if (princess) cameraTargetTransform.Add(princess);
+                }
+                break;
+        }
     }
 }
