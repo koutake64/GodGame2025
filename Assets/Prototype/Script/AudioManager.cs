@@ -1,6 +1,7 @@
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Audio;
+using static CommonSE_Proto;
 
 public class AudioManager : MonoBehaviour
 {
@@ -14,14 +15,27 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource seSource2D;    //UI・２D　SE用
 
     [Header("BGM Clips")]
-    [SerializeField] AudioClip titleBGM;
-    [SerializeField] AudioClip gameBGM;
-    [SerializeField] AudioClip resultBGM;
+    [SerializeField] AudioClip mornigBGM;
+    [SerializeField] AudioClip noonBGM;
+    [SerializeField] AudioClip afternoonBGM;
+    [SerializeField] AudioClip nightBGM;
 
     [Header("UI SE Clips")]
     [SerializeField] AudioClip clickSE;         //ゲームシーンのクリックSE
     [SerializeField] AudioClip decideButtonSE;  //タイトル、リザルトの決定ボタンSE
     [SerializeField] AudioClip cancelButtonSE;  //タイトル、リザルトのキャンセル（戻る等）ボタンSE
+
+    private TimeManager timeManager;
+
+    private void Start()
+    {
+        timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
+        if(timeManager == null)
+        {
+            Debug.Log("タイムマネージャが見つかりませんAudioManagerで！");
+        }
+        PlaySceneBGM();
+    }
 
     void Awake()
     {
@@ -79,7 +93,22 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlaySceneBGM()
     {
-       
+        if (timeManager.GetCurState() == E_TIMEOFDAY.morning)
+        {
+            PlayBGM(mornigBGM);
+        }
+        else if (timeManager.GetCurState() == E_TIMEOFDAY.noon)
+        {
+            PlayBGM(noonBGM);
+        }
+        else if (timeManager.GetCurState() == E_TIMEOFDAY.afternoon)
+        {
+            PlayBGM(afternoonBGM);
+        }
+        else if (timeManager.GetCurState() == E_TIMEOFDAY.night)
+        {
+            PlayBGM(nightBGM);
+        }
     }
 
     /// <summary>
