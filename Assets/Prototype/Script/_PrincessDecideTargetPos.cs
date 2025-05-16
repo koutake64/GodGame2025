@@ -36,7 +36,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.I) && !cmController.GetAutoMove())
+        if (!cmController.GetAutoMove())
         {
             SetSearchRange();
             DecideTargetPos();

@@ -8,7 +8,7 @@ public class ModelShiftByTime : MonoBehaviour
     //[SerializeField, SelectTag] private string tag;
 
     [Header("本体のゲームオブジェクト")]
-    [SerializeField] private GameObject mainObj = null;
+    //[SerializeField] private GameObject mainObj = null;
 
     [Header("各時間帯のモデル(nullの場合は非アクティブになる)")]
     [Header("朝"), SerializeField] private GameObject morningModel = null;
@@ -22,13 +22,13 @@ public class ModelShiftByTime : MonoBehaviour
 
     private void Start()
     {
-        if (!mainObj)
-        {
-            Debug.Log(
-                "Script : ModelShiftByTime.cs \n" +
-                "本体のオブジェクトがセットされていません"
-                );
-        }
+        //if (!mainObj)
+        //{
+        //    Debug.Log(
+        //        "Script : ModelShiftByTime.cs \n" +
+        //        "本体のオブジェクトがセットされていません"
+        //        );
+        //}
 
         timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
         if (!timeMng)
@@ -56,8 +56,8 @@ public class ModelShiftByTime : MonoBehaviour
 
         startOnce = false;
 
-        // --- 本体と各モデルをすべて非アクティブにする
-        mainObj.SetActive(false);
+        // --- 各モデルをすべて非アクティブにする
+        //mainObj.SetActive(false);
         foreach (var model in models)
         {
             if (!model)
@@ -71,21 +71,21 @@ public class ModelShiftByTime : MonoBehaviour
         // --- 時間帯にあったモデルをアクティブにする
         ModelActive(timeMng.GetCurState());
 
-        // --- モデルが1つでもアクティブなら本体オブジェクトをアクティブにする
-        foreach (var model in models)
-        {
-            if (!model)
-            {
-                continue;
-            }
+        //// --- モデルが1つでもアクティブなら本体オブジェクトをアクティブにする
+        //foreach (var model in models)
+        //{
+        //    if (!model)
+        //    {
+        //        continue;
+        //    }
 
-            if (model.activeSelf)
-            {
-                mainObj.SetActive(true);
-                return;
-            }
+        //    if (model.activeSelf)
+        //    {
+        //        mainObj.SetActive(true);
+        //        return;
+        //    }
 
-        }
+        //}
 
         
     }
