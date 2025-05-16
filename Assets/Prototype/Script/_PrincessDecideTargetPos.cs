@@ -15,6 +15,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     private Vector2Int prevEdgeTargetPos = new Vector2Int(int.MinValue, int.MinValue);
 
     private CharacterMoveController cmController;
+    private TimeManager timeMng;
 
     private int currentKey = -1;
 
@@ -29,12 +30,50 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         {
             Debug.Log("owari");
         }
+        timeMng = GameObject.Find("Canvas").GetComponentInChildren<TimeManager>();
+        if (timeMng == null)
+        {
+            Debug.Log("owari");
+        }
 
         keyList.Add(5);
 
     }
 
     private void Update()
+    {
+        switch(timeMng.GetCurState())
+        {
+            case CommonSE_Proto.E_TIMEOFDAY.morning:
+                MorningUpdate();
+                break;
+            case CommonSE_Proto.E_TIMEOFDAY.noon:
+
+                break;
+            case CommonSE_Proto.E_TIMEOFDAY.afternoon:
+
+                break;
+            case CommonSE_Proto.E_TIMEOFDAY.night:
+                NightUpdate();
+                break;
+        }
+    }
+
+    private void MorningUpdate()
+    {
+        // ‰¼
+        if (!cmController.GetAutoMove())
+        {
+            SetSearchRange();
+            DecideTargetPos();
+            cmController.StartAutoMove(nextTargetPos);
+            //Debug.Log(
+            //    "nextTargetPos : " + nextTargetPos
+            //    );
+        }
+    }
+
+    private void NightUpdate()
     {
         if (!cmController.GetAutoMove())
         {

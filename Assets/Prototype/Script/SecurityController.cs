@@ -16,6 +16,9 @@ public class SecurityController : MonoBehaviour
     private Vector2Int              fieldSize;      // フィールドサイズ
     private bool                    isFoundPrincess;// お嬢様見つけたフラグ
 
+    private Vector2Int              initPos;        // 初期位置
+    private TimeManager             timeManager;    // タイムマネージャー
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -37,6 +40,15 @@ public class SecurityController : MonoBehaviour
             );
         }
 
+        timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
+        if (!timeManager)
+        {
+            Debug.LogError(
+               "Script:CharacterMoveController.cs \n" +
+               "timeManagerがnullです"
+            );
+        }
+
         isEndMovement = true;
         currentIndex = 0;
         addNum = 1;
@@ -47,6 +59,12 @@ public class SecurityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 夜になったら初期位置に戻る
+        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
+        {
+            transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
+        }
+
         // 進行方向に対してチェックを行う
         ForwardMonitoring();
 
@@ -154,4 +172,10 @@ public class SecurityController : MonoBehaviour
     {
         targetArray.Add(pos);
     }
+
+    public void SetInitPos(Vector2Int pos)
+    {
+        initPos = pos;
+    }
+
 }

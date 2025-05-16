@@ -493,6 +493,9 @@ public class _FieldDataManager : MonoBehaviour
                                     instPos,
                                     instRot
                                     );
+
+                                obj.GetComponent<SecurityController>().SetInitPos(new Vector2Int((int)instPos.x, (int)instPos.z));
+                                
                                 break;
                             case E_FIELDSTATE.surveillanceCamera:
                                 obj = Instantiate(

@@ -23,8 +23,7 @@ public class PlayerMove : MonoBehaviour
 
 	void Update()
 	{
-		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon 
-			&& timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.afternoon)
+		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon)
 			return;
 
 		inputTimer -= Time.deltaTime;
