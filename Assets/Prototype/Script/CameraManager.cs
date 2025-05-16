@@ -30,7 +30,6 @@ public class CameraManager : MonoBehaviour
                     if (princessObj != null)
                     {
                         princessTransform = princessObj.transform;
-                        transparencyObject.AddTargetTransform(princessTransform);
                     }
                     else
                         Debug.LogWarning("princessが見つかりませんでした。タグを確認してください。");
