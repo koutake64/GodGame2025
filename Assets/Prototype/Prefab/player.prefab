@@ -176,7 +176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d532c423de6ca544eabb259e6446f5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainObj: {fileID: 3663559527937981423}
   morningModel: {fileID: 3663559527937981423}
   noonModel: {fileID: 3663559527937981423}
   afternoonModel: {fileID: 3663559527937981423}

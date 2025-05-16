@@ -366,7 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492964ca88c9db14ea3531abaf3848fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noonTime: 60
+  noonTime: 35
   afterNoonTime: 180
   nightTime: 240
   fadeDuration: 5
@@ -727,7 +727,7 @@ MonoBehaviour:
   fieldWall: {fileID: 1850335846313603325, guid: 950b8c40df5dae14f9cedd37405877cb, type: 3}
   fieldWallWindow: {fileID: 1850335846313603325, guid: 369ef5e7898fc554e8a152eed3d3c993, type: 3}
   princess: {fileID: 3864955835613232448, guid: f634dcd0ecc5a8b40b7b38937b28b0f1, type: 3}
-  player: {fileID: 3663559527937981423, guid: da1bde8e173d92e4a87de3eb15c5a831, type: 3}
+  player: {fileID: 7808433448352047340, guid: 6967fe1b8b53b2346b574c9a1dc04a2b, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
   pillar: {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}

@@ -11,7 +11,7 @@ public class TransparencyObject : MonoBehaviour
     [SerializeField] private Material opaqueMaterial;
 
     private Transform cameraTransform;
-    private Transform cameraTargetTransform;
+    private List<Transform> cameraTargetTransform = new List<Transform>();
     private List<GameObject> transparentList = new List<GameObject>();  // 透明オブジェクトリスト
     private Dictionary<GameObject, Material> originalMaterials = new Dictionary<GameObject, Material>();
 
@@ -23,7 +23,7 @@ public class TransparencyObject : MonoBehaviour
         {
             Debug.LogError(
                "Script:TransparencyObject.cs \n" +
-               "cameraTranformがnullです"
+               "cameraTransformがnullです"
             );
         }
     }
@@ -31,7 +31,7 @@ public class TransparencyObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!cameraTargetTransform || !cameraTransform)
+        if (cameraTargetTransform.Count == 0 || !cameraTransform)
         {
             return;
         }
@@ -39,57 +39,60 @@ public class TransparencyObject : MonoBehaviour
         // このフレームで衝突したオブジェクト
         List<GameObject> currentHits = new List<GameObject>();
 
-        // 方向と距離を計算
-        Vector3 direction = (cameraTargetTransform.position - cameraTransform.position).normalized;
-        float distance = Vector3.Distance(cameraTransform.position, cameraTargetTransform.position);
-
-        // レイを作成し衝突オブジェクトを検知
-        RaycastHit[] hits = Physics.RaycastAll(cameraTransform.position, direction, distance);
-
-        // シーンビュー上にRayを描画
-        // Ray作成
-        Ray ray = new Ray(cameraTransform.position, direction);
-        Debug.DrawRay(ray.origin, ray.direction * distance, Color.blue);
-        
-        foreach (var hit in hits)
+        foreach (var target in cameraTargetTransform)
         {
-            // 透明化しないオブジェクト確認
-            GameObject hitObject = hit.collider.gameObject;
+            // 方向と距離を計算
+            Vector3 direction = (target.position - cameraTransform.position).normalized;
+            float distance = Vector3.Distance(cameraTransform.position, target.position);
 
-            if (hitObject.tag == "Player" || hitObject.tag == "Princess" || hitObject.tag == "Security")
-            {
-                continue;
-            }
+            // レイを作成し衝突オブジェクトを検知
+            RaycastHit[] hits = Physics.RaycastAll(cameraTransform.position, direction, distance);
 
-            // 重複していないか確認
-            if (!transparentList.Contains(hitObject))
+            // シーンビュー上にRayを描画
+            // Ray作成
+            Ray ray = new Ray(cameraTransform.position, direction);
+            Debug.DrawRay(ray.origin, ray.direction * distance, Color.blue);
+
+            foreach (var hit in hits)
             {
-                // 透明化
-                MeshRenderer mesh = hitObject.GetComponent<MeshRenderer>();
-                if (!mesh)
+                // 透明化しないオブジェクト確認
+                GameObject hitObject = hit.collider.gameObject;
+
+                if (hitObject.tag == "Player" || hitObject.tag == "Princess" || hitObject.tag == "Security")
                 {
-                    mesh = hitObject.GetComponentInChildren<MeshRenderer>();
+                    continue;
                 }
-                if (mesh)
+
+                // 重複していないか確認
+                if (!transparentList.Contains(hitObject))
                 {
-                    // 元のマテリアルを保存
-                    if (!originalMaterials.ContainsKey(hitObject))
+                    // 透明化
+                    MeshRenderer mesh = hitObject.GetComponent<MeshRenderer>();
+                    if (!mesh)
                     {
-                        originalMaterials[hitObject] = mesh.material;
+                        mesh = hitObject.GetComponentInChildren<MeshRenderer>();
                     }
+                    if (mesh)
+                    {
+                        // 元のマテリアルを保存
+                        if (!originalMaterials.ContainsKey(hitObject))
+                        {
+                            originalMaterials[hitObject] = mesh.material;
+                        }
 
-                    mesh.material = new Material(transparentMaterial);
-                    Color color = mesh.material.color;
-                    color.a = alpha;
-                    mesh.material.color = color;
+                        mesh.material = new Material(transparentMaterial);
+                        Color color = mesh.material.color;
+                        color.a = alpha;
+                        mesh.material.color = color;
 
-                    // リストに追加
-                    transparentList.Add(hitObject);
+                        // リストに追加
+                        transparentList.Add(hitObject);
+                    }
                 }
-            }
 
-            // このフレームで衝突したリストに追加
-            currentHits.Add(hitObject);
+                // このフレームで衝突したリストに追加
+                currentHits.Add(hitObject);
+            }
         }
 
         // 透明解除オブジェクトを確認
@@ -119,8 +122,13 @@ public class TransparencyObject : MonoBehaviour
             originalMaterials.Remove(obj);
         }
     }
-    public void SetTargetTransform(Transform target)
+    public void AddTargetTransform(Transform target)
     {
-        cameraTargetTransform = target;
+        cameraTargetTransform.Add(target);
+    }
+
+    public void ClearTargetTransformList()
+    {
+        cameraTargetTransform.Clear();
     }
 }
