@@ -51,5 +51,7 @@ public class PlayerMove : MonoBehaviour
 			moveController.AddPosX(-1);
 			inputTimer = inputCooldown;
 		}
+
 	}
+
 }

@@ -121,7 +121,7 @@ public class SurveillanceCamera : MonoBehaviour
         }
         else
         {
-            Debug.LogError("プレイヤーが見つかりませんでした");
+            //Debug.LogError("プレイヤーが見つかりませんでした");
         }
 
         // プリンセスの GameObject を使って座標を取得
@@ -133,7 +133,7 @@ public class SurveillanceCamera : MonoBehaviour
         }
         else
         {
-            Debug.LogError("プリンセスが見つかりませんでした");
+            //Debug.LogError("プリンセスが見つかりませんでした");
         }
 
 

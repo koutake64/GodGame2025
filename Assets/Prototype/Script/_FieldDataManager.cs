@@ -479,6 +479,7 @@ public class _FieldDataManager : MonoBehaviour
                                     instPos,
                                     instRot
                                     );
+
                                 break;
                             case E_FIELDSTATE.princess:
                                 obj = Instantiate(
