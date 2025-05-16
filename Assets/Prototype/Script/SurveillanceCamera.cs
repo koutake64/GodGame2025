@@ -55,7 +55,10 @@ public class SurveillanceCamera : MonoBehaviour
 
     Vector2Int targetPos = new Vector2Int();
 
-
+    //朝昼夜のやつ
+    private CommonSE_Proto.E_TIMEOFDAY TimeOfDay = E_TIMEOFDAY.morning;
+    
+    //監視カメラの向き
     private float angleY = 0f;
 
     //レイ用
@@ -381,21 +384,27 @@ public class SurveillanceCamera : MonoBehaviour
 
                 if (!inSightRange)
                     continue; // 索敵範囲外なら無視
-
-                // 索敵範囲内だった場合の処理
-                if (hit.collider.CompareTag("Princess"))
+                if (TimeOfDay == E_TIMEOFDAY.afternoon)
                 {
-                    Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
-                    prevFoundTarget = foundTarget = true;
-                    targetPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
+                    // 索敵範囲内だった場合の処理
+                    if (hit.collider.CompareTag("Player"))
+                    {
+                        Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
+                    }
                 }
-                else if (hit.collider.CompareTag("Player"))
+                if (TimeOfDay == E_TIMEOFDAY.afternoon)
                 {
-                    Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
-                }
-                else
-                {
-                    //Debug.Log("何かにヒット → " + hit.collider.gameObject.name);
+                    // 索敵範囲内だった場合の処理
+                    if (hit.collider.CompareTag("Princess"))
+                    {
+                        Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
+                        prevFoundTarget = foundTarget = true;
+                        targetPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
+                    }
+                    else if (hit.collider.CompareTag("Player"))
+                    {
+                        Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
+                    }
                 }
             }
         }
