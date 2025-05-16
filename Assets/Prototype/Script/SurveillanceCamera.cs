@@ -167,6 +167,8 @@ public class SurveillanceCamera : MonoBehaviour
 
         if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return))
         {
+            AudioManager.Instance.PlayClickSE();
+
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
                 {
@@ -230,6 +232,8 @@ public class SurveillanceCamera : MonoBehaviour
                     else if (watchState == E_WATCHSTATE.Right)
                         watchState = E_WATCHSTATE.Center;
                 }
+
+           
 
             RotateVisualObject();
             //Debug.Log("→ 現在の監視状態：" + watchState + SurveillanceCameraPos);
