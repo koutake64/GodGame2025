@@ -65,7 +65,11 @@ public class TransparencyObject : MonoBehaviour
             if (!transparentList.Contains(hitObject))
             {
                 // 透明化
-                MeshRenderer mesh = hitObject.transform.GetChild(0).GetComponent<MeshRenderer>();
+                MeshRenderer mesh = hitObject.GetComponent<MeshRenderer>();
+                if (!mesh)
+                {
+                    mesh = hitObject.GetComponentInChildren<MeshRenderer>();
+                }
                 if (mesh)
                 {
                     // 元のマテリアルを保存
@@ -101,7 +105,11 @@ public class TransparencyObject : MonoBehaviour
         // α値を元に戻す
         foreach(var obj in restore)
         {
-            MeshRenderer mesh = obj.transform.GetChild(0).GetComponent<MeshRenderer>();
+            MeshRenderer mesh = obj.transform.GetComponent<MeshRenderer>();
+            if (!mesh)
+            {
+                mesh = obj.transform.GetComponentInChildren<MeshRenderer>();
+            }
             if (mesh && originalMaterials.ContainsKey(obj))
             {
                 mesh.material = originalMaterials[obj]; // 元の Opaque マテリアルに戻す
