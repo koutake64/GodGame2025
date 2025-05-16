@@ -16,7 +16,7 @@ public class TextManager : MonoBehaviour
     [SerializeField, Header("1文字ごとの表示速度")] private float charInterval = 0.05f;
     [SerializeField, Header("TMPro版を使用する場合はチェックを入れる")] private bool isUseTMPro = false;
     [SerializeField, Header("オートモード時１行ごとに待つ時間(秒)")] private float autoDelay = 2.0f;
-    [SerializeField, Header("オートモードに切り替え(Tabキーで変えられる)")] private bool isAuto;
+    [SerializeField, Header("オートモードに切り替え(Tキーで変えられる)")] private bool isAuto;
     [Header("各オブジェクト")]
     [SerializeField, Header("背景パネル")] private GameObject backgroundPanel;
     [SerializeField, Header("メインテキスト")] private GameObject mainTextObj;
@@ -92,8 +92,8 @@ public class TextManager : MonoBehaviour
         if (!isAuto && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
             OnClick(false);
 
-        // Tabキーでオートモード切り替え
-        if(Input.GetKeyDown(KeyCode.Tab))
+        // Tキーでオートモード切り替え
+        if(Input.GetKeyDown(KeyCode.T))
         {
             isAuto = !isAuto;
             Debug.Log("モードを切り替えました。オートモード:" + isAuto);
