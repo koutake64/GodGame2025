@@ -168,7 +168,7 @@ public class SurveillanceCamera : MonoBehaviour
 
         if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return))
         {
-            AudioManager.Instance.PlayClickSE();
+            AudioManager.Instance.PlayCmeraSE();
 
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側

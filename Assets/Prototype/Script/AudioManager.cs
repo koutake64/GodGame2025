@@ -15,15 +15,21 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource seSource2D;    //UI・２D　SE用
 
     [Header("BGM Clips")]
-    [SerializeField] AudioClip mornigBGM;
-    [SerializeField] AudioClip noonBGM;
-    [SerializeField] AudioClip afternoonBGM;
-    [SerializeField] AudioClip nightBGM;
+    [SerializeField] AudioClip mornigBGM;       //朝
+    [SerializeField] AudioClip noonBGM;         //昼
+    [SerializeField] AudioClip afternoonBGM;    //夕
+    [SerializeField] AudioClip nightBGM;        //夜
+    [SerializeField] AudioClip titleBGM;        //タイトル
+    [SerializeField] AudioClip goalBGM;         //ゴール
+    [SerializeField] AudioClip gameOverBGM;     //ゲームオーバー
+
 
     [Header("UI SE Clips")]
-    [SerializeField] AudioClip clickSE;         //ゲームシーンのクリックSE
-    [SerializeField] AudioClip decideButtonSE;  //タイトル、リザルトの決定ボタンSE
-    [SerializeField] AudioClip cancelButtonSE;  //タイトル、リザルトのキャンセル（戻る等）ボタンSE
+    [SerializeField] AudioClip sCameraSE;           //監視カメラの向き変更時クリックSE
+    [SerializeField] AudioClip sCameraHitSE;        //監視カメラ発見SE
+    [SerializeField] AudioClip movePrincessSE;      //姫移動SE
+    [SerializeField] AudioClip moveButlerSE;        //執事移動SE
+    [SerializeField] AudioClip moveSecuritySE;      //警備員移動SE
 
     private TimeManager timeManager;
 
@@ -114,17 +120,17 @@ public class AudioManager : MonoBehaviour
     /// <summary>
     /// クリックSE再生
     /// </summary>
-    public void PlayClickSE()
+    public void PlayCmeraSE()
     {
-        PlaySE2D(clickSE);
+        PlaySE2D(sCameraSE);
     }
 
     /// <summary>
     /// 決定ボタンクリック時のSE再生
     /// </summary>
-    public void PlayDecideSE()
+    public void PlayCameraHitSE()
     {
-        PlaySE2D(decideButtonSE);
+        PlaySE2D(sCameraHitSE);
     }
 
     /// <summary>
@@ -132,6 +138,6 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayCancelSE()
     {
-        PlaySE2D(cancelButtonSE);
+        PlaySE2D(movePrincessSE);
     }
 }
