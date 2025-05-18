@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
@@ -534,6 +535,8 @@ public class SurveillanceCamera : MonoBehaviour
                 }
             }
         }
+
+        UpdateSearchedTileList(); // 
     }
 
 
@@ -642,4 +645,59 @@ public class SurveillanceCamera : MonoBehaviour
     }
 
 
+    // 索敵範囲のマス座標を保持するリスト
+    private List<Vector2Int> searchedTileList = new List<Vector2Int>();
+
+    /// <summary>
+    /// 現在の監視状態に応じて索敵しているマスのリストを返す
+    /// </summary>
+    private void UpdateSearchedTileList()
+    {
+        searchedTileList.Clear(); // 毎フレームリセット
+
+        // 中心座標（カメラのマス位置）
+        Vector2Int center = SurveillanceCameraPos;
+
+        // 索敵範囲は前方3マス × 横3マス（扇状に広がる）
+        // forward方向と監視状態によってオフセットが変わる
+        Vector2Int[] offsets = GetOffsetsBasedOnWatchState();
+
+        foreach (var offset in offsets)
+        {
+            Vector2Int target = center + offset;
+            searchedTileList.Add(target);
+        }
+
+        // デバッグ表示
+        foreach (var pos in searchedTileList)
+        {
+            Debug.Log($"索敵マス: {pos}");
+        }
+    }
+
+    /// <summary>
+    /// 監視状態とforwardに応じて、索敵範囲の相対オフセットを返す
+    /// </summary>
+    private Vector2Int[] GetOffsetsBasedOnWatchState()
+    {
+        List<Vector2Int> offsetList = new List<Vector2Int>();
+
+        Vector2Int forwardDir = Vector2Int.RoundToInt(forward);
+        Vector2Int rightDir = new Vector2Int(forwardDir.y, -forwardDir.x);
+
+        int sideOffset = 0;
+        if (watchState == E_WATCHSTATE.Left) sideOffset = -1;
+        else if (watchState == E_WATCHSTATE.Right) sideOffset = 1;
+
+        for (int i = 1; i <= 3; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                Vector2Int offset = forwardDir * i + rightDir * (j + sideOffset);
+                offsetList.Add(offset);
+            }
+        }
+
+        return offsetList.ToArray();
+    }
 }
