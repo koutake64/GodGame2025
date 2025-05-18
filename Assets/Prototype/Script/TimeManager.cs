@@ -31,8 +31,6 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-		
-
         prevState = currentState;
 
         time += Time.deltaTime;
@@ -126,6 +124,7 @@ public class TimeManager : MonoBehaviour
 	// デバッグ用：特定の時間帯に強制変更
 	public void ForceChangeState(CommonSE_Proto.E_TIMEOFDAY newState)
 	{
+		prevState = currentState;
 		currentState = newState;
 		//prevState = newState;
 
@@ -150,6 +149,8 @@ public class TimeManager : MonoBehaviour
 		}
 
 		UpdateLevelText();
+		FindAnyObjectByType<ModelShiftByTime>()?.Refresh();
+
 	}
 #endif
 

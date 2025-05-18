@@ -46,7 +46,7 @@ public class ModelShiftByTime : MonoBehaviour
 
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         // --- 時間帯が変わった時だけ処理を行う
         if (!timeMng.IsChangeState() && !startOnce)
@@ -100,5 +100,11 @@ public class ModelShiftByTime : MonoBehaviour
             Debug.Log(time + "のモデルがアクティブになりました");
         }
     }
+
+	public void Refresh()
+	{
+		startOnce = true; // 次の LateUpdate でモデルを再評価させる
+	}
+
 
 }
