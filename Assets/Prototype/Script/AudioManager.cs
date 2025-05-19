@@ -1,46 +1,30 @@
+using NUnit.Framework;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Audio;
-using static CommonSE_Proto;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
     [Header("Mixer")]
-    [SerializeField] AudioMixer audioMixer;
+    [SerializeField] private AudioMixer audioMixer;
 
     [Header("Sources")]
-    [SerializeField] AudioSource bgmSource;     //B(GM用
-    [SerializeField] AudioSource seSource2D;    //UI・２D　SE用
+    [SerializeField] private AudioSource bgmSource;     //BGM用
+    [SerializeField] private AudioSource seSource;    //SE用
 
     [Header("BGM Clips")]
-    [SerializeField] AudioClip mornigBGM;       //朝
-    [SerializeField] AudioClip noonBGM;         //昼
-    [SerializeField] AudioClip afternoonBGM;    //夕
-    [SerializeField] AudioClip nightBGM;        //夜
-    [SerializeField] AudioClip titleBGM;        //タイトル
-    [SerializeField] AudioClip goalBGM;         //ゴール
-    [SerializeField] AudioClip gameOverBGM;     //ゲームオーバー
+    [SerializeField] private AudioClip[] BGMs;
 
-
-    [Header("UI SE Clips")]
-    [SerializeField] AudioClip sCameraSE;           //監視カメラの向き変更時クリックSE
-    [SerializeField] AudioClip sCameraHitSE;        //監視カメラ発見SE
-    [SerializeField] AudioClip movePrincessSE;      //姫移動SE
-    [SerializeField] AudioClip moveButlerSE;        //執事移動SE
-    [SerializeField] AudioClip moveSecuritySE;      //警備員移動SE
-
-    private TimeManager timeManager;
+    [Header("SE Clips")]
+    [SerializeField] private AudioClip[] SEs;
 
     private void Start()
     {
-        timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
-        if(timeManager == null)
-        {
-            Debug.Log("タイムマネージャが見つかりませんAudioManagerで！");
-        }
-        PlaySceneBGM();
+        //PlayBGM();
     }
 
     void Awake()
@@ -58,24 +42,36 @@ public class AudioManager : MonoBehaviour
     /// BGM　再生
     /// </summary>
     /// <param name="clip">BGMのクリップ</param>
-    public void PlayBGM(AudioClip clip)
+    public void PlayBGM(int no = 0)
     {
-        if (clip == null || bgmSource.clip == clip) return;
+        if (no >= BGMs.Length) return; // 配列外指定
+        if (BGMs[no] == null) return; // clipがない
+
         bgmSource.Stop();
-        bgmSource.clip = clip;
+        bgmSource.clip = BGMs[no];
         bgmSource.Play();
+    }
+
+    /*
+    public void PlayGameBGM(E_TIMEOFDAY state.)
+    {
 
     }
+    */
+
 
     /// <summary>
-    /// 2D UI SE再生
+    /// SE再生
     /// </summary>
     /// <param name="clip"></param>
-    public void PlaySE2D(AudioClip clip)
+    public void PlaySE(int no = 0)
     {
-        if (clip == null) return;
-        seSource2D.PlayOneShot(clip);
+        if (no >= SEs.Length) return; // 配列外指定
+        if (SEs[no] == null) return; // clipがない
+
+        seSource.PlayOneShot(SEs[no]);
     }
+
     /// <summary>
     /// BGM 音量設定
     /// </summary>
@@ -92,52 +88,5 @@ public class AudioManager : MonoBehaviour
     public void SetSEVolume(float volume)
     {
         audioMixer.SetFloat("SEVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
-    }
-
-    /// <summary>
-    /// シーンに応じたBGM再生
-    /// </summary>
-    public void PlaySceneBGM()
-    {
-        if (timeManager.GetCurState() == E_TIMEOFDAY.morning)
-        {
-            PlayBGM(mornigBGM);
-        }
-        else if (timeManager.GetCurState() == E_TIMEOFDAY.noon)
-        {
-            PlayBGM(noonBGM);
-        }
-        else if (timeManager.GetCurState() == E_TIMEOFDAY.afternoon)
-        {
-            PlayBGM(afternoonBGM);
-        }
-        else if (timeManager.GetCurState() == E_TIMEOFDAY.night)
-        {
-            PlayBGM(nightBGM);
-        }
-    }
-
-    /// <summary>
-    /// クリックSE再生
-    /// </summary>
-    public void PlayCmeraSE()
-    {
-        PlaySE2D(sCameraSE);
-    }
-
-    /// <summary>
-    /// 決定ボタンクリック時のSE再生
-    /// </summary>
-    public void PlayCameraHitSE()
-    {
-        PlaySE2D(sCameraHitSE);
-    }
-
-    /// <summary>
-    /// キャンセルボタンクリック時のSE再生
-    /// </summary>
-    public void PlayCancelSE()
-    {
-        PlaySE2D(movePrincessSE);
     }
 }
