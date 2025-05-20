@@ -537,7 +537,7 @@ public class SurveillanceCamera : MonoBehaviour
             }
         }
 
-        UpdateSearchedTileList(); // 
+       
     }
 
 
@@ -652,15 +652,17 @@ public class SurveillanceCamera : MonoBehaviour
     /// <summary>
     /// 現在の監視状態に応じて索敵しているマスのリストを返す
     /// </summary>
-    private void UpdateSearchedTileList()
+    /// <summary>
+    /// 現在の監視状態に応じて索敵しているマスのリストを返す
+    /// </summary>
+    public List<Vector2Int> GetSearchedTileList()
     {
-        searchedTileList.Clear(); // 毎フレームリセット
+        List<Vector2Int> searchedTileList = new List<Vector2Int>();
 
         // 中心座標（カメラのマス位置）
         Vector2Int center = SurveillanceCameraPos;
 
         // 索敵範囲は前方3マス × 横3マス（扇状に広がる）
-        // forward方向と監視状態によってオフセットが変わる
         Vector2Int[] offsets = GetOffsetsBasedOnWatchState();
 
         foreach (var offset in offsets)
@@ -669,11 +671,13 @@ public class SurveillanceCamera : MonoBehaviour
             searchedTileList.Add(target);
         }
 
-        // デバッグ表示
+        // デバッグ表示（必要に応じてコメントアウト可）
         foreach (var pos in searchedTileList)
         {
             Debug.Log($"索敵マス: {pos}");
         }
+
+        return searchedTileList;
     }
 
     /// <summary>
