@@ -49,7 +49,7 @@ public class SurveillanceCamera : MonoBehaviour
     bool isPlayerInRange = false;
 
     // マスの状態取得用
-    FieldDataManager fieldManager;
+    //FieldDataManager fieldManager;
 
     bool foundTarget = false;
     bool prevFoundTarget = false;
@@ -239,6 +239,9 @@ public class SurveillanceCamera : MonoBehaviour
 
             RotateVisualObject();
             //Debug.Log("→ 現在の監視状態：" + watchState + SurveillanceCameraPos);
+
+            fieldDataManager.ChangeColor();
+
         }
 
         // 監視範囲の状態をリセット

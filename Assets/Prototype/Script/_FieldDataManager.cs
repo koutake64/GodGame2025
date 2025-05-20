@@ -48,10 +48,19 @@ public class _FieldDataManager : MonoBehaviour
         public E_FIELDSTATE state;      // 状態
     }
 
+    private struct S_TAILPREHUBINFO
+    {
+        public GameObject obj;
+        public bool typeFlag;
+    }
+
     /// <summary>
     /// どのマスに何があるのかを管理する配列
     /// </summary>
     private List<S_FIELDINFO>[,] fieldData;
+
+    private S_TAILPREHUBINFO[,] fieldGameObj;
+    private bool changeColorFlag = true;
 
     private int updateCnt = 0;
 
@@ -113,6 +122,8 @@ public class _FieldDataManager : MonoBehaviour
             }
         }
 
+        fieldGameObj = new S_TAILPREHUBINFO[fieldSizeX, fieldSizeY];
+
         // ---床の生成
         GameObject obj = null;
         bool tileType = false;
@@ -149,6 +160,12 @@ public class _FieldDataManager : MonoBehaviour
                 {
                     obj.transform.SetParent(field.transform);
                 }
+
+                S_TAILPREHUBINFO tpi = new S_TAILPREHUBINFO();
+                tpi.obj = obj;
+                tpi.typeFlag = tileType;
+                fieldGameObj[x, y] = tpi;
+                Debug.Log("aaa");
 
                 // 生成タイルを反転
                 tileType ^= true;
@@ -390,6 +407,12 @@ public class _FieldDataManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (updateCnt > 3 && changeColorFlag)
+        {
+            ChangeTail_debug();
+            changeColorFlag = false;
+        }
+
         updateCnt++;
 
         if (updateCnt > 2)
@@ -525,6 +548,9 @@ public class _FieldDataManager : MonoBehaviour
                             S_FIELDINFO temp = fieldData[x, y][i];
                             temp.obj = obj;
                             fieldData[x, y][i] = temp;
+
+
+
                             obj.transform.SetParent(field.transform);
                         }
 
@@ -563,6 +589,83 @@ public class _FieldDataManager : MonoBehaviour
     public Vector2Int GetFieldSize()
     {
         return new Vector2Int(fieldSizeX, fieldSizeY);
+    }
+
+    private void ChangeTail_debug()
+    {
+        Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
+        bool[,] scFlag = new bool[fieldSizeX, fieldSizeY];
+
+        for (int y = 0; y < fieldSize.y; ++y)
+        {
+            for (int x = 0; x < fieldSize.x; ++x)
+            {
+                scFlag[x, y] = false;
+            }
+
+        }
+
+        for (int y = 0; y < fieldSize.y; ++y)
+        {
+            for (int x = 0; x < fieldSize.x; ++x)
+            {
+                for(int i = 0; i < fieldData[x, y].Count; ++i)
+                {
+                    if (fieldData[x, y][i].state != E_FIELDSTATE.surveillanceCamera)
+                    {
+                        continue;
+                    }
+
+                    SurveillanceCamera sc = fieldData[x, y][i].obj.GetComponent<SurveillanceCamera>();
+
+                    List<Vector2Int> posList = sc.GetSearchedTileList();
+
+                    for (int j = 0; j < posList.Count; ++j)
+                    {
+                        scFlag[posList[j].x, posList[j].y] = true;
+
+                        //Debug.Log(
+                        //    "pos.x : " + posList[j].x + "pos.y : " + posList[j].y + "\n" +
+                        //    "flag : " + scFlag[posList[j].x, posList[j].y]
+                        //    );
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        int debug_cnt = 0;
+        for (int y = 0; y < fieldSize.y; ++y)
+        {
+            for (int x = 0; x < fieldSize.x; ++x)
+            {
+                MeshRenderer mr = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
+
+                if (scFlag[x, y])
+                {
+                    var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
+                    renderer.material = new Material(renderer.sharedMaterial);
+                    renderer.material.color = Color.red;
+                    debug_cnt++;
+                }
+                else
+                {
+                    Color baseColor = fieldGameObj[x, y].typeFlag
+                        ? tileA.GetComponent<MeshRenderer>().sharedMaterial.color
+                        : tileB.GetComponent<MeshRenderer>().sharedMaterial.color;
+
+                    mr.material.color = baseColor;
+                }
+            }
+        }
+    }
+
+    public void ChangeColor()
+    {
+        changeColorFlag = true;
     }
 
 }
