@@ -1933,7 +1933,7 @@ GameObject:
   - component: {fileID: 1892366280}
   - component: {fileID: 1892366279}
   m_Layer: 0
-  m_Name: MsterAudio
+  m_Name: MasterAudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1953,13 +1953,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 2e6edfa65cbfd6442aa1f0e1d67c4271, type: 2}
   bgmSource: {fileID: 1295127876}
-  seSource2D: {fileID: 1054207567}
-  titleBGM: {fileID: 8300000, guid: 1276f2507de92ac4e81f37f926ffb4f2, type: 3}
-  gameBGM: {fileID: 0}
-  resultBGM: {fileID: 0}
-  clickSE: {fileID: 8300000, guid: 5d5bc6ceafd7959448834c0dd2c6ceaa, type: 3}
-  decideButtonSE: {fileID: 8300000, guid: 5d5bc6ceafd7959448834c0dd2c6ceaa, type: 3}
-  cancelButtonSE: {fileID: 8300000, guid: 5d5bc6ceafd7959448834c0dd2c6ceaa, type: 3}
+  seSource: {fileID: 0}
+  BGMs: []
+  SEs: []
 --- !u!4 &1892366280
 Transform:
   m_ObjectHideFlags: 0
