@@ -691,7 +691,7 @@ public class SurveillanceCamera : MonoBehaviour
         List<Vector2Int> offsetList = new List<Vector2Int>();
 
         Vector2Int forwardDir = Vector2Int.RoundToInt(forward);
-        Vector2Int rightDir = new Vector2Int(forwardDir.y, -forwardDir.x);
+        Vector2Int rightDir = new Vector2Int(-forwardDir.y, -forwardDir.x);
 
         int sideOffset = 0;
         if (watchState == E_WATCHSTATE.Left) sideOffset = -1;
