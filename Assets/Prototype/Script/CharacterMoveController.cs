@@ -160,7 +160,7 @@ public class CharacterMoveController : MonoBehaviour
 
         // 各座標更新
         prevPos = currentPos;
-        currentPos.x += num;
+        currentPos.y += num;
 
         // 移動情報更新
         isMove = true;
