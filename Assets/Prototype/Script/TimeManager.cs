@@ -120,39 +120,39 @@ public class TimeManager : MonoBehaviour
 
 	public CommonSE_Proto.E_TIMEOFDAY CurrentState => currentState;
 
-#if UNITY_EDITOR
-	// デバッグ用：特定の時間帯に強制変更
-	public void ForceChangeState(CommonSE_Proto.E_TIMEOFDAY newState)
-	{
-		prevState = currentState;
-		currentState = newState;
-		//prevState = newState;
+//#if UNITY_EDITOR
+//	// デバッグ用：特定の時間帯に強制変更
+//	public void ForceChangeState(CommonSE_Proto.E_TIMEOFDAY newState)
+//	{
+//		prevState = currentState;
+//		currentState = newState;
+//		//prevState = newState;
 
-		switch (newState)
-		{
-			case CommonSE_Proto.E_TIMEOFDAY.morning:
-				time = 0;
-				SunMove(0f);
-				break;
-			case CommonSE_Proto.E_TIMEOFDAY.noon:
-				time = noonTime;
-				SunMove(30f);
-				break;
-			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-				time = afterNoonTime;
-				SunMove(185f);
-				break;
-			case CommonSE_Proto.E_TIMEOFDAY.night:
-				time = nightTime;
-				SunMove(200f);
-				break;
-		}
+//		switch (newState)
+//		{
+//			case CommonSE_Proto.E_TIMEOFDAY.morning:
+//				time = 0;
+//				SunMove(0f);
+//				break;
+//			case CommonSE_Proto.E_TIMEOFDAY.noon:
+//				time = noonTime;
+//				SunMove(30f);
+//				break;
+//			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
+//				time = afterNoonTime;
+//				SunMove(185f);
+//				break;
+//			case CommonSE_Proto.E_TIMEOFDAY.night:
+//				time = nightTime;
+//				SunMove(200f);
+//				break;
+//		}
 
-		UpdateLevelText();
-		FindAnyObjectByType<ModelShiftByTime>()?.Refresh();
+//		UpdateLevelText();
+//		FindAnyObjectByType<ModelShiftByTime>()?.Refresh();
 
-	}
-#endif
+//	}
+//#endif
 
 	public CommonSE_Proto.E_TIMEOFDAY GetCurState()
 	{
