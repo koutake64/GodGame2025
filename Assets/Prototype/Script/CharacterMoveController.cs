@@ -25,7 +25,8 @@ public class CharacterMoveController : MonoBehaviour
     private bool                isMove;         // 移動するか
     private Vector2Int          fieldSize;      // フィールドサイズ
     private Queue<Vector2Int>   moveRoute;      // 移動経路
-    private bool                isAutoMoving;   // 自動移動中か   
+    private bool                isAutoMoving;   // 自動移動中か
+
     void Start()
     {
         fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
@@ -108,15 +109,15 @@ public class CharacterMoveController : MonoBehaviour
                 // 移動フラグを下げる
                 isMove = false;
 
+                // 念のため一度現在座標を更新
+                currentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+
                 // 移動先に自身の情報登録
                 fieldData.MoveInfo(prevPos, currentPos, charaState);
 
                 MoveNextStep();
             }
-
         }
-        //UpdateModel();
-
     }
     private void UpdateTargetPosition()
     {
