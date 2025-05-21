@@ -109,9 +109,6 @@ public class CharacterMoveController : MonoBehaviour
                 // 移動フラグを下げる
                 isMove = false;
 
-                // 念のため一度現在座標を更新
-                currentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
-
                 // 移動先に自身の情報登録
                 fieldData.MoveInfo(prevPos, currentPos, charaState);
 
@@ -130,28 +127,18 @@ public class CharacterMoveController : MonoBehaviour
         // 移動中・自動移動中なら終了
         if (isMove || isAutoMoving) return;
 
+        // 目標座標
+        Vector2Int targetPos = new Vector2Int(currentPos.x + num, currentPos.y);
+
+        // 通れるか判定
+        if(!fieldData.GetIsThrough(targetPos))
+        {
+            return;
+        }
+
         // 各座標更新
         prevPos = currentPos;
         currentPos.x += num;
-
-        // 範囲外チェック
-        if (currentPos.x < 0)
-        {
-            currentPos.x = prevPos.x;
-            return;
-        }
-        if (currentPos.x >= fieldSize.x)
-        {
-            currentPos.x = prevPos.x;
-            return;
-        }
-
-        // 通れるか判定
-        if(!fieldData.GetIsThrough(currentPos))
-        {
-            currentPos.x -= num;
-            return;
-        }
 
         // 移動情報更新
         isMove = true;
@@ -162,33 +149,24 @@ public class CharacterMoveController : MonoBehaviour
         // 移動中・自動移動中なら終了
         if (isMove || isAutoMoving) return;
 
-        // 各座標更新
-        prevPos = currentPos;
-        currentPos.y += num;
-
-        // 範囲外チェック
-        if (currentPos.y < 0)
-        {
-            currentPos.y = prevPos.y;
-            return;
-        }
-        if (currentPos.y >= fieldSize.y)
-        {
-            currentPos.y = prevPos.y;
-            return;
-        }
+        // 目標座標
+        Vector2Int targetPos = new Vector2Int(currentPos.x, currentPos.y + num);
 
         // 通れるか判定
-        if (!fieldData.GetIsThrough(currentPos))
+        if (!fieldData.GetIsThrough(targetPos))
         {
-            currentPos.y -= num;
             return;
         }
+
+        // 各座標更新
+        prevPos = currentPos;
+        currentPos.x += num;
 
         // 移動情報更新
         isMove = true;
         UpdateTargetPosition();
     }
+
 
     public void SetPos(Vector2Int pos)
     {
@@ -219,6 +197,9 @@ public class CharacterMoveController : MonoBehaviour
 
         // 座標設定
         transform.position = new Vector3(currentPos.x, 0, currentPos.y);
+
+        // 移動先に自身の情報登録
+        fieldData.MoveInfo(prevPos, currentPos, charaState);
     }
 
     public void StartAutoMove(Vector2Int goal)
