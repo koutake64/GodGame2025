@@ -65,9 +65,6 @@ public class SecurityController : MonoBehaviour
             transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
         }
 
-        // 進行方向に対してチェックを行う
-        ForwardMonitoring();
-
         // 移動が終了していたら
         if (isEndMovement && targetArray.Count > 0)
         {
@@ -77,6 +74,9 @@ public class SecurityController : MonoBehaviour
             // 移動終了フラグを下げる
             isEndMovement = false;
         }
+
+        // 進行方向に対してチェックを行う
+        ForwardMonitoring();
     }
 
     public void EndMovement()
@@ -96,6 +96,9 @@ public class SecurityController : MonoBehaviour
         }
 
         isEndMovement = true;
+
+        // 座標をセット
+        moveController.SetPos(new Vector2Int((int)transform.position.x, (int)transform.position.z));
     }
 
     public void InverseArray()
@@ -137,6 +140,7 @@ public class SecurityController : MonoBehaviour
                 // お姫様を発見
                 if (info[j].state == _FieldDataManager.E_FIELDSTATE.princess)
                 {
+
                 }
 
                 // 貫通しないオブジェクトの場合
@@ -177,5 +181,4 @@ public class SecurityController : MonoBehaviour
     {
         initPos = pos;
     }
-
 }
