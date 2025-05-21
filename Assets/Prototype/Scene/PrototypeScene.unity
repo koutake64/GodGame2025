@@ -615,7 +615,6 @@ MonoBehaviour:
   princessTag: Princess
   offsetPosition: {x: 0, y: 10, z: -10}
   fixedRotation: {x: 40, y: 0, z: 0}
-  transparencyObject: {fileID: 316948682}
 --- !u!114 &316948682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,12 +624,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 316948676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073db33e8d973da48ab1f14f426a2432, type: 3}
+  m_Script: {fileID: 11500000, guid: 22d5faf94be98104dbd3b993a825ab42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   alpha: 0.1
-  transparentMaterial: {fileID: 2100000, guid: 36d0b40ed36aee546bec63e303cfd7ae, type: 2}
-  opaqueMaterial: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
+  fadeSpeed: 1
 --- !u!1 &324205370
 GameObject:
   m_ObjectHideFlags: 0

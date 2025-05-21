@@ -1,59 +1,88 @@
 using UnityEngine;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine.Rendering.Universal.Internal;
 
 public class TransparencyObject : MonoBehaviour
 {
-    private MeshRenderer    mesh;           // MeshRenderer
-    private Material        material;       // Material
-    private float           currentAlpha;   // 現在の透明度
-    private float           targetAlpha;    // 目標透明度
-    private bool            isFade;         // フェードするか
-    private float           fadeSpeed;      // フェード速度
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("マテリアル設定")]
+    [SerializeField] private Material opaqueMaterial;
+    [SerializeField] private Material transparentMaterial;
+
+    private MeshRenderer meshRenderer;
+    private Material workingMaterial;
+
+    private float currentAlpha = 1f;
+    private float fadeSpeed = 1f;
+    private float goalAlpha = 1f;
+
+    private bool isFading = false;
+    private bool isTransparent = false;
+
+    private void Awake()
     {
-        mesh = transform.GetChild(0).GetComponent<MeshRenderer>();
-        material = mesh.material;
-        currentAlpha = material.color.a;
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+
+        if (!meshRenderer)
+        {
+            Debug.LogError("TransparencyObject: MeshRenderer が見つかりません");
+            enabled = false;
+            return;
+        }
+
+        // 最初はOpaqueマテリアルで表示
+        workingMaterial = new Material(opaqueMaterial);
+        meshRenderer.material = workingMaterial;
+        currentAlpha = 1f;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!isFade) return;
+        if (!isFading) return;
 
-        // 現在の透明度を目標透明度に向かって補間
-        currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, fadeSpeed * Time.deltaTime);
+        currentAlpha = Mathf.MoveTowards(currentAlpha, goalAlpha, fadeSpeed * Time.deltaTime);
 
-        // 色を更新
-        Color color = material.color;
-        color.a = currentAlpha;
-        material.color = color;
-
-        // フェード完了したらフラグを下げる
-        if (Mathf.Approximately(currentAlpha, targetAlpha))
+        // マテリアルの切替が必要なら行う
+        if (!isTransparent && goalAlpha < 1f)
         {
-            isFade = false;
+            workingMaterial = new Material(transparentMaterial);
+            meshRenderer.material = workingMaterial;
+            isTransparent = true;
+        }
+
+        Color color = workingMaterial.color;
+        color.a = currentAlpha;
+        workingMaterial.color = color;
+        meshRenderer.material = workingMaterial;
+
+        // フェード完了チェック
+        if (Mathf.Approximately(currentAlpha, goalAlpha))
+        {
+            isFading = false;
+
+            // 完全不透明に戻ったら Opaque に戻す
+            if (Mathf.Approximately(goalAlpha, 1f))
+            {
+                workingMaterial = new Material(opaqueMaterial);
+                meshRenderer.material = workingMaterial;
+                isTransparent = false;
+            }
         }
     }
 
-    public void StartFade(float alpha, float speed)
+    /// <summary>
+    /// フェードを開始（透明にする）
+    /// </summary>
+    public void StartFade(float toAlpha, float speed)
     {
-        // フラグを立てる
-        isFade = true;
-
-        // 目標α値を0～1の間にクランプ
-        targetAlpha = Mathf.Clamp01(alpha);
-
-        // フェード速度を設定
-        fadeSpeed = speed;
+        Debug.Log($"StartFade: {toAlpha}");
+        goalAlpha = Mathf.Clamp01(toAlpha);
+        fadeSpeed = Mathf.Max(speed, 0.01f);
+        isFading = true;
     }
 
+    /// <summary>
+    /// 不透明に戻す
+    /// </summary>
     public void RemoveAlpha(float speed)
     {
-        StartFade(1.0f, speed);
+        StartFade(1f, speed);
     }
 }

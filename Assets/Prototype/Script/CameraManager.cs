@@ -6,7 +6,6 @@ public class CameraManager : MonoBehaviour
     [SerializeField, SelectTag, Header("追従対象のタグ")] private string princessTag;
     [SerializeField, Header("プレイヤーとの相対位置")] private Vector3 offsetPosition;
     [SerializeField, Header("カメラの固定角度")] private Vector3 fixedRotation;
-    [SerializeField, Header("透明化スクリプト")] private TransparencyObject transparencyObject;
 
     private Transform playerTransform;
     private Transform princessTransform;

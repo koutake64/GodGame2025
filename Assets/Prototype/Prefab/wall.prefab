@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073db33e8d973da48ab1f14f426a2432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  opaqueMaterial: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 36d0b40ed36aee546bec63e303cfd7ae, type: 2}
+  targetAlpha: 0.1
 --- !u!65 &5224719239933917508
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -130,8 +133,7 @@ MeshRenderer:
   m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: b8ff920f85546b646849a9dbe5e7d582, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

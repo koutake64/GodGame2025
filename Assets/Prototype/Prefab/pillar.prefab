@@ -67,6 +67,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073db33e8d973da48ab1f14f426a2432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  opaqueMaterial: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 36d0b40ed36aee546bec63e303cfd7ae, type: 2}
+  targetAlpha: 0.1
 --- !u!1001 &704037429792936336
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121,16 +124,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f79b75aaae76942488b0ccb01d9edbcb, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f79b75aaae76942488b0ccb01d9edbcb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 36d0b40ed36aee546bec63e303cfd7ae, type: 2}
+      objectReference: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
     - target: {fileID: -7511558181221131132, guid: f79b75aaae76942488b0ccb01d9edbcb, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: 8f548c83c9665c94baa8855eb952b009, type: 2}
+      objectReference: {fileID: 2100000, guid: 36d0b40ed36aee546bec63e303cfd7ae, type: 2}
     - target: {fileID: 919132149155446097, guid: f79b75aaae76942488b0ccb01d9edbcb, type: 3}
       propertyPath: m_Name
       value: hashira
