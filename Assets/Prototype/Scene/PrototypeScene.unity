@@ -1261,7 +1261,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c82c3dc88ebd81b4da6abedfbdddba27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  memoUIObj: {fileID: 1851309043}
+  UIEntries:
+  - kind: 0
+    uiObject: {fileID: 1851309043}
 --- !u!1 &1054207566
 GameObject:
   m_ObjectHideFlags: 0
