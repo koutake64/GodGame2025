@@ -106,6 +106,9 @@ public class _FieldDataManager : MonoBehaviour
     [Header("お宝のプレハブ")]
     [SerializeField] private GameObject goal;
 
+    [Header("警備員巡回ルート(IDはこちらで指定)")]
+    [SerializeField] private Dictionary<int, List<Vector2Int>> route = new Dictionary<int, List<Vector2Int>>();
+
     private void Start()
     {
         // --- ヌルチェック
@@ -257,7 +260,12 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(15, 12), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
         AddInfo(new Vector2Int(9, 13), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.down);
 
-        AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up);
+        AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up, 10);
+        List<Vector2Int> route1 = new List<Vector2Int>();
+        route1.Add(new Vector2Int(1, 14));
+        route1.Add(new Vector2Int(1, 13));
+        route.Add(10, route1);
+
         AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right);
 
         AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
@@ -519,7 +527,17 @@ public class _FieldDataManager : MonoBehaviour
                                     );
 
                                 obj.GetComponent<SecurityController>().SetInitPos(new Vector2Int((int)instPos.x, (int)instPos.z));
-                                
+                                foreach (var r in route)
+                                {
+                                    if (fieldData[x, y][i].alignmentID == r.Key)
+                                    {
+                                        foreach(var q in r.Value)
+                                        {
+                                            obj.GetComponent<SecurityController>().AddTargetPos(q);
+                                        }
+                                    }
+                                }
+
                                 break;
                             case E_FIELDSTATE.surveillanceCamera:
                                 obj = Instantiate(
@@ -570,20 +588,6 @@ public class _FieldDataManager : MonoBehaviour
             }
 
         }
-        else if (updateCnt == 2)
-        {
-            for (int i = 0; i < moveGameObjList.Count; ++i)
-            {
-                //Debug.Log(
-                //    "GameObject" + moveGameObjList[i].name + "\n" +
-                //    "Position" + moveGameObjList[i].transform.position
-                //    );
-                CharacterMoveController cmc = moveGameObjList[i].transform.GetComponent<CharacterMoveController>();
-                cmc.SetPos(new Vector2Int((int)moveGameObjList[i].transform.position.x, (int)moveGameObjList[i].transform.position.z));
-            }
-
-        }
-
     }
 
     public Vector2Int GetFieldSize()
