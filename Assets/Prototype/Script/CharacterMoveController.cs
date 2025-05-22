@@ -167,7 +167,6 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
     }
 
-
     public void SetPos(Vector2Int pos)
     {
         if (pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y)
@@ -230,9 +229,6 @@ public class CharacterMoveController : MonoBehaviour
             isMove = false;
             isAutoMoving = false;
 
-            // TODO プロト終わったら消す
-            routeSearch.ResetTileColor();
-
             // 警備員なら
             if(security)
             {
@@ -247,9 +243,8 @@ public class CharacterMoveController : MonoBehaviour
 
         // 次ルートをセット
         Vector2Int next = moveRoute.Dequeue();
-        currentPos.x = next.x;
-        currentPos.y = next.y;
-
+        currentPos = next;
+     
         // 座標更新
         isMove = true;
         UpdateTargetPosition();
