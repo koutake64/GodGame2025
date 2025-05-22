@@ -314,6 +314,42 @@ public class _FieldDataManager : MonoBehaviour
 
     }
 
+    public List<GameObject> GetGameObjectList(E_FIELDSTATE state)
+    {
+        List<GameObject> list = new List<GameObject>();
+
+        Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
+
+        for (int y = 0; y < fieldSize.y; ++y)
+        {
+            for (int x = 0; x < fieldSize.x; ++x)
+            {
+                List<S_FIELDINFO> info = fieldData[x, y];
+
+                if (info.Count == 0)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < info.Count; ++i)
+                {
+                    if (info[i].state != state)
+                    {
+                        continue;
+                    }
+
+                    list.Add(info[i].obj);
+
+                }
+
+            }
+
+        }
+
+        return list;
+
+    }
+
     public bool GetIsThrough(Vector2Int pos)
     {
         if (pos.x < 0 || pos.y < 0 || pos.x >= fieldData.GetLength(0) || pos.y >= fieldData.GetLength(1))
