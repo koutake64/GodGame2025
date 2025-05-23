@@ -272,4 +272,8 @@ public class CharacterMoveController : MonoBehaviour
     {
         return prevPos;
     }
+    public void Stop()
+    {
+        moveRoute.Clear();
+    }
 }
