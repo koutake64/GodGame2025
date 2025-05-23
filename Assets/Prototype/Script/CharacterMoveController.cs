@@ -112,6 +112,14 @@ public class CharacterMoveController : MonoBehaviour
                 // ˆÚ“®æ‚É©g‚Ìî•ñ“o˜^
                 fieldData.MoveInfo(prevPos, currentPos, charaState);
 
+                if(security)
+                {
+                    if(security.StartMoveFoundPos())
+                    {
+                        return;
+                    }
+                }
+
                 MoveNextStep();
             }
         }
