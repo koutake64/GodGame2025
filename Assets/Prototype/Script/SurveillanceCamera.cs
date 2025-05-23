@@ -662,22 +662,38 @@ public class SurveillanceCamera : MonoBehaviour
     {
         List<Vector2Int> searchedTileList = new List<Vector2Int>();
 
-        // 中心座標（カメラのマス位置）
         Vector2Int center = SurveillanceCameraPos;
-
-        // 索敵範囲は前方3マス × 横3マス（扇状に広がる）
         Vector2Int[] offsets = GetOffsetsBasedOnWatchState();
+
+        // レイの発射点（監視カメラの世界座標）
+        Vector3 rayOrigin = GetRayStartPoint(center, CameraDir);
 
         foreach (var offset in offsets)
         {
-            Vector2Int target = center + offset;
-            searchedTileList.Add(target);
+            Vector2Int targetGrid = center + offset;
+            Vector3 targetWorld = GridToWorld(targetGrid);
+
+            Vector3 dirToTarget = (targetWorld - rayOrigin).normalized;
+            float dist = Vector3.Distance(rayOrigin, targetWorld);
+
+            // 壁に遮られているかどうか判定
+            if (Physics.Raycast(rayOrigin, dirToTarget, out RaycastHit hit, dist))
+            {
+                if (hit.collider.gameObject)
+                {
+                    // 壁があるため、このマスは視認不可
+                    continue;
+                }
+            }
+
+            // 遮蔽物なし＝視認可能なマスなのでリストに追加
+            searchedTileList.Add(targetGrid);
         }
 
-        // デバッグ表示（必要に応じてコメントアウト可）
+        // デバッグ表示
         foreach (var pos in searchedTileList)
         {
-            Debug.Log($"索敵マス: {pos}");
+            Debug.Log($"視認可能な索敵マス: {pos}");
         }
 
         return searchedTileList;
