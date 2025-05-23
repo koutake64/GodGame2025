@@ -51,8 +51,7 @@ public class SurveillanceCamera : MonoBehaviour
     // マスの状態取得用
     //FieldDataManager fieldManager;
 
-    bool foundTarget = false;
-    bool prevFoundTarget = false;
+    bool isFoundTarget = false;
 
     Vector2Int targetPos = new Vector2Int();
 
@@ -285,6 +284,8 @@ public class SurveillanceCamera : MonoBehaviour
     private void SearchRange()
     {
         int offsetValue = 0;
+        isFoundTarget = false;
+
         // 状態に応じてスライド方向を決定
         if (forward == Vector2.right || forward == Vector2.left)
         {
@@ -419,7 +420,7 @@ public class SurveillanceCamera : MonoBehaviour
                     if (hit.collider.CompareTag("Princess"))
                     {
                         Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
-                        prevFoundTarget = foundTarget = true;
+                        isFoundTarget = true;
                         targetPos = hit.collider.GetComponent<CharacterMoveController>().GetCurrentPos();
                     }
                     else if (hit.collider.CompareTag("Player"))
@@ -431,7 +432,7 @@ public class SurveillanceCamera : MonoBehaviour
             }
         }
 
-        if (foundTarget)
+        if (isFoundTarget)
         {
             // 呼び出し通知オブジェクトリスト
             List<SecurityController> securityObj = new List<SecurityController>();
@@ -485,65 +486,29 @@ public class SurveillanceCamera : MonoBehaviour
                 }
             }
         }
-        // 前フレームと値が変化していたら
-        if (foundTarget != prevFoundTarget)
+        else
         {
-            // 呼び出し通知オブジェクトリスト
-            List<SecurityController> securityObj = new List<SecurityController>();
+            var securityPos = fieldDataManager.GetStatePos(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
 
-            // 自身の座標
-            Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
-
-            // 呼び始めの座標用
-            Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
-
-            // 通知範囲内にいる警備員を取得
-            for (int y = 0; y < callRange; ++y)
+            foreach (var pos in securityPos)
             {
-                for (int x = 0; x < callRange; ++x)
+                var objList = fieldDataManager.GetInfoList(pos);
+
+                foreach (var obj in objList)
                 {
-                    // 範囲内のリスト取得
-                    Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
+                    var security = obj.obj.GetComponent<SecurityController>();
 
-                    // 範囲外確認
-                    if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
-                        continue;
-
-                    // 対象座標のリスト取得
-                    var list = fieldDataManager.GetInfoList(callPos);
-
-                    if (list.Count != 0)
+                    if(security)
                     {
-                        // リストの中に警備員がいたら取得
-                        foreach (var obj in list)
+                        if(security.GetIsFoundPrincess())
                         {
-                            if (!obj.obj) continue;
-                            var security = obj.obj.GetComponent<SecurityController>();
-                            if (!security) continue;
-
-                            // リストに追加
-                            securityObj.Add(security);
-                        }
-                    }
-                    if (securityObj.Count != 0)
-                    {
-                        foreach (var obj in securityObj)
-                        {
-                            // フラグが立っていなければ次へ
-                            if (!obj.GetIsFoundPrincess())
-                                continue;
-
-                            // お嬢さま発見フラグを下げる
-                            obj.SetIsFoundPrincess(false);
+                            security.SetIsFoundPrincess(false);
                         }
                     }
                 }
             }
-        }
-
-       
+        }       
     }
-
 
     /// <summary>
     /// 前フレームに設定されたカメラの索敵範囲をリセット
