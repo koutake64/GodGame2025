@@ -36,8 +36,9 @@ public class UIManager : MonoBehaviour
     private Animator memoAnimator;  // メモUIアニメーター
     private TimeManager timeMng;
     private _FieldDataManager fieldDataMng; // フィールドデータ
-    private SecurityController[] securityControllers;
+    private SecurityController securityController;
     private int securityCnt = 0;
+    private List<GameObject> secObjs;
 
     private bool useMemo;       // メモを開いているかどうか
     private bool currentFlag;   // 現在のフラグ状況
@@ -84,8 +85,24 @@ public class UIManager : MonoBehaviour
 
         // 生成されている警備員の数を取得
         List<Vector2Int> ints = fieldDataMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
-        securityCnt = ints.Count;
-        Debug.Log("警備員の数:" + securityCnt);
+        secObjs = fieldDataMng.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
+        securityCnt = secObjs.Count;
+        if (secObjs == null)
+            Debug.LogError("警備員リストが取得できませんでした");
+
+        for (int i = 0; i < secObjs.Count; i++)
+        {
+            if (secObjs[i] == null)
+            {
+                Debug.Log($"secObjs[{i}] は null です。");
+            }
+            else
+            {
+                Debug.Log($"secObjs[{i}] は {secObjs[i].name} です。");
+            }
+
+            Debug.Log("警備員の数:" + securityCnt);
+        }
     }
 
     // Update is called once per frame
@@ -94,6 +111,7 @@ public class UIManager : MonoBehaviour
         InputUpdate();
         UpdateAnimator();
         UpdateTimeScale();
+        //ObjectUpdate();
 
         // 過去フラグ状況の更新
         prevFlag = currentFlag;
@@ -150,10 +168,27 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void ObjectUpdate()
     {
-        for(int i = 0;i < securityCnt;i++)
+        foreach(GameObject obj in secObjs)
         {
+            if (obj == null)
+            {
+                Debug.LogWarning("secObjs の中に null の要素があります。");
+                continue; // null の場合はスキップ
+            }
 
+            SecurityController secCon = obj.GetComponent<SecurityController>();
+
+            if(secCon != null && secCon.GetIsFoundPrincess())
+            {
+                UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(true);
+                break;
+            }
+            else
+                UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(false);
         }
+
+        
+       
     }
 
     /// <summary>
