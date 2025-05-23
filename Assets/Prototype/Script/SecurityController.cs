@@ -7,13 +7,15 @@ public class SecurityController : MonoBehaviour
     [SerializeField] private int monitoringRange;
 
     private List<Vector2Int>        targetArray = new List<Vector2Int>();
-    private CharacterMoveController moveController; // CharacterMoveController
-    private _FieldDataManager       fieldData;      // _FieldDataManager
-    private bool                    isEndMovement;  // 目標座標までの移動終了したか
-    private int                     currentIndex;   // 配列の何番目か
-    private int                     addNum;         // 加算する値
-    private Vector2Int              fieldSize;      // フィールドサイズ
-    private bool                    isFoundPrincess;// お嬢様見つけたフラグ
+    private CharacterMoveController moveController;         // CharacterMoveController
+    private _FieldDataManager       fieldData;              // _FieldDataManager
+    private bool                    isEndMovement;          // 目標座標までの移動終了したか
+    private int                     currentIndex;           // 配列の何番目か
+    private int                     addNum;                 // 加算する値
+    private Vector2Int              fieldSize;              // フィールドサイズ
+    private bool                    isFoundPrincess;        // お嬢様見つけたフラグ
+    private Vector2Int              foundPos;               // お嬢様を見つけた座標
+    private bool                    isStartMoveFoundPos;    // お嬢様を見つけた座標に移動を開始しているか
 
     private Vector2Int              initPos;        // 初期位置
     private TimeManager             timeManager;    // タイムマネージャー
@@ -53,6 +55,7 @@ public class SecurityController : MonoBehaviour
         addNum = 1;
         fieldSize = fieldData.GetFieldSize();
         isFoundPrincess = false;
+        isStartMoveFoundPos = false;
     }
 
     // Update is called once per frame
@@ -80,7 +83,12 @@ public class SecurityController : MonoBehaviour
 
     public void EndMovement()
     {
-        if(targetArray.Count == 0)
+        if (isStartMoveFoundPos)
+        {
+            isStartMoveFoundPos = false;
+        }
+
+        if (targetArray.Count == 0)
         {
             Debug.Log("巡回ルートがありません");
             return;
@@ -152,7 +160,7 @@ public class SecurityController : MonoBehaviour
     public void FoundPrincess(Vector2Int targetPos)
     {
         isFoundPrincess = true;
-        moveController.StartAutoMove(targetPos);
+        foundPos = targetPos;
         currentIndex += addNum * -1;
         isEndMovement = false;
     }
@@ -175,5 +183,23 @@ public class SecurityController : MonoBehaviour
     public void SetInitPos(Vector2Int pos)
     {
         initPos = pos;
+    }
+
+    public bool StartMoveFoundPos()
+    {
+        if(!isFoundPrincess)
+        {
+            return false;
+        }
+        if(isStartMoveFoundPos)
+        {
+            return false;
+        }
+
+        moveController.StartAutoMove(foundPos);
+        isEndMovement = false;
+        isStartMoveFoundPos = true;
+
+        return true;
     }
 }
