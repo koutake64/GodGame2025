@@ -142,8 +142,11 @@ public class RayToTarget : MonoBehaviour
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.night:
                 {
-                    Transform princess = GameObject.FindWithTag("Princess").transform;
-                    if (princess) cameraTargetTransform.Add(princess);
+                    GameObject princess = GameObject.FindWithTag("Princess");
+                    if (princess)
+                    {
+                        cameraTargetTransform.Add(princess.transform);
+                    }
                 }
                 break;
         }
