@@ -75,5 +75,5 @@ crashlytics-build.properties
 /Assets/Font/
 
 # --- Ignore ProjectSettings ---
-/ProjectSettings/ShaderGraphSettings.asset
-/ProjectSettings/Packages/com.unity.probuilder/Settings.json
+/[Pp]rojectSettings/ShaderGraphSettings.asset
+/[Pp]rojectSettings/Packages/com.unity.probuilder/Settings.json
