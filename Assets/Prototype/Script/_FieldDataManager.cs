@@ -266,7 +266,11 @@ public class _FieldDataManager : MonoBehaviour
         route1.Add(new Vector2Int(1, 13));
         route.Add(10, route1);
 
-        AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right);
+        AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right, 11);
+        List<Vector2Int> route2 = new List<Vector2Int>();
+        route2.Add(new Vector2Int(11, 14));
+        route2.Add(new Vector2Int(19, 14));
+        route.Add(11, route2);
 
         AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
 
