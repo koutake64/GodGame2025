@@ -420,13 +420,14 @@ public class SurveillanceCamera : MonoBehaviour
                     {
                         Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                         prevFoundTarget = foundTarget = true;
-                        targetPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
+                        targetPos = hit.collider.GetComponent<CharacterMoveController>().GetCurrentPos();
                     }
                     else if (hit.collider.CompareTag("Player"))
                     {
                         Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                     }
                 }
+
             }
         }
 
@@ -545,7 +546,7 @@ public class SurveillanceCamera : MonoBehaviour
 
 
     /// <summary>
-    /// 前フレームに設定されたカメラの索敵範囲をリセットし、元の色に戻す
+    /// 前フレームに設定されたカメラの索敵範囲をリセット
     /// </summary>
     private void ResetCameraRange()
     {
