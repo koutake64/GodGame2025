@@ -109,7 +109,6 @@ public class SecurityController : MonoBehaviour
     {
         addNum *= -1;
     }
-
     private void ForwardMonitoring()
     {
         // Œü‚¢‚Ä‚¢‚é•ûŒü
