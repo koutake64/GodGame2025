@@ -26,6 +26,7 @@ public class CharacterMoveController : MonoBehaviour
     private Vector2Int          fieldSize;      // フィールドサイズ
     private Queue<Vector2Int>   moveRoute;      // 移動経路
     private bool                isAutoMoving;   // 自動移動中か
+    private bool                isStop;         // 動きを止めるか
 
     void Start()
     {
@@ -55,6 +56,7 @@ public class CharacterMoveController : MonoBehaviour
         moveRoute = new Queue<Vector2Int>();
         security = GetComponent<SecurityController>();
         isAutoMoving = false;
+        isStop = false;
 
         // nullチェック
         if (!transform)
@@ -72,6 +74,9 @@ public class CharacterMoveController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        // 止めるフラグが立っていたら終了
+        if (isStop) return;
+            
         // 移動するなら
         if (isMove)
         {
@@ -274,6 +279,11 @@ public class CharacterMoveController : MonoBehaviour
     }
     public void Stop()
     {
-        moveRoute.Clear();
+        isStop = true;
+    }
+
+    public void ReStart()
+    {
+        isStop = false;
     }
 }
