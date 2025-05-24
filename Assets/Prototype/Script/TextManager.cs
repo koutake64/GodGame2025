@@ -82,7 +82,7 @@ public class TextManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Init();
+        //Init();
     }
 
     // Update is called once per frame
@@ -105,7 +105,7 @@ public class TextManager : MonoBehaviour
     /// </summary>
     private void Init()
     {
-        _text = LoadTextFile(scenarioFile[1].ToString());
+        _text = LoadTextFile(scenarioFile[0].ToString());
         _pageQueue = SeparateString(_text, S_Separate.NextPage);
         ShowNextPage();
 
@@ -120,9 +120,10 @@ public class TextManager : MonoBehaviour
     {
         backgroundPanel.SetActive(true);
         if (scenarioFile[talkNum] == null)
-            _text = LoadTextFile(scenarioFile[talkNum].ToString());
-        else
             Debug.LogError($"テキストファイルリスト番号{talkNum}番のテキストファイルがリストに登録されていません。");
+        else
+            _text = LoadTextFile(scenarioFile[talkNum].ToString());
+
         _pageQueue = SeparateString(_text, S_Separate.NextPage);
         ShowNextPage();
     }
