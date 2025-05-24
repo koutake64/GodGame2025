@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework.Internal.Filters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -51,7 +52,10 @@ public class SurveillanceCamera : MonoBehaviour
     // マスの状態取得用
     //FieldDataManager fieldManager;
 
+    // お嬢様呼び出し処理用
     bool isFoundTarget = false;
+    int frameCount = 0;
+    List<SecurityController> callSecurityList = new List<SecurityController>();
 
     Vector2Int targetPos = new Vector2Int();
 
@@ -285,6 +289,7 @@ public class SurveillanceCamera : MonoBehaviour
     {
         int offsetValue = 0;
         isFoundTarget = false;
+        frameCount++;
 
         // 状態に応じてスライド方向を決定
         if (forward == Vector2.right || forward == Vector2.left)
@@ -328,7 +333,6 @@ public class SurveillanceCamera : MonoBehaviour
         // スライド方向を現在の向きに回転
         Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
 
-
         // 索敵範囲の中心位置を計算（カメラの2マス先＋スライド方向）
         Vector2 center = SurveillanceCameraPos + forward * 2 + slideDir;
 
@@ -362,7 +366,6 @@ public class SurveillanceCamera : MonoBehaviour
 
             // ヒット順にソート（近い順）
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-
 
             RaycastHit hit;
 
@@ -421,6 +424,7 @@ public class SurveillanceCamera : MonoBehaviour
                     {
                         Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                         isFoundTarget = true;
+                        frameCount = 0;
                         targetPos = hit.collider.GetComponent<CharacterMoveController>().GetCurrentPos();
                     }
                     else if (hit.collider.CompareTag("Player"))
@@ -428,7 +432,6 @@ public class SurveillanceCamera : MonoBehaviour
                         Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                     }
                 }
-
             }
         }
 
@@ -479,35 +482,32 @@ public class SurveillanceCamera : MonoBehaviour
                             if (obj.GetIsFoundPrincess())
                                 continue;
 
+                            // 呼び出しオブジェクトリストに追加
+                            callSecurityList.Add(obj);
+
                             // ターゲット座標を通知
                             obj.FoundPrincess(targetPos);
+
+                            frameCount = 0;
                         }
                     }
                 }
             }
         }
-        else
+
+        if(!isFoundTarget && frameCount > 120 && callSecurityList.Count != 0)
         {
-            var securityPos = fieldDataManager.GetStatePos(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
-
-            foreach (var pos in securityPos)
+            foreach(var security in callSecurityList)
             {
-                var objList = fieldDataManager.GetInfoList(pos);
-
-                foreach (var obj in objList)
+                if(security.GetIsFoundPrincess())
                 {
-                    var security = obj.obj.GetComponent<SecurityController>();
-
-                    if(security)
-                    {
-                        if(security.GetIsFoundPrincess())
-                        {
-                            security.SetIsFoundPrincess(false);
-                        }
-                    }
+                    security.SetIsFoundPrincess(false);
                 }
             }
-        }       
+
+            // 配列を初期化
+            callSecurityList.Clear();
+        }
     }
 
     /// <summary>
