@@ -73,6 +73,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 /Assets/Font/
+/Assets/TextMesh Pro/
 
 # --- Ignore ProjectSettings ---
 /[Pp]rojectSettings/ShaderGraphSettings.asset
