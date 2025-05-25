@@ -33,6 +33,9 @@ public class _FieldDataManager : MonoBehaviour
         sc_searchRange,     // 監視カメラの監視範囲
         sg_searchRange,     // 警備員の監視範囲
 
+        // --- その他
+        talk                // お花しするマス
+
     }
 
     /// <summary>
@@ -253,7 +256,9 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall);
         AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall);
         AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall);
-        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(6, 13), E_FIELDSTATE.pillar);
+
 
         AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up);
         AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
@@ -273,6 +278,9 @@ public class _FieldDataManager : MonoBehaviour
         route.Add(11, route2);
 
         AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
+
+        AddInfo(new Vector2Int(13, 1), E_FIELDSTATE.talk);
+        AddInfo(new Vector2Int(12, 10), E_FIELDSTATE.talk);
 
     }
 
@@ -415,7 +423,6 @@ public class _FieldDataManager : MonoBehaviour
             }
 
         }
-
     }
 
     public void ChangeDirection(Vector2Int pos, E_FIELDSTATE state, CommonSE_Proto.E_DIRECTION dir)
