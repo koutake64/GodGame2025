@@ -2116,12 +2116,12 @@ MonoBehaviour:
   bgmSource: {fileID: 1295127876}
   seSource: {fileID: 1054207567}
   BGMs:
-  - {fileID: 8300000, guid: 8a2f3e2fe2414b04b9b9b339328849a0, type: 3}
-  - {fileID: 8300000, guid: e98d31de91dcfba4490d33b4b2e41d38, type: 3}
-  - {fileID: 8300000, guid: 94d685876addb1d41bb795d9f85fb528, type: 3}
-  - {fileID: 8300000, guid: 753b4e323c22cea44ae218aabdf8000f, type: 3}
-  - {fileID: 8300000, guid: 1276f2507de92ac4e81f37f926ffb4f2, type: 3}
-  - {fileID: 8300000, guid: fce8198a142e9cf4f835feb45149c2fc, type: 3}
+  - {fileID: 8300000, guid: a4f7ba066a14648448a4a2374b05a907, type: 3}
+  - {fileID: 8300000, guid: 25a40ee31eb993a47b9d159e05d97db0, type: 3}
+  - {fileID: 8300000, guid: a45f3c7a32f869b419abb2562b3d07e8, type: 3}
+  - {fileID: 8300000, guid: 0baa6868c2f116c4286a78a5b9624f2e, type: 3}
+  - {fileID: 8300000, guid: a9d07fd61b89eae4d96ff27989f6ca17, type: 3}
+  - {fileID: 8300000, guid: fd645d1e54cd7004888ccfc40c94db06, type: 3}
   SEs:
   - {fileID: 8300000, guid: 3d51324a7396a7e4b891f79002b6219b, type: 3}
   - {fileID: 8300000, guid: 14201d72444494c4a8dd885126c20b7a, type: 3}
