@@ -198,6 +198,14 @@ public class _FieldDataManager : MonoBehaviour
             fwPos,
             Quaternion.identity
             );
+        
+        fwPos = new Vector3 ((-fieldSizeX / 2) - 0.5f, 0.0f, fieldSizeY);
+
+        obj = Instantiate(
+            fieldWall,
+            fwPos,
+            Quaternion.identity
+            );
 
         // 奥右
         fwPos = new Vector3(fieldSizeX, 0.0f, (fieldSizeY / 2.0f) - 0.5f);
