@@ -70,7 +70,7 @@ public class SurveillanceCamera : MonoBehaviour
     public int rayCount = 8;         // Rayの本数（例：6本で扇状）
     private void Start()
     {
-        //AudioManager.Instance.PlayBGM();
+        AudioManager.Instance.PlaySE(3);
 
         // フィールドマネージャーを取得
         fieldDataManager = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
@@ -422,6 +422,7 @@ public class SurveillanceCamera : MonoBehaviour
                     // 索敵範囲内だった場合の処理
                     if (hit.collider.CompareTag("Princess"))
                     {
+                        AudioManager.Instance.PlaySE(5);
                         Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                         isFoundTarget = true;
                         frameCount = 0;
