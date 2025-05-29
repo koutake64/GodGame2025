@@ -32,7 +32,7 @@ public class TextManager : MonoBehaviour
 
     private string _text = "";
 
-
+    public bool talkFlg = false;
 
     // 構造体定義
 
@@ -82,7 +82,7 @@ public class TextManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //Init();
+        
     }
 
     // Update is called once per frame
@@ -118,7 +118,8 @@ public class TextManager : MonoBehaviour
     /// <param name="talkNum"></param>
     public void StartTalk(int talkNum)
     {
-        backgroundPanel.SetActive(true);
+        talkFlg = true;
+        //backgroundPanel.SetActive(true);
         if (scenarioFile[talkNum] == null)
             Debug.LogError($"テキストファイルリスト番号{talkNum}番のテキストファイルがリストに登録されていません。");
         else
@@ -324,8 +325,11 @@ public class TextManager : MonoBehaviour
             else
             {
                 if (!ShowNextPage())
+                {
                     // UIを非表示にする
+                    talkFlg = false;
                     backgroundPanel.SetActive(false);
+                }
             }
         }
         else
@@ -335,8 +339,11 @@ public class TextManager : MonoBehaviour
             else
             {
                 if (!ShowNextPage())
+                {
                     // UIを非表示にする
+                    talkFlg = false;
                     backgroundPanel.SetActive(false);
+                }
             }
         }
     }

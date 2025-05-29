@@ -112,6 +112,12 @@ public class _FieldDataManager : MonoBehaviour
     [Header("警備員巡回ルート(IDはこちらで指定)")]
     [SerializeField] private Dictionary<int, List<Vector2Int>> route = new Dictionary<int, List<Vector2Int>>();
 
+    [Header("ポール")]
+    [SerializeField] private GameObject pole;
+
+    [Header("ロープ")]
+    [SerializeField] private GameObject rope;
+
     private void Start()
     {
         // --- ヌルチェック
@@ -171,7 +177,6 @@ public class _FieldDataManager : MonoBehaviour
                 tpi.obj = obj;
                 tpi.typeFlag = tileType;
                 fieldGameObj[x, y] = tpi;
-                Debug.Log("aaa");
 
                 // 生成タイルを反転
                 tileType ^= true;
@@ -213,6 +218,29 @@ public class _FieldDataManager : MonoBehaviour
         obj = Instantiate(
             fieldWallWindow,
             fwPos,
+            Quaternion.identity
+            );
+
+        // ----- ポールの生成
+        Vector3 basePos = new Vector3(-1.0f, 0.0f, -1.0f);
+        Vector3 heightEdgePos = new Vector3(basePos.x, basePos.y, basePos.z + fieldSizeY);
+        Vector3 widthEdgePos = new Vector3(basePos.x + fieldSizeX, basePos.y, basePos.z);
+
+        Instantiate(
+            pole,
+            basePos,
+            Quaternion.identity
+            );
+
+        Instantiate(
+            pole,
+            heightEdgePos,
+            Quaternion.identity
+            );
+
+        Instantiate(
+            pole,
+            widthEdgePos,
             Quaternion.identity
             );
 

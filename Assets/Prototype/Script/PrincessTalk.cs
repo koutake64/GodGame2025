@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 public class PrincessTalk : MonoBehaviour
 {
-    TextManager textMng;
-    _FieldDataManager fieldMng;
-    TimeManager timeMng;
+    private TextManager textMng;
+    private _FieldDataManager fieldMng;
+    private TimeManager timeMng;
 
-    GameObject backgroundPanel;
+    private GameObject backgroundPanel;
 
-    int talkCnt = 0;
+    private int talkCnt = 0;
+    public bool flag = false;   //TODO 仮 後で変えるからごちゃごちゃ言うな
 
     private void Awake()
     {
@@ -19,7 +20,7 @@ public class PrincessTalk : MonoBehaviour
 
         textMng = obj.GetComponent<TextManager>();
         if (!textMng)
-        { 
+        {
             Debug.Log(
             "=================================================================================naiyo");
         }
@@ -44,8 +45,15 @@ public class PrincessTalk : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (timeMng.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.morning)
+        if (!flag)
         {
+            CharacterMoveController cmc = GetComponent<CharacterMoveController>();
+            cmc.ReStart();
+        }
+
+        if (timeMng.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.morning || flag)
+        {
+            flag = textMng.talkFlg;
             return;
         }
 
@@ -64,11 +72,12 @@ public class PrincessTalk : MonoBehaviour
                 CharacterMoveController cmc = GetComponent<CharacterMoveController>();
                 cmc.Stop();
 
+                fieldMng.RemoveInfo(princessPos, _FieldDataManager.E_FIELDSTATE.talk);
+
                 backgroundPanel.SetActive(true);
                 textMng.StartTalk(talkCnt);
 
-                Debug.Log("現在のトーク番号：" + talkCnt);
-
+                flag = true;
                 talkCnt++;
             }
         }
