@@ -117,37 +117,48 @@ public class RayToTarget : MonoBehaviour
     {
         if (timeZone == timeManager.GetCurState()) return;
 
+        foreach (var obj in transparentList)
+        {
+            if (obj == null) continue;
+
+            var trans = obj.GetComponent<TransparencyObject>();
+            if (trans != null)
+            {
+                trans.RemoveAlpha(fadeSpeed);
+            }
+        }
+
+        transparentList.Clear(); // 全部解除したのでリストも空に
+
         // 最新の時間を取得
         timeZone = timeManager.GetCurState();
 
         // 一度リストをクリア
         cameraTargetTransform.Clear();
 
+        void AddIfValid(string tag)
+        {
+            GameObject obj = GameObject.FindWithTag(tag);
+            if (obj != null && obj.activeInHierarchy)
+            {
+                cameraTargetTransform.Add(obj.transform);
+            }
+        }
+
         switch (timeZone)
         {
             case CommonSE_Proto.E_TIMEOFDAY.morning:
-                {
-                    Transform princess = GameObject.FindWithTag("Princess").transform;
-                    if (princess) cameraTargetTransform.Add(princess);
-                    Transform player = GameObject.FindWithTag("Player").transform;
-                    if (player) cameraTargetTransform.Add(player);
-                }
+                AddIfValid("Princess");
+                AddIfValid("Player");
                 break;
+
             case CommonSE_Proto.E_TIMEOFDAY.noon:
             case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-                {
-                    Transform player = GameObject.FindWithTag("Player").transform;
-                    if (player) cameraTargetTransform.Add(player);
-                }
+                AddIfValid("Player");
                 break;
+
             case CommonSE_Proto.E_TIMEOFDAY.night:
-                {
-                    GameObject princess = GameObject.FindWithTag("Princess");
-                    if (princess)
-                    {
-                        cameraTargetTransform.Add(princess.transform);
-                    }
-                }
+                AddIfValid("Princess");
                 break;
         }
     }
