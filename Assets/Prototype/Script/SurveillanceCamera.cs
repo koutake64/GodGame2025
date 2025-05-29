@@ -70,7 +70,7 @@ public class SurveillanceCamera : MonoBehaviour
     public int rayCount = 8;         // Rayの本数（例：6本で扇状）
     private void Start()
     {
-        AudioManager.Instance.PlaySE(3);
+       
 
         // フィールドマネージャーを取得
         fieldDataManager = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
@@ -173,6 +173,7 @@ public class SurveillanceCamera : MonoBehaviour
 
         if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return))
         {
+            AudioManager.Instance.PlaySE(3);
 
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
