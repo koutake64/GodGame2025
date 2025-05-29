@@ -39,7 +39,7 @@ public class PrincessTalk : MonoBehaviour
 
     private void Start()
     {
-        //backgroundPanel.SetActive(false);
+        backgroundPanel.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -64,9 +64,9 @@ public class PrincessTalk : MonoBehaviour
                 CharacterMoveController cmc = GetComponent<CharacterMoveController>();
                 cmc.Stop();
 
+                backgroundPanel.SetActive(true);
                 textMng.StartTalk(talkCnt);
 
-                Debug.Log("竹名k");
                 Debug.Log("現在のトーク番号：" + talkCnt);
 
                 talkCnt++;
