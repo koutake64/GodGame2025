@@ -22,10 +22,12 @@ public class ButlerControal : MonoBehaviour
     {
 
         // íãÇ…Ç»Ç¡ÇΩÇÁèâä˙à íuÇ…ñﬂÇÈ
-        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon && timeManager.IsChangeState())
+        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.IsChangeState())
         {
             transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
             transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
+            CharacterMoveController cmc = this.GetComponent<CharacterMoveController>();
+            cmc.SetPos(initPos);
         }
     }
 
