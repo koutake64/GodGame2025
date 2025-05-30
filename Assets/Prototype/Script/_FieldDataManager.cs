@@ -222,28 +222,34 @@ public class _FieldDataManager : MonoBehaviour
             Quaternion.identity
             );
 
-        // ----- ポールの生成
+        // ----- ポールとロープの生成
         Vector3 basePos = new Vector3(-1.0f, 0.0f, -1.0f);
-        Vector3 heightEdgePos = new Vector3(basePos.x, basePos.y, basePos.z + fieldSizeY);
-        Vector3 widthEdgePos = new Vector3(basePos.x + fieldSizeX, basePos.y, basePos.z);
+        Vector3 hRopeScale = new Vector3(0.8f, 0.8f, 0.85f);
+        Vector3 wRopeScale = new Vector3(0.8f, 0.8f, 0.95f);
+        Quaternion wRot = Quaternion.Euler(0.0f, 90.0f, 0.0f);
 
-        Instantiate(
-            pole,
-            basePos,
-            Quaternion.identity
-            );
+        Instantiate(pole, basePos, Quaternion.identity);
+        Instantiate(pole, basePos, wRot);
 
-        Instantiate(
-            pole,
-            heightEdgePos,
-            Quaternion.identity
-            );
+        // --- 縦
+        for (int i = 0; i < fieldSizeY / 3; ++i)
+        {
+            Vector3 ipPos = new Vector3(basePos.x, basePos.y, basePos.z + ((i + 1) * 3));
+            Instantiate(pole, ipPos, Quaternion.identity);
+            Vector3 irPos = new Vector3(ipPos.x, ipPos.y + 0.75f, ipPos.z - 1.625f);
+            GameObject _rope = Instantiate(rope, irPos, Quaternion.identity);
+            _rope.transform.localScale = hRopeScale;
+        }
 
-        Instantiate(
-            pole,
-            widthEdgePos,
-            Quaternion.identity
-            );
+        // --- 横
+        for (int i = 0; i < fieldSizeX / 3; ++i)
+        {
+            Vector3 ipPos = new Vector3(basePos.x + ((i + 1) * 3) + ((i +1) * 0.33f), basePos.y, basePos.z);
+            Instantiate(pole, ipPos, wRot);
+            Vector3 irPos = new Vector3(ipPos.x - 1.8f, ipPos.y + 0.75f, ipPos.z);
+            GameObject _rope = Instantiate(rope, irPos, wRot);
+            _rope.transform.localScale = wRopeScale;
+        }
 
         // プロトタイプ用のステージ作成
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);

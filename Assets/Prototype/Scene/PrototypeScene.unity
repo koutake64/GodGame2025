@@ -811,6 +811,8 @@ MonoBehaviour:
   wall: {fileID: 3556016710770019404, guid: 90ee446a018e2434891a7bc72d1f553c, type: 3}
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal: {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
+  pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
+  rope: {fileID: 6181181272637633349, guid: 4a97dc5b166a8c041b1563713ab780ee, type: 3}
 --- !u!1 &563647271
 GameObject:
   m_ObjectHideFlags: 0
@@ -1700,6 +1702,7 @@ MonoBehaviour:
   nameTextObj: {fileID: 1237518191}
   mainiTextProObj: {fileID: 811968039}
   nameTextProObj: {fileID: 135802325}
+  talkFlg: 0
 --- !u!1 &1295127875
 GameObject:
   m_ObjectHideFlags: 0
