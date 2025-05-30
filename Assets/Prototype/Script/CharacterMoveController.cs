@@ -261,6 +261,20 @@ public class CharacterMoveController : MonoBehaviour
         // ç¿ïWçXêV
         isMove = true;
         UpdateTargetPosition();
+
+        // à⁄ìÆSE
+        if(charaState == _FieldDataManager.E_FIELDSTATE.princess)
+        {
+            AudioManager.Instance.PlaySE(0);
+        }
+        else if(charaState == _FieldDataManager.E_FIELDSTATE.butler)
+        {
+            AudioManager.Instance.PlaySE(1);
+        }
+        else if(charaState == _FieldDataManager.E_FIELDSTATE.securityGuard_N)
+        {
+            AudioManager.Instance.PlaySE(2);
+        }
     }
  
     public bool GetAutoMove()
