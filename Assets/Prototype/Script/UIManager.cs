@@ -129,8 +129,8 @@ public class UIManager : MonoBehaviour
 
 
         // Tabキーでメモをポップアップする
-        if (Input.GetKeyDown(KeyCode.Tab))
-            useMemo = !useMemo;
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //    useMemo = !useMemo;
     }
 
     /// <summary>
