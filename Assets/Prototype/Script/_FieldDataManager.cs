@@ -730,13 +730,15 @@ public class _FieldDataManager : MonoBehaviour
             {
                 MeshRenderer mr = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
 
-                if (state[x, y] == E_FIELDSTATE.surveillanceCamera)
+                Debug.Log(x + y + state[x, y]);
+
+                if (state[x, y] == E_FIELDSTATE.sc_searchRange)
                 {
                     var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
                     renderer.material = new Material(renderer.sharedMaterial);
                     renderer.material.color = Color.red;
                 }
-                else if (state[x, y] == E_FIELDSTATE.surveillanceCamera)
+                else if (state[x, y] == E_FIELDSTATE.shadow)
                 {
                     var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
                     renderer.material = new Material(renderer.sharedMaterial);
