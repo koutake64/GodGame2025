@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// UIを管理するクラス
@@ -40,6 +40,21 @@ public class UIManager : MonoBehaviour
     private bool useMemo;       // メモを開いているかどうか
     private bool currentFlag;   // 現在のフラグ状況
     private bool prevFlag;      // 1フレーム前のフラグ状況
+
+    // InputSystem
+    private PlayerInput playerInput;
+    private InputAction switchAction;
+
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    private void Awake()
+    {
+        // InputSystem
+        playerInput = GetComponent<PlayerInput>();
+        switchAction = playerInput.actions["SwitchAction"];
+    }
 
     /// <summary>
     /// 初期化
@@ -173,5 +188,18 @@ public class UIManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void OnEnable()
+    {
+        switchAction.performed += OnSwitchPerformed;
+        switchAction.Enable();
+    }
+
+
+    private void OnSwitchPerformed(InputAction.CallbackContext context)
+    {
+        // メモをポップアップする
+        useMemo = !useMemo;
     }
 }
