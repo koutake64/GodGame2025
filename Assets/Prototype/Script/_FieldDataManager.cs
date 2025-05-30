@@ -32,6 +32,7 @@ public class _FieldDataManager : MonoBehaviour
         // --- ギミック範囲
         sc_searchRange,     // 監視カメラの監視範囲
         sg_searchRange,     // 警備員の監視範囲
+        shadow,             // 影
 
         // --- その他
         talk                // お花しするマス
@@ -658,10 +659,6 @@ public class _FieldDataManager : MonoBehaviour
                         if (obj.GetComponent<CharacterMoveController>() != null)
                         {
                             moveGameObjList.Add(obj);
-                            //Debug.Log(
-                            //    "GameObject" + obj + "\n" +
-                            //    "Position" + obj.transform.position
-                            //    );
                         }
 
                     }
@@ -681,13 +678,13 @@ public class _FieldDataManager : MonoBehaviour
     private void ChangeTail_debug()
     {
         Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
-        bool[,] scFlag = new bool[fieldSizeX, fieldSizeY];
+        E_FIELDSTATE[,] state = new E_FIELDSTATE[fieldSizeX, fieldSizeY];
 
         for (int y = 0; y < fieldSize.y; ++y)
         {
             for (int x = 0; x < fieldSize.x; ++x)
             {
-                scFlag[x, y] = false;
+                state[x, y] = E_FIELDSTATE.outOfRange;
             }
 
         }
@@ -698,25 +695,22 @@ public class _FieldDataManager : MonoBehaviour
             {
                 for(int i = 0; i < fieldData[x, y].Count; ++i)
                 {
-                    if (fieldData[x, y][i].state != E_FIELDSTATE.surveillanceCamera)
+                    if (fieldData[x, y][i].state == E_FIELDSTATE.surveillanceCamera)
                     {
-                        continue;
+                        SurveillanceCamera sc = fieldData[x, y][i].obj.GetComponent<SurveillanceCamera>();
+
+                        List<Vector2Int> posList = sc.GetSearchedTileList();
+
+                        for (int j = 0; j < posList.Count; ++j)
+                        {
+                            state[posList[j].x, posList[j].y] = E_FIELDSTATE.sc_searchRange;
+                        }
+                    }
+                    else if (fieldData[x, y][i].state == E_FIELDSTATE.shadow)
+                    { 
+                        // TODO 影の位置をもらい、ステータスを更新
                     }
 
-                    SurveillanceCamera sc = fieldData[x, y][i].obj.GetComponent<SurveillanceCamera>();
-
-                    List<Vector2Int> posList = sc.GetSearchedTileList();
-
-                    for (int j = 0; j < posList.Count; ++j)
-                    {
-                        scFlag[posList[j].x, posList[j].y] = true;
-
-                        //Debug.Log(
-                        //    "pos.x : " + posList[j].x + "pos.y : " + posList[j].y + "\n" +
-                        //    "flag : " + scFlag[posList[j].x, posList[j].y]
-                        //    );
-
-                    }
 
                 }
 
@@ -724,19 +718,23 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
-        int debug_cnt = 0;
         for (int y = 0; y < fieldSize.y; ++y)
         {
             for (int x = 0; x < fieldSize.x; ++x)
             {
                 MeshRenderer mr = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
 
-                if (scFlag[x, y])
+                if (state[x, y] == E_FIELDSTATE.surveillanceCamera)
                 {
                     var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
                     renderer.material = new Material(renderer.sharedMaterial);
                     renderer.material.color = Color.red;
-                    debug_cnt++;
+                }
+                else if (state[x, y] == E_FIELDSTATE.surveillanceCamera)
+                {
+                    var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
+                    renderer.material = new Material(renderer.sharedMaterial);
+                    renderer.material.color = Color.black;
                 }
                 else
                 {
