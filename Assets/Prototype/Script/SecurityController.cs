@@ -62,7 +62,8 @@ public class SecurityController : MonoBehaviour
     void Update()
     {
         // 夜になったら初期位置に戻る
-        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night && timeManager.IsChangeState())
+        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night && timeManager.IsChangeState() || 
+            timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.IsChangeState())
         {
             transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
         }
@@ -111,6 +112,12 @@ public class SecurityController : MonoBehaviour
     }
     private void ForwardMonitoring()
     {
+        // 夜以外はスルー
+        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
+        {
+            return;
+        }
+
         // 向いている方向
         Vector3 forward = transform.forward.normalized;
         Vector2Int direction;
