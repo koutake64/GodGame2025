@@ -44,12 +44,13 @@ public class UIManager : MonoBehaviour
     // InputSystem
     private PlayerInput playerInput;
     private InputAction switchAction;
+    public InputActionReference switchActionRef;    // 必要なデータだけ
 
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    private void Awake()
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	private void Awake()
     {
         // InputSystem
         playerInput = GetComponent<PlayerInput>();
@@ -192,8 +193,12 @@ public class UIManager : MonoBehaviour
 
     public void OnEnable()
     {
-        switchAction.performed += OnSwitchPerformed;
-        switchAction.Enable();
+		if (switchActionRef != null)
+		{
+			switchAction.performed += OnSwitchPerformed;
+			switchAction.Enable();
+		}
+		
     }
 
 
