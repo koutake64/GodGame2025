@@ -36,9 +36,10 @@ public class UIManager : MonoBehaviour
     private Animator memoAnimator;  // メモUIアニメーター
     private TimeManager timeMng;
     private _FieldDataManager fieldDataMng; // フィールドデータ
-    private SecurityController securityController;
-    private int securityCnt = 0;
     private List<GameObject> secObjs;
+    private SecurityController[] secCons;
+    private GameObject Field;
+    private int securityCnt = 0;
 
     private bool useMemo;       // メモを開いているかどうか
     private bool currentFlag;   // 現在のフラグ状況
@@ -84,9 +85,20 @@ public class UIManager : MonoBehaviour
         }
 
         // 生成されている警備員の数を取得
+        Field = GameObject.Find("Field");
+        if(!Field)
+        {
+            Debug.LogError("Fieldが見つかりません。");
+        }
+
+        //secCons = Field.GetComponentsInChildren<SecurityController>();
+        //int Cnt = secCons.Length;
+        //Debug.Log("警備員の数：" + Cnt);
+
+
         List<Vector2Int> ints = fieldDataMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
         secObjs = fieldDataMng.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
-        securityCnt = secObjs.Count;
+        securityCnt = ints.Count;
         if (secObjs == null)
             Debug.LogError("警備員リストが取得できませんでした");
 
@@ -168,7 +180,20 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void ObjectUpdate()
     {
-        foreach(GameObject obj in secObjs)
+        //foreach (SecurityController security in secCons)
+        //{
+        //    bool isFound = security.GetIsFoundPrincess();
+        //    Debug.Log("お嬢様を見つけたか：" + isFound);
+
+        //    if(security.GetIsFoundPrincess())
+        //    {
+        //        UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(false);
+        //    }
+        //    else
+        //        UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(true);
+        //}
+
+        foreach (GameObject obj in secObjs)
         {
             if (obj == null)
             {
@@ -178,7 +203,7 @@ public class UIManager : MonoBehaviour
 
             SecurityController secCon = obj.GetComponent<SecurityController>();
 
-            if(secCon != null && secCon.GetIsFoundPrincess())
+            if (secCon != null && secCon.GetIsFoundPrincess())
             {
                 UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(true);
                 break;
@@ -187,8 +212,8 @@ public class UIManager : MonoBehaviour
                 UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(false);
         }
 
-        
-       
+
+
     }
 
     /// <summary>
