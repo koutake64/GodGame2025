@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
 using TMPro;
 
 public class TextManager : MonoBehaviour

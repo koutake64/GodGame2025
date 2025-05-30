@@ -291,7 +291,7 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.wall);
 
         AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall);
-        AddInfo(new Vector2Int(2, 11), E_FIELDSTATE.wall);
+
         AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar);
 
         AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall);
@@ -601,6 +601,10 @@ public class _FieldDataManager : MonoBehaviour
                                     instRot
                                     );
 
+                                GameObject child = GameObject.FindGameObjectWithTag("Player");
+                                ButlerControal bc = child.GetComponent<ButlerControal>();
+                                bc.SetInitPos(new Vector2Int((int)instPos.x, (int)instPos.z));
+
                                 break;
                             case E_FIELDSTATE.princess:
                                 obj = Instantiate(
@@ -729,8 +733,6 @@ public class _FieldDataManager : MonoBehaviour
             for (int x = 0; x < fieldSize.x; ++x)
             {
                 MeshRenderer mr = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
-
-                Debug.Log(x + y + state[x, y]);
 
                 if (state[x, y] == E_FIELDSTATE.sc_searchRange)
                 {

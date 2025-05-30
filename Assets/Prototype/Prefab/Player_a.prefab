@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7305274912983128620}
   - component: {fileID: 275840247934663377}
-  - component: {fileID: 4810304420952899179}
   m_Layer: 0
   m_Name: Player_a
   m_TagString: Untagged
@@ -51,18 +50,6 @@ MonoBehaviour:
   noonModel: {fileID: 2205586295364159637}
   afternoonModel: {fileID: 2205586295364159637}
   nightModel: {fileID: 0}
---- !u!114 &4810304420952899179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7808433448352047340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f63dd757e9158c409fd3375891b10d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1322572700663395780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -168,6 +155,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 186a569949d88004f913b8df7b105a5f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1397808055403426420}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 186a569949d88004f913b8df7b105a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5549209275136368990}
   m_SourcePrefab: {fileID: 100100000, guid: 186a569949d88004f913b8df7b105a5f, type: 3}
 --- !u!4 &1571758058035925551 stripped
 Transform:
@@ -379,6 +369,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45c41fe2bca998446957c95bc877ca61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5549209275136368990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2205586295364159637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f63dd757e9158c409fd3375891b10d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &4100342506929010056
