@@ -19,7 +19,7 @@ public class SecurityController : MonoBehaviour
 
     private Vector2Int              initPos;        // 初期位置
     private TimeManager             timeManager;    // タイムマネージャー
-
+    private UIManager               uiManager;      // UIマネージャー
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,6 +47,15 @@ public class SecurityController : MonoBehaviour
             Debug.LogError(
                "Script:CharacterMoveController.cs \n" +
                "timeManagerがnullです"
+            );
+        }
+
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        if(!uiManager)
+        {
+            Debug.LogError(
+               "Script:CharacterMoveController.cs \n" +
+               "uiManagerがnullです"
             );
         }
 
@@ -149,7 +158,8 @@ public class SecurityController : MonoBehaviour
                 // お姫様を発見
                 if (info[j].state == _FieldDataManager.E_FIELDSTATE.princess)
                 {
-
+                    // ゲームオーバーのUIを表示
+                    uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
                 }
 
                 // 貫通しないオブジェクトの場合

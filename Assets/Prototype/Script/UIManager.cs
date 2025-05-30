@@ -36,10 +36,6 @@ public class UIManager : MonoBehaviour
     private Animator memoAnimator;  // メモUIアニメーター
     private TimeManager timeMng;
     private _FieldDataManager fieldDataMng; // フィールドデータ
-    private List<GameObject> secObjs;
-    private SecurityController[] secCons;
-    private GameObject Field;
-    private int securityCnt = 0;
 
     private bool useMemo;       // メモを開いているかどうか
     private bool currentFlag;   // 現在のフラグ状況
@@ -83,38 +79,6 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("_FieldDataManagerが見つかりません。");
         }
-
-        // 生成されている警備員の数を取得
-        Field = GameObject.Find("Field");
-        if(!Field)
-        {
-            Debug.LogError("Fieldが見つかりません。");
-        }
-
-        //secCons = Field.GetComponentsInChildren<SecurityController>();
-        //int Cnt = secCons.Length;
-        //Debug.Log("警備員の数：" + Cnt);
-
-
-        List<Vector2Int> ints = fieldDataMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
-        secObjs = fieldDataMng.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
-        securityCnt = ints.Count;
-        if (secObjs == null)
-            Debug.LogError("警備員リストが取得できませんでした");
-
-        for (int i = 0; i < secObjs.Count; i++)
-        {
-            if (secObjs[i] == null)
-            {
-                Debug.Log($"secObjs[{i}] は null です。");
-            }
-            else
-            {
-                Debug.Log($"secObjs[{i}] は {secObjs[i].name} です。");
-            }
-
-            Debug.Log("警備員の数:" + securityCnt);
-        }
     }
 
     // Update is called once per frame
@@ -123,7 +87,6 @@ public class UIManager : MonoBehaviour
         InputUpdate();
         UpdateAnimator();
         UpdateTimeScale();
-        //ObjectUpdate();
 
         // 過去フラグ状況の更新
         prevFlag = currentFlag;
@@ -173,47 +136,6 @@ public class UIManager : MonoBehaviour
             // それ以外は裏で動いていても大丈夫
             timeMng.SetTimeScale(1.0f);
         }
-    }
-
-    /// <summary>
-    /// 各オブジェクトの更新処理
-    /// </summary>
-    void ObjectUpdate()
-    {
-        //foreach (SecurityController security in secCons)
-        //{
-        //    bool isFound = security.GetIsFoundPrincess();
-        //    Debug.Log("お嬢様を見つけたか：" + isFound);
-
-        //    if(security.GetIsFoundPrincess())
-        //    {
-        //        UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(false);
-        //    }
-        //    else
-        //        UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(true);
-        //}
-
-        foreach (GameObject obj in secObjs)
-        {
-            if (obj == null)
-            {
-                Debug.LogWarning("secObjs の中に null の要素があります。");
-                continue; // null の場合はスキップ
-            }
-
-            SecurityController secCon = obj.GetComponent<SecurityController>();
-
-            if (secCon != null && secCon.GetIsFoundPrincess())
-            {
-                UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(true);
-                break;
-            }
-            else
-                UIDictionary.GetValueOrDefault(E_UI_KIND.gameOver).SetActive(false);
-        }
-
-
-
     }
 
     /// <summary>
