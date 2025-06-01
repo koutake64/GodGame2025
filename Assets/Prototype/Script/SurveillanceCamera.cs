@@ -55,7 +55,7 @@ public class SurveillanceCamera : MonoBehaviour
 
     // タイムマネージャー
     private TimeManager timeManager;
-    
+
     //監視カメラの向き
     private float angleY = 0f;
 
@@ -108,7 +108,7 @@ public class SurveillanceCamera : MonoBehaviour
         SearchRange();
 
         // 初期向きを記録しておく
-       
+
     }
     void Update()
     {
@@ -164,8 +164,7 @@ public class SurveillanceCamera : MonoBehaviour
         //Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
         //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
 
-
-        if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return) 
+        if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return)
             && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
         {
             AudioManager.Instance.PlaySE(3);
@@ -234,7 +233,7 @@ public class SurveillanceCamera : MonoBehaviour
                         watchState = E_WATCHSTATE.Center;
                 }
 
-           
+
 
             RotateVisualObject();
             //Debug.Log("→ 現在の監視状態：" + watchState + SurveillanceCameraPos);
@@ -256,7 +255,7 @@ public class SurveillanceCamera : MonoBehaviour
     private void RotateVisualObject()
     {
 
-        
+
 
         if (forward == Vector2.up)
         {
@@ -418,7 +417,6 @@ public class SurveillanceCamera : MonoBehaviour
                     // 索敵範囲内だった場合の処理
                     if (hit.collider.CompareTag("Princess"))
                     {
-                        AudioManager.Instance.PlaySE(5);
                         Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
                         isFoundTarget = true;
                         frameCount = 0;
@@ -492,11 +490,11 @@ public class SurveillanceCamera : MonoBehaviour
             }
         }
 
-        if(!isFoundTarget && frameCount > 120 && callSecurityList.Count != 0)
+        if (!isFoundTarget && frameCount > 120 && callSecurityList.Count != 0)
         {
-            foreach(var security in callSecurityList)
+            foreach (var security in callSecurityList)
             {
-                if(security.GetIsFoundPrincess())
+                if (security.GetIsFoundPrincess())
                 {
                     security.SetIsFoundPrincess(false);
                 }
@@ -686,5 +684,10 @@ public class SurveillanceCamera : MonoBehaviour
         }
 
         return offsetList.ToArray();
+    }
+
+    public bool GetIsFoundTarget()
+    {
+        return isFoundTarget;
     }
 }
