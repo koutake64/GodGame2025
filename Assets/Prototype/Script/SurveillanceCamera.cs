@@ -165,7 +165,8 @@ public class SurveillanceCamera : MonoBehaviour
         //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
 
 
-        if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return))
+        if (isPlayerInRange == true && Input.GetKeyDown(KeyCode.Return) 
+            && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
         {
             AudioManager.Instance.PlaySE(3);
 
