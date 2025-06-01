@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour
     {
         // InputSystem
         playerInput = GetComponent<PlayerInput>();
-        switchAction = playerInput.actions["SwitchAction"];
+        //switchAction = playerInput.actions["SwitchAction"];
     }
 
     /// <summary>
@@ -193,13 +193,17 @@ public class UIManager : MonoBehaviour
 
     public void OnEnable()
     {
-		if (switchActionRef != null)
+		if (switchActionRef != null && switchActionRef.action != null)
 		{
+			switchAction = switchActionRef.action;
 			switchAction.performed += OnSwitchPerformed;
 			switchAction.Enable();
 		}
-		
-    }
+		else
+		{
+			Debug.LogError("switchActionRefÇ™ñ¢ê›íËÅAÇ‹ÇΩÇÕactionÇ™nullÇ≈Ç∑ÅB");
+		}
+	}
 
 
     private void OnSwitchPerformed(InputAction.CallbackContext context)
