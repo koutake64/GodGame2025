@@ -174,4 +174,36 @@ public class TimeManager : MonoBehaviour
 	{
 		Time.timeScale = num;
 	}
+
+	/// <summary>
+	/// ‚»‚ê‚¼‚ê‚ÌŠJnŠÔ‚Ìæ“¾
+	/// </summary>
+	/// <param name="time"></param>
+	/// <returns></returns>
+	public float GetTime(CommonSE_Proto.E_TIMEOFDAY time)
+	{
+		float Time = 0.0f;
+		switch (time)
+		{
+			case CommonSE_Proto.E_TIMEOFDAY.noon:
+				Time = noonTime;
+				break;
+			case CommonSE_Proto.E_TIMEOFDAY.night:
+				Time = nightTime;
+				break;
+			default:
+				Time = 0.0f;
+				break;
+		}
+		return Time;
+	}
+
+	/// <summary>
+	/// Œ»İŠÔ‚Ìæ“¾
+	/// </summary>
+	/// <returns></returns>
+	public float GetCurrentTime()
+	{
+		return time;
+	}
 }
