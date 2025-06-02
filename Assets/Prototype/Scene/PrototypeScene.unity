@@ -1018,7 +1018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &748128810
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2318,8 +2318,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1878288897}
-  TexScaleX: 0.32
-  UVX: 0
   lerpTime: 5
 --- !u!222 &1878288896
 CanvasRenderer:
