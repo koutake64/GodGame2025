@@ -422,6 +422,7 @@ public class SurveillanceCamera : MonoBehaviour
                         frameCount = 0;
                         targetPos = hit.collider.GetComponent<CharacterMoveController>().GetCurrentPos();
                         AudioManager.Instance.PlaySE(5);
+                        WarningVolumeController.Instance.NotifyCameraDetection();
                     }
                     else if (hit.collider.CompareTag("Player"))
                     {
