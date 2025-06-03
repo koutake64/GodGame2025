@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
         memo,       // メモ
         timeIcon,   // 時間アイコン
         gameOver,   // ゲームオーバー
+        performance,// 画面演出
+        backPanel,  // 背景パネル
     }
 
     /// <summary>
@@ -40,6 +42,8 @@ public class UIManager : MonoBehaviour
     private bool useMemo;       // メモを開いているかどうか
     private bool currentFlag;   // 現在のフラグ状況
     private bool prevFlag;      // 1フレーム前のフラグ状況
+
+
 
     // InputSystem
     private PlayerInput playerInput;
@@ -95,6 +99,9 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("_FieldDataManagerが見つかりません。");
         }
+
+        UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(false);
+        UIDictionary.GetValueOrDefault(E_UI_KIND.backPanel).SetActive(false);
     }
 
     // Update is called once per frame
@@ -103,6 +110,7 @@ public class UIManager : MonoBehaviour
         InputUpdate();
         UpdateAnimator();
         UpdateTimeScale();
+        ObjectFlagUpdate();
 
         // 過去フラグ状況の更新
         prevFlag = currentFlag;
@@ -191,6 +199,20 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// オブジェクトのフラグを更新する
+    /// </summary>
+    void ObjectFlagUpdate()
+    {
+        if(timeMng.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.morning ||
+           timeMng.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
+        {
+            UIDictionary.GetValueOrDefault(E_UI_KIND.memo).SetActive(false);
+        }
+        else
+            UIDictionary.GetValueOrDefault(E_UI_KIND.memo).SetActive(true);
+    }
+
     public void OnEnable()
     {
 		if (switchActionRef != null && switchActionRef.action != null)
@@ -208,7 +230,11 @@ public class UIManager : MonoBehaviour
 
     private void OnSwitchPerformed(InputAction.CallbackContext context)
     {
-        // メモをポップアップする
-        useMemo = !useMemo;
+        if(timeMng.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon || 
+           timeMng.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon)
+        {
+            // メモをポップアップする
+            useMemo = !useMemo;
+        }
     }
 }

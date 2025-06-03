@@ -130,7 +130,7 @@ public class TextManager : MonoBehaviour
     /// 外部用　会話のスタート
     /// </summary>
     /// <param name="talkNum"></param>
-    public void StartTalk(int talkNum)
+    public void StartTalk(int talkNum, bool Auto = true)
     {
         talkFlg = true;
         //backgroundPanel.SetActive(true);
