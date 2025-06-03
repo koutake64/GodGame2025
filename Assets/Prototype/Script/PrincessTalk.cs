@@ -10,7 +10,7 @@ public class PrincessTalk : MonoBehaviour
     private GameObject backgroundPanel;
 
     private int talkCnt = 0;
-    public bool flag = false;   //TODO ‰¼ Œã‚Å•Ï‚¦‚é‚©‚ç‚²‚¿‚á‚²‚¿‚áŒ¾‚¤‚È
+    public bool isTalk = false;
 
     private void Awake()
     {
@@ -45,15 +45,15 @@ public class PrincessTalk : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!flag)
+        if (!isTalk)
         {
             CharacterMoveController cmc = GetComponent<CharacterMoveController>();
             cmc.ReStart();
         }
 
-        if (timeMng.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.morning || flag)
+        if (timeMng.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.morning || isTalk)
         {
-            flag = textMng.talkFlg;
+            isTalk = textMng.talkFlg;
             return;
         }
 
@@ -77,7 +77,7 @@ public class PrincessTalk : MonoBehaviour
                 backgroundPanel.SetActive(true);
                 textMng.StartTalk(talkCnt);
 
-                flag = true;
+                isTalk = true;
                 talkCnt++;
             }
         }
