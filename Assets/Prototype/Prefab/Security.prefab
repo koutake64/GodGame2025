@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monitoringRange: 5
+  footstepsRange: 0
 --- !u!65 &94649804299236929
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -108,7 +109,7 @@ Animator:
   m_GameObject: {fileID: 2175653325360876618}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0dd725ec15544094b9c1e3d4a993f8c6, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6a5ae961dbb447a42a49a5ffa4575859, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

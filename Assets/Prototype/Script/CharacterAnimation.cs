@@ -3,11 +3,25 @@ using UnityEngine;
 public class CharacterAnimation : MonoBehaviour
 {
     private Animator animator;
+    private CharacterMoveController moveController;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         animator = GetComponent<Animator>();
+        moveController = GetComponent<CharacterMoveController>();
+    }
+
+    private void Update()
+    {
+        if (moveController.GetIsMove())
+        {
+            Moving();
+        }
+        else
+        {
+            StopMoving();
+        }
     }
 
     /// <summary>

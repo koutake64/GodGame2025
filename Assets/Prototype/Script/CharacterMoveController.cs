@@ -300,4 +300,14 @@ public class CharacterMoveController : MonoBehaviour
     {
         isStop = false;
     }
+
+    public bool GetIsMove()
+    {
+        return isMove;
+    }
+
+    public bool GetIsStop()
+    {
+        return isStop;
+    }
 }

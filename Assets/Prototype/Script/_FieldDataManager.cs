@@ -119,6 +119,9 @@ public class _FieldDataManager : MonoBehaviour
     [Header("ロープ")]
     [SerializeField] private GameObject rope;
 
+    [Header("場外床")]
+    [SerializeField] private GameObject outOfRangeTile;
+
     private void Start()
     {
         // --- ヌルチェック
@@ -250,6 +253,14 @@ public class _FieldDataManager : MonoBehaviour
             GameObject _rope = Instantiate(rope, irPos, wRot);
             _rope.transform.localScale = wRopeScale;
         }
+
+        // --- 床外の床を生成
+        GameObject _outOfRangeTile1 = Instantiate(outOfRangeTile, new Vector3(-11, -0.5f, 7), Quaternion.identity);
+        _outOfRangeTile1.transform.localScale = new Vector3(21, 1, 15);
+        GameObject _outOfRangeTile2 = Instantiate(outOfRangeTile, new Vector3(0, -0.5f, -9), Quaternion.identity);
+        _outOfRangeTile2.transform.localScale = new Vector3(43, 1, 17);
+        GameObject _outOfRangeTile3 = Instantiate(outOfRangeTile, new Vector3(31, -0.5f, -1), Quaternion.identity);
+        _outOfRangeTile3.transform.localScale = new Vector3(21, 1, 33);
 
         // プロトタイプ用のステージ作成
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
