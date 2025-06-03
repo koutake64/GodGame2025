@@ -23,6 +23,12 @@ public class TextManager : MonoBehaviour
     [SerializeField, Header("メインテキスト(TMPro)")] private GameObject mainiTextProObj;
     [SerializeField, Header("名前テキスト(TMPro)")] private GameObject nameTextProObj;
 
+    [Header("※ここからはさわらない※")]
+    public string spriteDirectory = "Sprites/";
+    [SerializeField, Header("立ち絵のオブジェクト")] private GameObject characterImages;
+    private string prefabsDirectory = "Prefabs/";
+    private List<Image> _charaImageList = new List<Image>();
+
     private Queue<char> _charQueue; // 文字列を格納するキュー
     private Queue<string> _pageQueue;
     private Queue<RichChar> _richCharQueue;
@@ -43,6 +49,8 @@ public class TextManager : MonoBehaviour
         public readonly static char MainStart = '「';
         public readonly static char MainEnd = '」';
         public readonly static char NextPage = '&';
+        public readonly static char Command = '!';
+        public readonly static char Param = '=';
     }
 
     /// <summary>
@@ -50,10 +58,17 @@ public class TextManager : MonoBehaviour
     /// </summary>
     private readonly struct S_Command
     {
-        public readonly static string CharacterImage = "charaimg";
-        public readonly static string Position = "_pos";
-        public readonly static string Size = "_size";
-        public readonly static string Rotation = "_rotate";
+        public const string CharacterImage = "charaimg";
+        public const string Position = "_pos";
+        public const string Size = "_size";
+        public const string Rotation = "_rotate";
+        public const string Sprite = "_sprite";
+        public const string Color = "_color";
+    }
+
+    private readonly struct S_Prefab
+    {
+        public const string CharaImage = "CharaImage";
     }
 
     /// <summary>
@@ -138,6 +153,14 @@ public class TextManager : MonoBehaviour
     /// <param name="text"></param>
     private void ReadLine(string text)
     {
+        // 最初が「!」だったら
+        if (text[0].Equals(S_Separate.Command))
+        {
+            ReadCommand(text);
+            ShowNextPage();
+            return;
+        }
+
         // '「'の位置で文字列を分割
         string[] ts = text.Split(S_Separate.MainStart);
         if (ts.Length < 2)
@@ -392,5 +415,75 @@ public class TextManager : MonoBehaviour
             input = input.Replace(pair.Key, pair.Value);
         }
         return input;
+    }
+
+    private void ReadCommand(string cmdLine)
+    {
+        // 最初の「!」を消す
+        cmdLine = cmdLine.Remove(0, 1);
+        Queue<string> cmdQueue = SeparateString(cmdLine, S_Separate.Command);
+        foreach(string cmd in cmdQueue)
+        {
+            string[] cmds = cmd.Split(S_Separate.Param);
+            if (cmds[0].Contains(S_Command.CharacterImage))
+                SetCharacterImage(cmds[1], cmds[0], cmds[2]);
+        }
+    }
+
+    /// <summary>
+    /// 立ち絵をファイルから読み出し、生成する
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    private Sprite LoadSprite(string name)
+    {
+        return Instantiate(Resources.Load<Sprite>(spriteDirectory + name));
+    }
+
+    private void SetImage(string cmd,string parameter,Image image)
+    {
+        cmd = cmd.Replace(" ", "");
+        parameter = parameter.Substring(parameter.IndexOf('"') + 1, parameter.LastIndexOf('"') - parameter.IndexOf('"') - 1);
+        switch(cmd)
+        {
+            case S_Command.Sprite:
+                image.sprite = LoadSprite(parameter);
+                break;
+            case S_Command.Size:
+                image.GetComponent<RectTransform>().sizeDelta = ParameterToVector3(parameter);
+                break;
+            case S_Command.Position:
+                image.GetComponent<RectTransform>().anchoredPosition = ParameterToVector3(parameter);
+                break;
+            case S_Command.Rotation:
+                image.GetComponent<RectTransform>().eulerAngles = ParameterToVector3(parameter);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 立ち絵の設定
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="cmd"></param>
+    /// <param name="parameter"></param>
+    private void SetCharacterImage(string name,string cmd,string parameter)
+    {
+        cmd = cmd.Replace(S_Command.CharacterImage, "");
+        name = name.Substring(name.IndexOf('"') + 1, name.LastIndexOf('"') - name.IndexOf('"') - 1);
+        Image image = _charaImageList.Find(n => n.name == name);
+        if(image == null)
+        {
+            image = Instantiate(Resources.Load<Image>(prefabsDirectory +  S_Prefab.CharaImage), characterImages.transform);
+            image.name = name;
+            _charaImageList.Add(image);
+        }
+        SetImage(cmd, parameter, image);
+    }
+
+    private Vector3 ParameterToVector3(string parameter)
+    {
+        string[] ps = parameter.Replace(" ", "").Split(',');
+        return new Vector3(float.Parse(ps[0]), float.Parse(ps[1]), float.Parse(ps[2]));
     }
 }
