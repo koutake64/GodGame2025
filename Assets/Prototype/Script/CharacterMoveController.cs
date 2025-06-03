@@ -27,7 +27,7 @@ public class CharacterMoveController : MonoBehaviour
     private Queue<Vector2Int>   moveRoute;      // ˆÚ“®Œo˜H
     private bool                isAutoMoving;   // Ž©“®ˆÚ“®’†‚©
     private bool                isStop;         // “®‚«‚ðŽ~‚ß‚é‚©
-
+ 
     void Start()
     {
         fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
@@ -263,17 +263,21 @@ public class CharacterMoveController : MonoBehaviour
         UpdateTargetPosition();
 
         // ˆÚ“®SE
-        if(charaState == _FieldDataManager.E_FIELDSTATE.princess)
+        if (charaState == _FieldDataManager.E_FIELDSTATE.princess)
         {
             AudioManager.Instance.PlaySE(0);
         }
-        else if(charaState == _FieldDataManager.E_FIELDSTATE.butler)
+        else if (charaState == _FieldDataManager.E_FIELDSTATE.butler)
         {
             AudioManager.Instance.PlaySE(1);
         }
-        else if(charaState == _FieldDataManager.E_FIELDSTATE.securityGuard_N)
+        else if (charaState == _FieldDataManager.E_FIELDSTATE.securityGuard_N)
         {
-            AudioManager.Instance.PlaySE(2);
+            // ‘«‰¹‚ª•·‚±‚¦‚éƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚ê‚Î
+            if (security.GetIsFoodStepsFlg())
+            {
+                AudioManager.Instance.PlaySE(2);
+            }
         }
     }
  

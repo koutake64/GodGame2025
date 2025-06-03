@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
+using static UnityEditor.PlayerSettings;
 
 public class SecurityController : MonoBehaviour
 {
     [Header("前方監視範囲")]
     [SerializeField] private int monitoringRange;
+
+    [Header("足音が聞こえる範囲")]
+    [SerializeField] private int footstepsRange;
 
     private List<Vector2Int>        targetArray = new List<Vector2Int>();
     private CharacterMoveController moveController;         // CharacterMoveController
@@ -16,6 +20,7 @@ public class SecurityController : MonoBehaviour
     private bool                    isFoundPrincess;        // お嬢様見つけたフラグ
     private Vector2Int              foundPos;               // お嬢様を見つけた座標
     private bool                    isStartMoveFoundPos;    // お嬢様を見つけた座標に移動を開始しているか
+    private bool                    isFootstepsRange;       // 足音の聞こえる範囲にいるか
 
     private Vector2Int              initPos;        // 初期位置
     private TimeManager             timeManager;    // タイムマネージャー
@@ -65,6 +70,7 @@ public class SecurityController : MonoBehaviour
         fieldSize = fieldData.GetFieldSize();
         isFoundPrincess = false;
         isStartMoveFoundPos = false;
+        isFootstepsRange = false;
     }
 
     // Update is called once per frame
@@ -75,6 +81,31 @@ public class SecurityController : MonoBehaviour
             timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.IsChangeState())
         {
             transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
+        }
+
+        // 一度足音を鳴らさなくする
+        isFootstepsRange = false;
+
+        // 対象の座標を取得
+        List<Vector2Int> princess = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
+       
+        // 探索範囲
+        int radius = monitoringRange / 2;
+
+        // 自身の座標
+        Vector2Int myPos = moveController.GetCurrentPos();
+
+        foreach (Vector2Int pos in princess)
+        {
+            // 範囲内かどうかをチェック
+            if (Mathf.Abs(pos.x - myPos.x) <= radius && Mathf.Abs(pos.y - myPos.y) <= radius)
+            {
+                // 足音フラグを立てる
+                isFootstepsRange = true;
+
+                // 1人見つけたら終了
+                break;
+            }
         }
 
         // 移動が終了していたら
@@ -155,6 +186,12 @@ public class SecurityController : MonoBehaviour
             var info = fieldData.GetInfoList(pos);
             for(int j = 0; j < info.Count; ++j)
             {
+                // 影の場合次へ
+                if (info[j].state == _FieldDataManager.E_FIELDSTATE.shadow)
+                {
+                    continue;
+                }
+
                 // お姫様を発見
                 if (info[j].state == _FieldDataManager.E_FIELDSTATE.princess)
                 {
@@ -217,5 +254,10 @@ public class SecurityController : MonoBehaviour
         isStartMoveFoundPos = true;
 
         return true;
+    }
+
+    public bool GetIsFoodStepsFlg()
+    {
+        return isFootstepsRange;
     }
 }
