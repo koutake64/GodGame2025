@@ -842,8 +842,11 @@ MonoBehaviour:
   player: {fileID: 7808433448352047340, guid: 6967fe1b8b53b2346b574c9a1dc04a2b, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
-  pillar: {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}
-  wall: {fileID: 3556016710770019404, guid: 90ee446a018e2434891a7bc72d1f553c, type: 3}
+  lightObj: {fileID: 919132149155446097, guid: 69fce4ff4e18cd74cb0e6b63a5ac23ec, type: 3}
+  pillars:
+  - {fileID: 919132149155446097, guid: f79b75aaae76942488b0ccb01d9edbcb, type: 3}
+  walls:
+  - {fileID: 3556016710770019404, guid: 90ee446a018e2434891a7bc72d1f553c, type: 3}
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal: {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}

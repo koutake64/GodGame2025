@@ -28,6 +28,7 @@ public class _FieldDataManager : MonoBehaviour
 
         // --- ギミックオブジェクト
         surveillanceCamera, // 監視カメラ
+        light,              // ライト
 
         // --- ギミック範囲
         sc_searchRange,     // 監視カメラの監視範囲
@@ -99,11 +100,14 @@ public class _FieldDataManager : MonoBehaviour
     [Header("監視カメラのプレハブ")]
     [SerializeField] private GameObject surveillanceCamera;
 
+    [Header("光のプレハブ")]
+    [SerializeField] private GameObject lightObj;
+
     [Header("障害物のプレハブ")]
     [Header("柱(単独のオブジェクトで監視カメラを設置できる)")]
-    [SerializeField] private GameObject pillar;
+    [SerializeField] private List<GameObject> pillars;
     [Header("壁(監視カメラの監視範囲を遮断できるオブジェクト)")]
-    [SerializeField] private GameObject wall;
+    [SerializeField] private List<GameObject> walls;
     [Header("展示台(横か縦に長いオブジェクト)")]
     [SerializeField] private GameObject exhibitionStand;
 
@@ -268,50 +272,50 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.butler, startInfo.dir);
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.princess, startInfo.dir);
 
-        AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 1);
+        AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.pillar);
-        AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(17, 6), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(17, 6), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall);
+        AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall);
-        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall);
-        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall);
-        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall);
-        AddInfo(new Vector2Int(6, 13), E_FIELDSTATE.pillar);
+        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(6, 13), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
 
         AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up);
@@ -586,14 +590,14 @@ public class _FieldDataManager : MonoBehaviour
                                 break;
                             case E_FIELDSTATE.pillar:
                                 obj = Instantiate(
-                                    pillar,
+                                    pillars[fieldData[x, y][i].alignmentID],
                                     instPos,
                                     instRot
                                     );
                                 break;
                             case E_FIELDSTATE.wall:
                                 obj = Instantiate(
-                                    wall,
+                                    walls[fieldData[x, y][i].alignmentID],
                                     instPos,
                                     instRot
                                     );
@@ -661,6 +665,13 @@ public class _FieldDataManager : MonoBehaviour
                             case E_FIELDSTATE.sc_searchRange:
                                 break;
                             case E_FIELDSTATE.sg_searchRange:
+                                break;
+                            case E_FIELDSTATE.light:
+                                Instantiate(
+                                    lightObj,
+                                    instPos,
+                                    instRot
+                                    );
                                 break;
                             default:
                                 break;
