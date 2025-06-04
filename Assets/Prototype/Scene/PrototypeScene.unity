@@ -480,9 +480,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492964ca88c9db14ea3531abaf3848fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noonTime: 40
-  afterNoonTime: 60
-  nightTime: 80
+  noonTime: 50
+  afterNoonTime: 90
+  nightTime: 110
   fadeDuration: 5
   timeText: {fileID: 227084327}
   levelText: {fileID: 1628049948}
@@ -858,9 +858,13 @@ MonoBehaviour:
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
   lightObj: {fileID: 919132149155446097, guid: 69fce4ff4e18cd74cb0e6b63a5ac23ec, type: 3}
   pillars:
-  - {fileID: 919132149155446097, guid: f79b75aaae76942488b0ccb01d9edbcb, type: 3}
+  - {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}
   walls:
   - {fileID: 3556016710770019404, guid: 90ee446a018e2434891a7bc72d1f553c, type: 3}
+  - {fileID: 1835969439129490220, guid: 0be27a20e41defd4e8b063d6bebd09ae, type: 3}
+  - {fileID: 6480480481225591004, guid: c281bc9287d108a48a4620a54cb7b768, type: 3}
+  - {fileID: 5906684375654024314, guid: 9fb0d82f404862745812e1534f55e5a0, type: 3}
+  - {fileID: 1795901532624376505, guid: 29273c488a684ac4da43045bf69d7b17, type: 3}
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal: {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
