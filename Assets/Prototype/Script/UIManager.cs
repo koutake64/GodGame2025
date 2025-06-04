@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
         gameOver,   // ゲームオーバー
         performance,// 画面演出
         backPanel,  // 背景パネル
+        perforMemo, // 演出用メモ
     }
 
     /// <summary>
@@ -40,9 +41,14 @@ public class UIManager : MonoBehaviour
     private _FieldDataManager fieldDataMng; // フィールドデータ
 
     private bool useMemo;       // メモを開いているかどうか
+    private bool usePerformance;
     private bool currentFlag;   // 現在のフラグ状況
     private bool prevFlag;      // 1フレーム前のフラグ状況
-
+    private float gameTime;     // ゲーム内の時間
+    private float noonTimeStart;
+    private float nightTimeStart;
+    private bool isSwitchNoon = false;
+    private bool isSwitchNight = false;
 
 
     // InputSystem
@@ -100,13 +106,20 @@ public class UIManager : MonoBehaviour
             Debug.LogError("_FieldDataManagerが見つかりません。");
         }
 
+        // 各演出開始時間の取得
+        noonTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) - 5.0f;
+        nightTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.night) - 5.0f;
+
         UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(false);
         UIDictionary.GetValueOrDefault(E_UI_KIND.backPanel).SetActive(false);
+        UIDictionary.GetValueOrDefault(E_UI_KIND.perforMemo).SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        gameTime = timeMng.GetCurrentTime();
+
         InputUpdate();
         UpdateAnimator();
         UpdateTimeScale();
@@ -134,7 +147,7 @@ public class UIManager : MonoBehaviour
     void InputUpdate()
     {
         // 現在のフラグ状況を更新
-        currentFlag = useMemo;
+        currentFlag = useMemo || usePerformance;
 
 
         // Tabキーでメモをポップアップする
@@ -151,7 +164,7 @@ public class UIManager : MonoBehaviour
         if (timeMng == null) return;
 
         // ここの条件はUIを開いている間、裏のゲーム自体を止めたい場合
-        if(useMemo)
+        if(useMemo || usePerformance)
         {
             timeMng.SetTimeScale(0.0f);
         }
@@ -211,6 +224,20 @@ public class UIManager : MonoBehaviour
         }
         else
             UIDictionary.GetValueOrDefault(E_UI_KIND.memo).SetActive(true);
+
+        // 朝→昼の演出開始
+        if(gameTime >= noonTimeStart && !isSwitchNoon)
+        {
+            isSwitchNoon = true;
+            usePerformance = true;
+            UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(true);
+            UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().StartPerformance();
+        }
+
+        if(usePerformance && !UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().GetIsPerformance())
+        {
+            usePerformance = false;
+        }
     }
 
     public void OnEnable()

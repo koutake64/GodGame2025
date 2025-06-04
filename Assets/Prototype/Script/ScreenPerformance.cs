@@ -3,18 +3,15 @@ using UnityEngine.UI;
 
 public class ScreenPerformance : MonoBehaviour
 {
-
-
     private TimeManager timeMng;
     private TextManager textMng;
     private UIManager uiMng;
     private GameObject backgroundPanel;
+    [SerializeField,Header("メモを表示する時間")]public float waitFrame = 5.0f;
+    private float frame = 0.0f;
 
-    private float noonTimeStart;
-    private float nightTimeStart;
-    private bool isSwitchNoon = false;
-    private bool isSwitchNight = false;
-    private float gameTime;
+    private bool isPerformance;     // 演出中
+    private bool isNext = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,24 +32,57 @@ public class ScreenPerformance : MonoBehaviour
         if (!uiMng)
             Debug.Log("Script:Screenperformance.cs \n" +
               "UIManagerがnullです");
-        backgroundPanel = GameObject.Find("BackGroundPanel");
+        backgroundPanel = GameObject.Find("BackgroundPanel");
+        if(!backgroundPanel)
+        {
+            Debug.Log("Script:Screenperformance.cs \n" +
+             "backgroundがnullです");
+        }
 
-        // 各演出開始時間の取得
-        noonTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) - 5.0f;
-        nightTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.night) - 5.0f;
+        
     }
 
+    private void Update()
+    {
+        frame += Time.unscaledDeltaTime;
+        if(isPerformance)
+        {
+            if(frame >= waitFrame && !isNext)
+            {
+                isNext = true;
+                NextPerformance();
+            }
+        }
+
+        if (isPerformance && textMng.talkFlg == false && isNext && frame >= waitFrame)
+        {
+            isPerformance = false;
+            uiMng.SetUIActive(UIManager.E_UI_KIND.perforMemo, false);
+            timeMng.SetTimeScale(1.0f);
+        }
+    }
     /// <summary>
     /// 画面演出の開始
     /// </summary>
-    void StartPerformance()
+    public void StartPerformance()
     {
+        isPerformance = true;
+        frame = 0.0f;
         uiMng.SetUIActive(UIManager.E_UI_KIND.backPanel, true);
         // TODO:メモテクスチャの表示
+        uiMng.SetUIActive(UIManager.E_UI_KIND.perforMemo, true);
+        
+    }
 
-        timeMng.SetTimeScale(0.0f);
+    private void NextPerformance()
+    {
         uiMng.SetUIActive(UIManager.E_UI_KIND.backPanel, false);
         backgroundPanel.SetActive(true);
         textMng.StartTalk(2, false);
+    }
+
+    public bool GetIsPerformance()
+    {
+        return isPerformance;
     }
 }
