@@ -617,7 +617,7 @@ public class _FieldDataManager : MonoBehaviour
                                     );
 
                                 GameObject child = GameObject.FindGameObjectWithTag("Player");
-                                ButlerControal bc = child.GetComponent<ButlerControal>();
+                                ButlerController bc = child.GetComponent<ButlerController>();
                                 bc.SetInitPos(new Vector2Int((int)instPos.x, (int)instPos.z));
 
                                 break;
