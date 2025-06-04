@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 
 public class SecurityController : MonoBehaviour
@@ -160,59 +161,28 @@ public class SecurityController : MonoBehaviour
             return;
         }
 
-        // 向いている方向
+        // デバッグ用
+        Ray ray = new Ray(transform.position, transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * monitoringRange, Color.green);
+
+        // ヒット情報を格納する変数
+        RaycastHit hit;
+
+        // レイの方向と距離
         Vector3 forward = transform.forward.normalized;
-        Vector2Int direction;
-        if(Mathf.Abs(forward.x) > Mathf.Abs(forward.z))
-        {
-            direction = forward.x > 0 ? Vector2Int.right : Vector2Int.left;
-        }
-        else
-        {
-            direction = forward.z > 0 ? Vector2Int.up : Vector2Int.down;
-        }
 
-        // 監視
-        Vector2Int currentPos = moveController.GetCurrentPos();
-        for(int i = 0; i < monitoringRange; ++i)
+        // レイキャストを実行
+        if (Physics.Raycast(transform.position, forward, out hit, monitoringRange))
         {
-            // マス目の情報取得
-            Vector2Int pos = currentPos + direction * (i + 1);
-
-            // 範囲外判定
-            if(pos.x < 0 || pos.x >= fieldSize.x || pos.y < 0 || pos.y >= fieldSize.y)
+            // ヒットしたオブジェクトのタグで判定
+            if (hit.collider.CompareTag("Princess"))
             {
-                continue;
-            }
-
-            var info = fieldData.GetInfoList(pos);
-            for(int j = 0; j < info.Count; ++j)
-            {
-                // 影の場合次へ
-                if (info[j].state == _FieldDataManager.E_FIELDSTATE.shadow)
-                {
-                    continue;
-                }
-
                 // お姫様を発見
-                if (info[j].state == _FieldDataManager.E_FIELDSTATE.princess)
-                {
-                    // ゲームオーバーのUIを表示
-                    uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
-                    SceneChanger.ChangeScene(sceneName);
-                }
-
-                // 貫通しないオブジェクトの場合
-                if (info[j].state == _FieldDataManager.E_FIELDSTATE.wall || 
-                    info[j].state == _FieldDataManager.E_FIELDSTATE.pillar ||
-                    info[j].state == _FieldDataManager.E_FIELDSTATE.exhibitionStand)
-                {
-                    break;
-                }
+                uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
+                SceneChanger.ChangeScene(sceneName);
             }
         }
     }
-
     public void FoundPrincess(Vector2Int targetPos)
     {
         isFoundPrincess = true;
