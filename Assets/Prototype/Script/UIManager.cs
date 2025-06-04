@@ -231,7 +231,16 @@ public class UIManager : MonoBehaviour
             isSwitchNoon = true;
             usePerformance = true;
             UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(true);
-            UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().StartPerformance();
+            UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().StartPerformance(ScreenPerformance.E_PerformanceTime.Noon);
+        }
+
+        // —[•û¨–é‚Ì‰‰oŠJŽn
+        if(gameTime >= nightTimeStart && !isSwitchNight)
+        {
+            isSwitchNight = true;
+            usePerformance = true;
+            UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(true);
+            UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().StartPerformance(ScreenPerformance.E_PerformanceTime.Night);
         }
 
         if(usePerformance && !UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().GetIsPerformance())
