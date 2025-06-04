@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static UnityEditor.PlayerSettings;
+
 
 public class SecurityController : MonoBehaviour
 {
@@ -9,6 +9,8 @@ public class SecurityController : MonoBehaviour
 
     [Header("足音が聞こえる範囲")]
     [SerializeField] private int footstepsRange;
+
+    [SerializeField, SceneSelector] private string sceneName;
 
     private List<Vector2Int>        targetArray = new List<Vector2Int>();
     private CharacterMoveController moveController;         // CharacterMoveController
@@ -197,6 +199,7 @@ public class SecurityController : MonoBehaviour
                 {
                     // ゲームオーバーのUIを表示
                     uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
+                    SceneChanger.ChangeScene(sceneName);
                 }
 
                 // 貫通しないオブジェクトの場合

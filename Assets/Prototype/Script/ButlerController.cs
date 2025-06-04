@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ButlerControal : MonoBehaviour
+public class ButlerController : MonoBehaviour
 {
     private Vector2Int initPos;        // 初期位置
     private TimeManager timeManager;    // タイムマネージャー
@@ -24,7 +24,6 @@ public class ButlerControal : MonoBehaviour
         // 昼になったら初期位置に戻る
         if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.IsChangeState())
         {
-            transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
             transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
             CharacterMoveController cmc = this.GetComponent<CharacterMoveController>();
             cmc.SetPos(initPos);

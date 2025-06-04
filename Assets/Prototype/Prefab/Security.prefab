@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monitoringRange: 5
   footstepsRange: 0
+  sceneName: GameOverScene
 --- !u!65 &94649804299236929
 BoxCollider:
   m_ObjectHideFlags: 0

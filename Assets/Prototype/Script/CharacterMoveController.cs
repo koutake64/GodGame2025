@@ -208,6 +208,10 @@ public class CharacterMoveController : MonoBehaviour
 
         // ˆÚ“®æ‚É©g‚Ìî•ñ“o˜^
         fieldData.MoveInfo(prevPos, currentPos, charaState);
+
+        isMove = false;
+        isAutoMoving = false;
+        moveRoute.Clear();
     }
 
     public void StartAutoMove(Vector2Int goal)
