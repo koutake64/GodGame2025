@@ -153,7 +153,7 @@ public class SecurityController : MonoBehaviour
     private void ForwardMonitoring()
     {
         // –éˆÈŠO‚ÍƒXƒ‹[
-        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
+        if (timeManager.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.night)
         {
             return;
         }
