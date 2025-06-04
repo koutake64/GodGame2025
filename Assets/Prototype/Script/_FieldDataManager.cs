@@ -272,7 +272,7 @@ public class _FieldDataManager : MonoBehaviour
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.butler, startInfo.dir);
         AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.princess, startInfo.dir);
 
-        AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 1);
+        AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
         AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
         AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
         AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
