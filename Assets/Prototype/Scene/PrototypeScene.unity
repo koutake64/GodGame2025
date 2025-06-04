@@ -2664,16 +2664,22 @@ MonoBehaviour:
   SEs:
   - clip: {fileID: 8300000, guid: 3d51324a7396a7e4b891f79002b6219b, type: 3}
     volume: 1
+    loop: 1
   - clip: {fileID: 8300000, guid: 14201d72444494c4a8dd885126c20b7a, type: 3}
     volume: 1
+    loop: 1
   - clip: {fileID: 8300000, guid: 48ddba1ae2f1ca846bd28af23837f8af, type: 3}
     volume: 1
+    loop: 1
   - clip: {fileID: 8300000, guid: 284d24adefd21b146a5d26ee6b8591b6, type: 3}
     volume: 1
+    loop: 0
   - clip: {fileID: 8300000, guid: 8b6e67e110b6f4a42bee03845494fa31, type: 3}
     volume: 1
+    loop: 0
   - clip: {fileID: 8300000, guid: e4636000189424a4ca0bf9747635e8a9, type: 3}
     volume: 1
+    loop: 0
 --- !u!4 &1892366280
 Transform:
   m_ObjectHideFlags: 0

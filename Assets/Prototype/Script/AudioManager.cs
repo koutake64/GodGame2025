@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
         public AudioClip clip;
         [Range(0f, 1f)]
         public float volume = 1f;
+        public bool loop = false; // ← インスペクターからループ設定可能
     }
 
     [Header("Mixer")]
@@ -32,6 +33,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        // シングルトン化
         if (Instance == null)
         {
             Instance = this;
@@ -67,12 +69,20 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// SEの再生ループを開始（SEが終わったら再び再生）
+    /// SEの再生。ループフラグに応じて再生処理を分岐。
     /// </summary>
     public void PlaySE(int no = 0)
     {
         if (no >= SEs.Length || SEs[no].clip == null) return;
 
+        // ループしない場合は一度だけ再生
+        if (!SEs[no].loop)
+        {
+            seSource.PlayOneShot(SEs[no].clip, SEs[no].volume);
+            return;
+        }
+
+        // ループする場合はコルーチンで管理
         if (seLoopCoroutine != null)
             StopCoroutine(seLoopCoroutine);
 
@@ -122,5 +132,33 @@ public class AudioManager : MonoBehaviour
     {
         if (index < 0 || index >= SEs.Length) return 1f;
         return SEs[index].volume;
+    }
+
+    /// <summary>
+    /// SEループの停止（任意で使用）
+    /// </summary>
+    public void StopSELoop()
+    {
+        if (seLoopCoroutine != null)
+        {
+            StopCoroutine(seLoopCoroutine);
+            seLoopCoroutine = null;
+        }
+
+        seSource.Stop();
+    }
+
+    /// <summary>
+    /// BGMループの停止（任意で使用）
+    /// </summary>
+    public void StopBGMLoop()
+    {
+        if (bgmLoopCoroutine != null)
+        {
+            StopCoroutine(bgmLoopCoroutine);
+            bgmLoopCoroutine = null;
+        }
+
+        bgmSource.Stop();
     }
 }
