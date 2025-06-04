@@ -752,6 +752,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 324205372}
+  - component: {fileID: 324205373}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -774,6 +775,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &324205373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324205370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b026bbb993f97fe4aaeaeececa688173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  a: ClearScene
 --- !u!1 &324351706
 GameObject:
   m_ObjectHideFlags: 0
@@ -2644,12 +2658,18 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a9d07fd61b89eae4d96ff27989f6ca17, type: 3}
   - {fileID: 8300000, guid: fd645d1e54cd7004888ccfc40c94db06, type: 3}
   SEs:
-  - {fileID: 8300000, guid: 3d51324a7396a7e4b891f79002b6219b, type: 3}
-  - {fileID: 8300000, guid: 14201d72444494c4a8dd885126c20b7a, type: 3}
-  - {fileID: 8300000, guid: 48ddba1ae2f1ca846bd28af23837f8af, type: 3}
-  - {fileID: 8300000, guid: 284d24adefd21b146a5d26ee6b8591b6, type: 3}
-  - {fileID: 8300000, guid: 8b6e67e110b6f4a42bee03845494fa31, type: 3}
-  - {fileID: 8300000, guid: e4636000189424a4ca0bf9747635e8a9, type: 3}
+  - clip: {fileID: 0}
+    volume: 1
+  - clip: {fileID: 0}
+    volume: 1
+  - clip: {fileID: 0}
+    volume: 1
+  - clip: {fileID: 0}
+    volume: 1
+  - clip: {fileID: 0}
+    volume: 1
+  - clip: {fileID: 0}
+    volume: 1
 --- !u!4 &1892366280
 Transform:
   m_ObjectHideFlags: 0
