@@ -311,10 +311,10 @@ public class _FieldDataManager : MonoBehaviour
 
         AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
 
-        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 1);
+        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 2);
+        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 3);
+        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 4);
         AddInfo(new Vector2Int(6, 13), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
 
 
