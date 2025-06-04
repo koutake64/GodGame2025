@@ -103,7 +103,7 @@ public class TextManager : MonoBehaviour
     void Update()
     {
 
-        if (!isAuto && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
+        if (!isAuto && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return)))
             OnClick(false);
 
         // Tキーでオートモード切り替え
@@ -132,6 +132,7 @@ public class TextManager : MonoBehaviour
     /// <param name="talkNum"></param>
     public void StartTalk(int talkNum, bool Auto = true)
     {
+        isAuto = Auto;
         talkFlg = true;
         //backgroundPanel.SetActive(true);
         if (scenarioFile[talkNum] == null)
@@ -312,10 +313,10 @@ public class TextManager : MonoBehaviour
         // キューが空になるまでループ
         while (OutPutChar())
             // wait分待機
-            yield return new WaitForSeconds(wait);
+            yield return new WaitForSecondsRealtime(wait);
         if(isAuto)
         {
-            yield return new WaitForSeconds(autoDelay);
+            yield return new WaitForSecondsRealtime(autoDelay);
             OnClick(false);
         }
 

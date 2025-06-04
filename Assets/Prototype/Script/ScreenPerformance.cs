@@ -3,18 +3,22 @@ using UnityEngine.UI;
 
 public class ScreenPerformance : MonoBehaviour
 {
-
+    public enum E_PerformanceTime
+    {
+        Noon,
+        Night,
+    }
 
     private TimeManager timeMng;
     private TextManager textMng;
     private UIManager uiMng;
     private GameObject backgroundPanel;
+    [SerializeField,Header("メモを表示する時間")]public float waitFrame = 5.0f;
+    private float frame = 0.0f;
+    private E_PerformanceTime curPerTime;
 
-    private float noonTimeStart;
-    private float nightTimeStart;
-    private bool isSwitchNoon = false;
-    private bool isSwitchNight = false;
-    private float gameTime;
+    private bool isPerformance;     // 演出中
+    private bool isNext = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,24 +39,83 @@ public class ScreenPerformance : MonoBehaviour
         if (!uiMng)
             Debug.Log("Script:Screenperformance.cs \n" +
               "UIManagerがnullです");
-        backgroundPanel = GameObject.Find("BackGroundPanel");
+        backgroundPanel = GameObject.Find("BackgroundPanel");
+        if(!backgroundPanel)
+        {
+            Debug.Log("Script:Screenperformance.cs \n" +
+             "backgroundがnullです");
+        }
 
-        // 各演出開始時間の取得
-        noonTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) - 5.0f;
-        nightTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.night) - 5.0f;
+        
     }
 
+    private void Update()
+    {
+        switch(curPerTime)
+        {
+            case E_PerformanceTime.Noon:
+                frame += Time.unscaledDeltaTime;
+                if (isPerformance)
+                {
+                    if (frame >= waitFrame && !isNext)
+                    {
+                        isNext = true;
+                        NextPerformance();
+                    }
+                }
+
+                if (isPerformance && textMng.talkFlg == false && isNext && frame >= waitFrame)
+                {
+                    isPerformance = false;
+                    uiMng.SetUIActive(UIManager.E_UI_KIND.perforMemo, false);
+                    timeMng.SetTimeScale(1.0f);
+                }
+                break;
+            case E_PerformanceTime.Night:
+                if(isPerformance && textMng.talkFlg == false)
+                {
+                    isPerformance = false;
+                    timeMng.SetTimeScale(1.0f);
+                }
+                break;
+        }
+
+        
+    }
     /// <summary>
     /// 画面演出の開始
     /// </summary>
-    void StartPerformance()
+    public void StartPerformance(E_PerformanceTime time)
     {
-        uiMng.SetUIActive(UIManager.E_UI_KIND.backPanel, true);
-        // TODO:メモテクスチャの表示
+        // 演出開始
+        isPerformance = true;
+        curPerTime = time;
+        switch(time)
+        {
+            case E_PerformanceTime.Noon:
+                frame = 0.0f;
+                uiMng.SetUIActive(UIManager.E_UI_KIND.backPanel, true);
+                // メモの表示
+                uiMng.SetUIActive(UIManager.E_UI_KIND.perforMemo, true);
+                break;
+            case E_PerformanceTime.Night:
+                backgroundPanel.SetActive(true);
+                textMng.StartTalk(3, true);
+                break;
+        }
+        
+        
+    }
 
-        timeMng.SetTimeScale(0.0f);
+    private void NextPerformance()
+    {
         uiMng.SetUIActive(UIManager.E_UI_KIND.backPanel, false);
         backgroundPanel.SetActive(true);
         textMng.StartTalk(2, false);
+    }
+
+    public bool GetIsPerformance()
+    {
+        return isPerformance;
     }
 }
