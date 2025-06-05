@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.XR;
 using UnityEngine;
 
 public class CharacterMoveController : MonoBehaviour
@@ -23,7 +24,8 @@ public class CharacterMoveController : MonoBehaviour
     private Queue<Vector2Int>   moveRoute;      // 移動経路
     private bool                isAutoMoving;   // 自動移動中か
     private bool                isStop;         // 動きを止めるか
- 
+    private bool                isFrontChara;   // 前方にキャラがいるか
+
     void Start()
     {
         fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
@@ -53,6 +55,7 @@ public class CharacterMoveController : MonoBehaviour
         security = GetComponent<SecurityController>();
         isAutoMoving = false;
         isStop = false;
+        isFrontChara = false;
 
         // nullチェック
         if (!transform)
@@ -109,9 +112,6 @@ public class CharacterMoveController : MonoBehaviour
             {
                 // 移動フラグを下げる
                 isMove = false;
-
-                // 移動先に自身の情報登録
-                fieldData.MoveInfo(prevPos, currentPos, charaState);
 
                 if(security)
                 {
@@ -251,13 +251,24 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
+        // 移動先にキャラがいたら終了
+        if (IsFrontChara(moveRoute.Peek()))
+        {
+            return;
+        }
+
+        // 目標マスを取得
+        Vector2Int next = moveRoute.Dequeue();
+        
         // 過去座標を更新
         prevPos = currentPos;
 
-        // 次ルートをセット
-        Vector2Int next = moveRoute.Dequeue();
+        // 次のマスをセット
         currentPos = next;
-     
+
+        // 移動先に自身の情報登録
+        fieldData.MoveInfo(prevPos, currentPos, charaState);
+
         // 座標更新
         isMove = true;
         UpdateTargetPosition();
@@ -313,5 +324,21 @@ public class CharacterMoveController : MonoBehaviour
     public bool GetIsStop()
     {
         return isStop;
+    }
+
+    private bool IsFrontChara(Vector2Int nextPos)
+    {
+        // 移動先のオブジェクト取得
+        var ObjList = fieldData.GetInfoList(nextPos);
+        foreach (var Obj in ObjList)
+        {
+            // CharacterMoveControllerを持つオブジェクト存在したらtrue
+            var moveController = Obj.obj.GetComponent<CharacterMoveController>();
+            if(moveController)
+            {
+                return true;  
+            }
+        }
+        return false;
     }
 }
