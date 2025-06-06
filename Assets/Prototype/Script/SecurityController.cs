@@ -152,21 +152,21 @@ public class SecurityController : MonoBehaviour
         // レイキャストを実行
         if (Physics.Raycast(transform.position, forward, out hit, monitoringRange))
         {
-            // レイがヒットした相手が影のマスにいないか確認
-            Vector2Int hitPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
-            var objList = fieldData.GetInfoList(hitPos);
-            foreach (var obj in objList)
-            {
-                // 影があったら終了
-                if(obj.state == _FieldDataManager.E_FIELDSTATE.shadow)
-                {
-                    return;
-                }
-            }
-
             // ヒットしたオブジェクトのタグで判定
             if (hit.collider.CompareTag("Princess"))
             {
+                // レイがヒットした相手が影のマスにいないか確認
+                Vector2Int hitPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
+                var objList = fieldData.GetInfoList(hitPos);
+                foreach (var obj in objList)
+                {
+                    // 影があったら終了
+                    if(obj.state == _FieldDataManager.E_FIELDSTATE.shadow)
+                    {
+                        return;
+                    }
+                }
+
                 // お姫様を発見
                 uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
                 SceneChanger.ChangeScene(sceneName);
