@@ -501,7 +501,7 @@ public class _FieldDataManager : MonoBehaviour
 
     }
 
-    public void MoveInfo(Vector2Int prevPos, Vector2Int nextPos, E_FIELDSTATE state, int id = 0)
+    public void MoveInfo(Vector2Int prevPos, Vector2Int nextPos, E_FIELDSTATE state, int id = -1)
     {
         List<S_FIELDINFO> prevList = fieldData[prevPos.x, prevPos.y];
 
@@ -509,8 +509,8 @@ public class _FieldDataManager : MonoBehaviour
         {
             if (prevList[i].state == state && prevList[i].alignmentID == id)
             {
-                RemoveInfo(prevPos, state);
-                AddInfo(nextPos, state);
+                RemoveInfo(prevPos, state, id);
+                AddInfo(nextPos, state, CommonSE_Proto.E_DIRECTION.down, id);
 
             }
 
@@ -618,6 +618,7 @@ public class _FieldDataManager : MonoBehaviour
 
                                 GameObject child = GameObject.FindGameObjectWithTag("Player");
                                 ButlerController bc = child.GetComponent<ButlerController>();
+                                child.GetComponent<CharacterMoveController>().SetID(fieldData[x, y][i].alignmentID);
                                 bc.SetInitPos(new Vector2Int((int)instPos.x, (int)instPos.z));
 
                                 break;
@@ -627,6 +628,7 @@ public class _FieldDataManager : MonoBehaviour
                                     instPos,
                                     instRot
                                     );
+                                obj.transform.GetChild(0).GetComponent<CharacterMoveController>().SetID(fieldData[x, y][i].alignmentID);
                                 break;
                             case E_FIELDSTATE.securityGuard_N:
                                 obj = Instantiate(
@@ -690,6 +692,7 @@ public class _FieldDataManager : MonoBehaviour
 
                         if (obj.GetComponent<CharacterMoveController>() != null)
                         {
+                            obj.GetComponent<CharacterMoveController>().SetID(fieldData[x, y][i].alignmentID);
                             moveGameObjList.Add(obj);
                         }
 
