@@ -5,10 +5,12 @@ public class PlayerMove : MonoBehaviour
 {
 	private CharacterMoveController moveController;
 	private TimeManager timeManager;
+	private _FieldDataManager fieldData;
 
 	private Vector2 moveInput; // 入力値
 	private float inputCooldown = 0.2f; // 入力間隔
 	private float inputTimer = 0f;
+	private Vector2Int fieldSize;
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
@@ -19,7 +21,17 @@ public class PlayerMove : MonoBehaviour
 	{
 		moveController = GetComponent<CharacterMoveController>();
 		timeManager = FindFirstObjectByType<TimeManager>();
-	}
+
+        fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
+        if (!fieldData)
+        {
+            Debug.LogError(
+               "Script:PlayerMove.cs \n" +
+               "fieldDataがnullです"
+            );
+        }
+		fieldSize = fieldData.GetFieldSize();
+    }
 
 	void Update()
 	{
@@ -52,6 +64,48 @@ public class PlayerMove : MonoBehaviour
 			inputTimer = inputCooldown;
 		}
 
+		if (Input.GetKeyDown(KeyCode.Return))
+		{
+			ChangeObjectDirection();
+		}
 	}
 
+	private void ChangeObjectDirection()
+	{
+		// 現在の座標を取得
+		Vector2Int pos = moveController.GetCurrentPos();
+
+		// 方向
+		Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+        // 自身の周り4マスにカメラ・ライトがあるか判定
+		foreach(var dir in directions)
+		{
+			// 取得座標がフィールドの範囲内か判定
+			Vector2Int targetPos = pos + dir;
+            if (targetPos.x < 0 && targetPos.x >= fieldSize.x && targetPos.y < 0 && targetPos.y >= fieldSize.y)
+			{
+				continue;
+			}
+
+			// 対象マスの情報取得
+			var infoList = fieldData.GetInfoList(targetPos);
+			foreach (var info in infoList) 
+			{
+				var camera = info.obj.GetComponent<SurveillanceCamera>();
+				if(camera)
+				{
+					camera.CameraAction(this.transform);
+					break;
+				}
+                var light = info.obj.GetComponent<LightObject>();
+                if (light)
+                {
+					light.Action(this.transform);
+                    break;
+                }
+
+            }
+		}
+	}
 }
