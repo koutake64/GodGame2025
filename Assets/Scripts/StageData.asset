@@ -13,4 +13,164 @@ MonoBehaviour:
   m_Name: StageData
   m_EditorClassIdentifier: 
   size: {x: 20, y: 15}
-  data: []
+  data:
+  - pos: {x: 0, y: 1}
+    dir: 1
+    id: -1
+    state: 0
+  - pos: {x: 0, y: 1}
+    dir: 1
+    id: -1
+    state: 5
+  - pos: {x: 0, y: 1}
+    dir: 1
+    id: -1
+    state: 6
+  - pos: {x: 0, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 1, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 2, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 3, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 4, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 5, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 8, y: 0}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 9, y: 0}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 10, y: 0}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 13, y: 0}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 15, y: 2}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 17, y: 3}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 17, y: 6}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 15, y: 10}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 14, y: 12}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 11, y: 10}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 9, y: 8}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 9, y: 14}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 5, y: 8}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 1, y: 10}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 1, y: 11}
+    dir: 2
+    id: 0
+    state: 0
+  - pos: {x: 3, y: 11}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 1, y: 12}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 2, y: 13}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 3, y: 13}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 4, y: 13}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 5, y: 13}
+    dir: 2
+    id: 0
+    state: 3
+  - pos: {x: 6, y: 13}
+    dir: 2
+    id: 0
+    state: 2
+  - pos: {x: 17, y: 4}
+    dir: 0
+    id: 0
+    state: 8
+  - pos: {x: 2, y: 10}
+    dir: 1
+    id: 0
+    state: 8
+  - pos: {x: 0, y: 0}
+    dir: 0
+    id: 0
+    state: 0
+  - pos: {x: 15, y: 12}
+    dir: 1
+    id: 0
+    state: 8
+  - pos: {x: 9, y: 13}
+    dir: 2
+    id: 0
+    state: 8
+  - pos: {x: 0, y: 0}
+    dir: 0
+    id: 0
+    state: 0
+  - pos: {x: 0, y: 0}
+    dir: 0
+    id: 0
+    state: 0
+  - pos: {x: 0, y: 0}
+    dir: 0
+    id: 0
+    state: 0
+  - pos: {x: 0, y: 0}
+    dir: 0
+    id: 0
+    state: 0
