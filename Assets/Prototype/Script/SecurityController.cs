@@ -86,30 +86,8 @@ public class SecurityController : MonoBehaviour
             transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
         }
 
-        // 一度足音を鳴らさなくする
-        isFootstepsRange = false;
-
-        // 対象の座標を取得
-        List<Vector2Int> princess = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
-       
-        // 探索範囲
-        int radius = monitoringRange / 2;
-
-        // 自身の座標
-        Vector2Int myPos = moveController.GetCurrentPos();
-
-        foreach (Vector2Int pos in princess)
-        {
-            // 範囲内かどうかをチェック
-            if (Mathf.Abs(pos.x - myPos.x) <= radius && Mathf.Abs(pos.y - myPos.y) <= radius)
-            {
-                // 足音フラグを立てる
-                isFootstepsRange = true;
-
-                // 1人見つけたら終了
-                break;
-            }
-        }
+        // 足音を鳴らすか判定
+        JudgeWalkSound();
 
         // 移動が終了していたら
         if (isEndMovement && targetArray.Count > 0)
@@ -174,6 +152,18 @@ public class SecurityController : MonoBehaviour
         // レイキャストを実行
         if (Physics.Raycast(transform.position, forward, out hit, monitoringRange))
         {
+            // レイがヒットした相手が影のマスにいないか確認
+            Vector2Int hitPos = new Vector2Int((int)hit.collider.transform.position.x, (int)hit.collider.transform.position.z);
+            var objList = fieldData.GetInfoList(hitPos);
+            foreach (var obj in objList)
+            {
+                // 影があったら終了
+                if(obj.state == _FieldDataManager.E_FIELDSTATE.shadow)
+                {
+                    return;
+                }
+            }
+
             // ヒットしたオブジェクトのタグで判定
             if (hit.collider.CompareTag("Princess"))
             {
@@ -232,5 +222,43 @@ public class SecurityController : MonoBehaviour
     public bool GetIsFoodStepsFlg()
     {
         return isFootstepsRange;
+    }
+
+    private void JudgeWalkSound()
+    {
+        // 一度足音を鳴らさなくする
+        isFootstepsRange = false;
+
+        // 対象の座標を格納する用
+        List<Vector2Int> targetPos = new List<Vector2Int>();
+
+        // 対象の座標を取得
+        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.morning || timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
+        {
+           targetPos = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
+        }
+        else if(timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon)
+        {
+            targetPos = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.butler);
+        }
+
+        // 探索範囲
+        int radius = monitoringRange / 2;
+
+        // 自身の座標
+        Vector2Int myPos = moveController.GetCurrentPos();
+
+        foreach (Vector2Int pos in targetPos)
+        {
+            // 範囲内かどうかをチェック
+            if (Mathf.Abs(pos.x - myPos.x) <= radius && Mathf.Abs(pos.y - myPos.y) <= radius)
+            {
+                // 足音フラグを立てる
+                isFootstepsRange = true;
+
+                // 1人見つけたら終了
+                break;
+            }
+        }
     }
 }
