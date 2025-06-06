@@ -55,8 +55,6 @@ public class LightObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
     }
 
     public void Action(Transform playerTransform)
