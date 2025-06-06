@@ -25,6 +25,7 @@ public class CharacterMoveController : MonoBehaviour
     private bool                isAutoMoving;   // 自動移動中か
     private bool                isStop;         // 動きを止めるか
     private bool                isFrontChara;   // 前方にキャラがいるか
+    private int                 characterID;    // キャラクターID
 
     void Start()
     {
@@ -75,7 +76,13 @@ public class CharacterMoveController : MonoBehaviour
     {
         // 止めるフラグが立っていたら終了
         if (isStop) return;
-            
+
+        if(isFrontChara)
+        {
+            MoveNextStep();
+            return;
+        }
+
         // 移動するなら
         if (isMove)
         {
@@ -145,9 +152,18 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
+        // 移動先にキャラがいたら終了
+        if (IsFrontChara(targetPos))
+        {
+            return;
+        }
+
         // 各座標更新
         prevPos = currentPos;
         currentPos.x += num;
+
+        // 移動先に自身の情報登録
+        fieldData.MoveInfo(prevPos, currentPos, charaState, characterID);
 
         // 移動情報更新
         isMove = true;
@@ -167,9 +183,18 @@ public class CharacterMoveController : MonoBehaviour
             return;
         }
 
+        // 移動先にキャラがいたら終了
+        if (IsFrontChara(targetPos))
+        {
+            return;
+        }
+
         // 各座標更新
         prevPos = currentPos;
         currentPos.y += num;
+
+        // 移動先に自身の情報登録
+        fieldData.MoveInfo(prevPos, currentPos, charaState, characterID);
 
         // 移動情報更新
         isMove = true;
@@ -207,7 +232,7 @@ public class CharacterMoveController : MonoBehaviour
         transform.position = new Vector3(currentPos.x, 0, currentPos.y);
 
         // 移動先に自身の情報登録
-        fieldData.MoveInfo(prevPos, currentPos, charaState);
+        fieldData.MoveInfo(prevPos, currentPos, charaState, characterID);
 
         isMove = false;
         isAutoMoving = false;
@@ -254,8 +279,12 @@ public class CharacterMoveController : MonoBehaviour
         // 移動先にキャラがいたら終了
         if (IsFrontChara(moveRoute.Peek()))
         {
+            isFrontChara = true;
             return;
         }
+
+        // 前方にキャラがいるフラグを下げる
+        isFrontChara = false;
 
         // 目標マスを取得
         Vector2Int next = moveRoute.Dequeue();
@@ -267,7 +296,7 @@ public class CharacterMoveController : MonoBehaviour
         currentPos = next;
 
         // 移動先に自身の情報登録
-        fieldData.MoveInfo(prevPos, currentPos, charaState);
+        fieldData.MoveInfo(prevPos, currentPos, charaState, characterID);
 
         // 座標更新
         isMove = true;
@@ -326,18 +355,24 @@ public class CharacterMoveController : MonoBehaviour
         return isStop;
     }
 
+    public void SetID(int id)
+    {
+        characterID = id;
+    }
+
     private bool IsFrontChara(Vector2Int nextPos)
     {
         // 移動先のオブジェクト取得
-        var ObjList = fieldData.GetInfoList(nextPos);
-        foreach (var Obj in ObjList)
+        var objList = fieldData.GetInfoList(nextPos);
+        foreach (var obj in objList)
         {
-            // CharacterMoveControllerを持つオブジェクト存在したらtrue
-            var moveController = Obj.obj.GetComponent<CharacterMoveController>();
-            if(moveController)
+            if (obj.state == _FieldDataManager.E_FIELDSTATE.butler ||
+                obj.state == _FieldDataManager.E_FIELDSTATE.princess ||
+                obj.state == _FieldDataManager.E_FIELDSTATE.securityGuard_N)
             {
-                return true;  
+                return true;
             }
+
         }
         return false;
     }
