@@ -34,4 +34,5 @@ public class SceneChanger : MonoBehaviour
 	}
 
 	// Todo ”ñ“¯Šúˆ—
+	// ChangeScene(Name, bool); true:—LŒø false:–³Œø
 }
