@@ -514,12 +514,22 @@ public class _FieldDataManager : MonoBehaviour
                 RemoveInfo(prevPos, state, id);
 
                 AddInfo(nextPos, state, CommonSE_Proto.E_DIRECTION.down, id);
-                S_FIELDINFO myStr = fieldData[nextPos.x, nextPos.y][i];
-                myStr.obj = prevObj;
+                S_FIELDINFO myStr;
+                foreach (var obj in fieldData[nextPos.x, nextPos.y])
+                {
+                    if (obj.state == state && obj.alignmentID == id)
+                    {
+                        myStr = obj;
+                        myStr.obj = prevObj;
+
+                        UpdateFieldData(nextPos, myStr);
+
+                        break;
+                    }
+
+                }
             }
-
         }
-
     }
 
     private void FixedUpdate()
@@ -790,4 +800,15 @@ public class _FieldDataManager : MonoBehaviour
         changeColorFlag = true;
     }
 
+    private void UpdateFieldData(Vector2Int pos, S_FIELDINFO newData)
+    {
+        var oldData = fieldData[pos.x, pos.y];
+        for(int cnt = 0; cnt < oldData.Count; ++cnt)
+        {
+            if (oldData[cnt].state == newData.state && oldData[cnt].alignmentID == newData.alignmentID)
+            {
+                fieldData[pos.x, pos.y][cnt] = newData;
+            }
+        }
+    }
 }
