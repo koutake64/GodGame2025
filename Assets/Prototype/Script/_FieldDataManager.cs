@@ -509,9 +509,13 @@ public class _FieldDataManager : MonoBehaviour
         {
             if (prevList[i].state == state && prevList[i].alignmentID == id)
             {
-                RemoveInfo(prevPos, state, id);
-                AddInfo(nextPos, state, CommonSE_Proto.E_DIRECTION.down, id);
+                GameObject prevObj = prevList[i].obj;
 
+                RemoveInfo(prevPos, state, id);
+
+                AddInfo(nextPos, state, CommonSE_Proto.E_DIRECTION.down, id);
+                S_FIELDINFO myStr = fieldData[nextPos.x, nextPos.y][i];
+                myStr.obj = prevObj;
             }
 
         }
@@ -684,8 +688,6 @@ public class _FieldDataManager : MonoBehaviour
                             S_FIELDINFO temp = fieldData[x, y][i];
                             temp.obj = obj;
                             fieldData[x, y][i] = temp;
-
-
 
                             obj.transform.SetParent(field.transform);
                         }
