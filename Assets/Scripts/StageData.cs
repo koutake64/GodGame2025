@@ -10,8 +10,10 @@ public class StageData : ScriptableObject
         [Header("位置"), SerializeField] public Vector2Int pos;
         [Header("向き"), SerializeField] public CommonSE_Proto.E_DIRECTION dir;
         [Header("ID"), SerializeField] public int id;
-        [Header("何ですか？"), SerializeField] public _FieldDataManager.E_FIELDSTATE state;
+        [Header("種類"), SerializeField] public _FieldDataManager.E_FIELDSTATE state;
     }
 
-    [SerializeField] private List<S_STAGEINFO> data;
+    [Header("大きさ"), SerializeField] private Vector2Int size;
+    [Header("データ"), SerializeField] private List<S_STAGEINFO> data;
+
 }
