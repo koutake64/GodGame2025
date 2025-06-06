@@ -612,7 +612,7 @@ public class SurveillanceCamera : MonoBehaviour
         return isFoundTarget;
     }
 
-    public void CameraAction()
+    public void CameraAction(Transform playerTransform)
     {
 
         if (isPlayerInRange == true && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
