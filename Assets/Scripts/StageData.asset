@@ -146,31 +146,3 @@ MonoBehaviour:
     dir: 1
     id: 0
     state: 8
-  - pos: {x: 0, y: 0}
-    dir: 0
-    id: 0
-    state: 0
-  - pos: {x: 15, y: 12}
-    dir: 1
-    id: 0
-    state: 8
-  - pos: {x: 9, y: 13}
-    dir: 2
-    id: 0
-    state: 8
-  - pos: {x: 0, y: 0}
-    dir: 0
-    id: 0
-    state: 0
-  - pos: {x: 0, y: 0}
-    dir: 0
-    id: 0
-    state: 0
-  - pos: {x: 0, y: 0}
-    dir: 0
-    id: 0
-    state: 0
-  - pos: {x: 0, y: 0}
-    dir: 0
-    id: 0
-    state: 0
