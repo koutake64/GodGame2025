@@ -64,7 +64,7 @@ public class PlayerMove : MonoBehaviour
 			inputTimer = inputCooldown;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Return))
+		if (Input.GetKeyDown(KeyCode.Return) && timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon)
 		{
 			ChangeObjectDirection();
 		}
@@ -83,8 +83,8 @@ public class PlayerMove : MonoBehaviour
 		{
 			// 取得座標がフィールドの範囲内か判定
 			Vector2Int targetPos = pos + dir;
-            if (targetPos.x < 0 && targetPos.x >= fieldSize.x && targetPos.y < 0 && targetPos.y >= fieldSize.y)
-			{
+            if (targetPos.x < 0 || targetPos.x >= fieldSize.x || targetPos.y < 0 || targetPos.y >= fieldSize.y)
+            {
 				continue;
 			}
 
@@ -95,17 +95,39 @@ public class PlayerMove : MonoBehaviour
 				var camera = info.obj.GetComponent<SurveillanceCamera>();
 				if(camera)
 				{
-					camera.CameraAction(this.transform);
+					Vector3 objPos = info.obj.GetComponent<Transform>().position;
+					if(objPos != null)
+					{
+						// 対象オブジェクトの方を見る
+						LookAtObject(objPos);
+                    }
+
+                    camera.CameraAction(this.transform);
 					break;
 				}
                 var light = info.obj.GetComponent<LightObject>();
                 if (light)
                 {
-					light.Action(this.transform);
+                    Vector3 objPos = info.obj.GetComponent<Transform>().position;
+                    if (objPos != null)
+                    {
+                        // 対象オブジェクトの方を見る
+                        LookAtObject(objPos);
+                    }
+
+                    light.Action(this.transform);
                     break;
                 }
-
             }
 		}
+	}
+
+	private void LookAtObject(Vector3 target)
+	{
+		// 高さの要素は自身のを使用
+		Vector3 lookPos = target;
+		lookPos.y = this.transform.position.y;
+
+		this.transform.LookAt(target);
 	}
 }
