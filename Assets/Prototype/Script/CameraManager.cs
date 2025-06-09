@@ -25,25 +25,43 @@ public class CameraManager : MonoBehaviour
         // 朝、昼、夜でカメラ切り替え
         switch (timeManager.CurrentState)
         {
-            case CommonSE_Proto.E_TIMEOFDAY.night:
-                if (princessTransform == null)
-                {
-                    GameObject princessObj = GameObject.FindWithTag(princessTag);
-                    if (princessObj != null)
-                    {
-                        princessTransform = princessObj.transform;
-                    }
-                    else
-                        Debug.LogWarning("princessが見つかりません。タグを確認してください。");
-                }
+			case CommonSE_Proto.E_TIMEOFDAY.night:
+				if (princessTransform == null)
+				{
+					GameObject princessObj = GameObject.FindWithTag(princessTag);
+					if (princessObj != null)
+					{
+						princessTransform = princessObj.transform;
+					}
+					else
+						Debug.LogWarning("princessが見つかりませんでした。タグを確認してください。");
+				}
 
-                if (princessTransform != null)
-                    transform.position = princessTransform.position + offsetPosition;
+				if (princessTransform != null)
+				{
+					Vector2Int fieldSize = fieldDataManager.GetFieldSize();
+					float princessX = princessTransform.position.x;
 
-                break;
+					Vector3 targetPos = princessTransform.position + offsetPosition;
 
-            case CommonSE_Proto.E_TIMEOFDAY.morning:
+					// 左右端ではX座標を固定
+					if (princessX < 5)
+					{
+						targetPos.x = transform.position.x;
+					}
+					else if (princessX > fieldSize.x - 6)
+					{
+						targetPos.x = transform.position.x;
+					}
+
+					transform.position = targetPos;
+				}
+
+				break;
+
+			case CommonSE_Proto.E_TIMEOFDAY.morning:
             case CommonSE_Proto.E_TIMEOFDAY.noon:
+			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
                 if (playerTransform == null)
                 {
                     GameObject playerObj = GameObject.FindWithTag(playerTag);
@@ -76,22 +94,22 @@ public class CameraManager : MonoBehaviour
 					transform.position = targetPos;
 				}
                 break;
-            case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-                if (playerTransform == null)
-                {
-                    GameObject playerObj = GameObject.FindWithTag(playerTag);
-                    if (playerObj != null)
-                    {
-                        playerTransform = playerObj.transform;
-                    }
-                    else
-                        Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
-                }
+            //case CommonSE_Proto.E_TIMEOFDAY.afternoon:
+            //    if (playerTransform == null)
+            //    {
+            //        GameObject playerObj = GameObject.FindWithTag(playerTag);
+            //        if (playerObj != null)
+            //        {
+            //            playerTransform = playerObj.transform;
+            //        }
+            //        else
+            //            Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
+            //    }
 
-                if (playerTransform != null)
-                    transform.position = playerTransform.position + offsetPosition;
+            //    if (playerTransform != null)
+            //        transform.position = playerTransform.position + offsetPosition;
 
-                break;
+            //    break;
         }
     }
 }
