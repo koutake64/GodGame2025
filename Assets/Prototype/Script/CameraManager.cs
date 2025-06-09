@@ -10,12 +10,15 @@ public class CameraManager : MonoBehaviour
     private Transform playerTransform;
     private Transform princessTransform;
     private TimeManager timeManager;
+	private _FieldDataManager fieldDataManager;
 
-    void Start()
+
+	void Start()
     {
         transform.eulerAngles = fixedRotation;
         timeManager = FindFirstObjectByType<TimeManager>();
-    }
+		fieldDataManager = FindFirstObjectByType<_FieldDataManager>();
+	}
 
     void LateUpdate()
     {
@@ -31,7 +34,7 @@ public class CameraManager : MonoBehaviour
                         princessTransform = princessObj.transform;
                     }
                     else
-                        Debug.LogWarning("princessが見つかりませんでした。タグを確認してください。");
+                        Debug.LogWarning("princessが見つかりません。タグを確認してください。");
                 }
 
                 if (princessTransform != null)
@@ -49,12 +52,29 @@ public class CameraManager : MonoBehaviour
                         playerTransform = playerObj.transform;
                     }
                     else
-                        Debug.LogWarning("プレイヤーが見つかりませんでした。タグを確認してください。");
+                        Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
                 }
 
                 if (playerTransform != null)
-                    transform.position = playerTransform.position + offsetPosition;
+                {
+					Vector2Int fieldSize = fieldDataManager.GetFieldSize();
+					float playerX = playerTransform.position.x;
 
+					Vector3 targetPos = playerTransform.position + offsetPosition;
+
+					// X座標固定
+                    // todo 変数化
+					if (playerX < 5)
+					{
+						targetPos.x = transform.position.x;
+					}
+					else if (playerX > fieldSize.x - 6)
+					{
+						targetPos.x = transform.position.x;
+					}
+
+					transform.position = targetPos;
+				}
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.afternoon:
                 if (playerTransform == null)
@@ -65,7 +85,7 @@ public class CameraManager : MonoBehaviour
                         playerTransform = playerObj.transform;
                     }
                     else
-                        Debug.LogWarning("プレイヤーが見つかりませんでした。タグを確認してください。");
+                        Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
                 }
 
                 if (playerTransform != null)
