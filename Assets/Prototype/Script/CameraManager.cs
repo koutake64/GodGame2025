@@ -28,6 +28,7 @@ public class CameraManager : MonoBehaviour
 			case CommonSE_Proto.E_TIMEOFDAY.night:
 				if (princessTransform == null)
 				{
+					this.gameObject.transform.position = new Vector3(5, 2, -9);
 					GameObject princessObj = GameObject.FindWithTag(princessTag);
 					if (princessObj != null)
 					{
