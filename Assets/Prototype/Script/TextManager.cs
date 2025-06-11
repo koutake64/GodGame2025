@@ -39,6 +39,8 @@ public class TextManager : MonoBehaviour
 
     public bool talkFlg = false;
 
+    private TimeManager timeMng;
+
     // 構造体定義
 
     /// <summary>
@@ -96,7 +98,12 @@ public class TextManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
+        if(!timeMng)
+        {
+            Debug.LogError("Script:TextManager.cs \n" +
+              "TimeManagerがnullです");
+        }
     }
 
     // Update is called once per frame
@@ -132,6 +139,7 @@ public class TextManager : MonoBehaviour
     /// <param name="talkNum"></param>
     public void StartTalk(int talkNum, bool Auto = true)
     {
+
         isAuto = Auto;
         talkFlg = true;
         //backgroundPanel.SetActive(true);
