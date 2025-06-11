@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
     private Animator memoAnimator;  // メモUIアニメーター
     private TimeManager timeMng;
     private _FieldDataManager fieldDataMng; // フィールドデータ
+    private TextManager textMng;
 
     private bool useMemo;       // メモを開いているかどうか
     private bool usePerformance;
@@ -106,6 +107,11 @@ public class UIManager : MonoBehaviour
             Debug.LogError("_FieldDataManagerが見つかりません。");
         }
 
+        textMng = GameObject.Find("TextTyper").GetComponent<TextManager>();
+        if (!textMng)
+            Debug.Log("Script:UIManager.cs \n" +
+              "TextManagerがnullです");
+
         // 各演出開始時間の取得
         noonTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) - 5.0f;
         nightTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.night) - 5.0f;
@@ -164,7 +170,7 @@ public class UIManager : MonoBehaviour
         if (timeMng == null) return;
 
         // ここの条件はUIを開いている間、裏のゲーム自体を止めたい場合
-        if(useMemo || usePerformance)
+        if(useMemo || usePerformance || textMng.talkFlg)
         {
             timeMng.SetTimeScale(0.0f);
         }
