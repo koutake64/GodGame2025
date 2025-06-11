@@ -1,15 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ModelShiftByTime : MonoBehaviour
 {
     private TimeManager timeMng = null;
 
-    //[Header("対象タグ")]
-    //[SerializeField, SelectTag] private string tag;
-
     [Header("本体のゲームオブジェクト")]
-    //[SerializeField] private GameObject mainObj = null;
-
     [Header("各時間帯のモデル(nullの場合は非アクティブになる)")]
     [Header("朝"), SerializeField] private GameObject morningModel = null;
     [Header("昼"), SerializeField] private GameObject noonModel = null;
@@ -20,22 +16,25 @@ public class ModelShiftByTime : MonoBehaviour
 
     private bool startOnce = true;
 
+    private _FieldDataManager fdMng;
+
     private void Start()
     {
-        //if (!mainObj)
-        //{
-        //    Debug.Log(
-        //        "Script : ModelShiftByTime.cs \n" +
-        //        "本体のオブジェクトがセットされていません"
-        //        );
-        //}
-
         timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
         if (!timeMng)
         {
             Debug.Log(
                 "Script : ModelShiftByTime.cs \n" + 
                 "TimeManagerがセットされていません"
+                );
+        }
+
+        fdMng = GameObject.Find("Field").GetComponent<_FieldDataManager>();
+        if (!fdMng)
+        {
+            Debug.Log(
+                "Script : ModelShiftByTime.cs \n" +
+                "_FieldDataManagerが見つかりません"
                 );
         }
 
@@ -54,10 +53,23 @@ public class ModelShiftByTime : MonoBehaviour
             return;
         }
 
+        // --- 位置情報の削除
+        List<Vector2Int> princessPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
+        List<Vector2Int> butlerPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.butler);
+
+        if (princessPos.Count > 0)
+        {
+            fdMng.RemoveInfo(princessPos[0], _FieldDataManager.E_FIELDSTATE.princess);
+        }
+
+        if (butlerPos.Count > 0)
+        {
+            fdMng.RemoveInfo(butlerPos[0], _FieldDataManager.E_FIELDSTATE.butler);
+        }
+
         startOnce = false;
 
         // --- 各モデルをすべて非アクティブにする
-        //mainObj.SetActive(false);
         foreach (var model in models)
         {
             if (!model)
@@ -70,23 +82,6 @@ public class ModelShiftByTime : MonoBehaviour
 
         // --- 時間帯にあったモデルをアクティブにする
         ModelActive(timeMng.GetCurState());
-
-        //// --- モデルが1つでもアクティブなら本体オブジェクトをアクティブにする
-        //foreach (var model in models)
-        //{
-        //    if (!model)
-        //    {
-        //        continue;
-        //    }
-
-        //    if (model.activeSelf)
-        //    {
-        //        mainObj.SetActive(true);
-        //        return;
-        //    }
-
-        //}
-
         
     }
 
