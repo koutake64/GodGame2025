@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
     private Transform princessTransform;
     private TimeManager timeManager;
 	private _FieldDataManager fieldDataManager;
-
+	private bool initNightPos = false;
 
 	void Start()
     {
@@ -20,98 +20,74 @@ public class CameraManager : MonoBehaviour
 		fieldDataManager = FindFirstObjectByType<_FieldDataManager>();
 	}
 
-    void LateUpdate()
-    {
-        // 朝、昼、夜でカメラ切り替え
-        switch (timeManager.CurrentState)
-        {
+	void LateUpdate()
+	{
+		switch (timeManager.CurrentState)
+		{
 			case CommonSE_Proto.E_TIMEOFDAY.night:
-				this.gameObject.transform.position = new Vector3(5, 10, -9);
 				if (princessTransform == null)
 				{
-					this.gameObject.transform.position = new Vector3(5, 2, -9);
 					GameObject princessObj = GameObject.FindWithTag(princessTag);
 					if (princessObj != null)
 					{
 						princessTransform = princessObj.transform;
 					}
 					else
-						Debug.LogWarning("princessが見つかりませんでした。タグを確認してください。");
+					{
+						if (!initNightPos)
+						{
+							transform.position = new Vector3(5, 2, -9);
+							initNightPos = true;
+						}
+						Debug.LogWarning("princessが見つかりません。タグを確認してください。");
+						return;
+					}
 				}
 
-				if (princessTransform != null)
+				// princess が見つかればフラグをリセット
+				initNightPos = false;
+
+				Vector2Int fieldSize = fieldDataManager.GetFieldSize();
+				float princessX = princessTransform.position.x;
+				Vector3 targetPos = princessTransform.position + offsetPosition;
+
+				if (princessX < 5 || princessX > fieldSize.x - 6)
 				{
-					Vector2Int fieldSize = fieldDataManager.GetFieldSize();
-					float princessX = princessTransform.position.x;
-
-					Vector3 targetPos = princessTransform.position + offsetPosition;
-
-					// 左右端ではX座標を固定
-					if (princessX < 5)
-					{
-						targetPos.x = transform.position.x;
-					}
-					else if (princessX > fieldSize.x - 6)
-					{
-						targetPos.x = transform.position.x;
-					}
-
-					transform.position = targetPos;
+					targetPos.x = transform.position.x;
 				}
 
+				transform.position = targetPos;
 				break;
 
 			case CommonSE_Proto.E_TIMEOFDAY.morning:
-            case CommonSE_Proto.E_TIMEOFDAY.noon:
+			case CommonSE_Proto.E_TIMEOFDAY.noon:
 			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-                if (playerTransform == null)
-                {
-                    GameObject playerObj = GameObject.FindWithTag(playerTag);
-                    if (playerObj != null)
-                    {
-                        playerTransform = playerObj.transform;
-                    }
-                    else
-                        Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
-                }
-
-                if (playerTransform != null)
-                {
-					Vector2Int fieldSize = fieldDataManager.GetFieldSize();
-					float playerX = playerTransform.position.x;
-
-					Vector3 targetPos = playerTransform.position + offsetPosition;
-
-					// X座標固定
-                    // todo 変数化
-					if (playerX < 5)
+				if (playerTransform == null)
+				{
+					GameObject playerObj = GameObject.FindWithTag(playerTag);
+					if (playerObj != null)
 					{
-						targetPos.x = transform.position.x;
+						playerTransform = playerObj.transform;
 					}
-					else if (playerX > fieldSize.x - 6)
+					else
 					{
-						targetPos.x = transform.position.x;
+						Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
+						return;
 					}
-
-					transform.position = targetPos;
 				}
-                break;
-            //case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-            //    if (playerTransform == null)
-            //    {
-            //        GameObject playerObj = GameObject.FindWithTag(playerTag);
-            //        if (playerObj != null)
-            //        {
-            //            playerTransform = playerObj.transform;
-            //        }
-            //        else
-            //            Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
-            //    }
 
-            //    if (playerTransform != null)
-            //        transform.position = playerTransform.position + offsetPosition;
+				Vector2Int fieldSizeDay = fieldDataManager.GetFieldSize();
+				float playerX = playerTransform.position.x;
+				Vector3 targetPosDay = playerTransform.position + offsetPosition;
 
-            //    break;
-        }
-    }
+				if (playerX < 5 || playerX > fieldSizeDay.x - 6)
+				{
+					targetPosDay.x = transform.position.x;
+				}
+
+				transform.position = targetPosDay;
+				break;
+		}
+	}
 }
+
