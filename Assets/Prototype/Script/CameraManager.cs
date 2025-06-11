@@ -26,6 +26,7 @@ public class CameraManager : MonoBehaviour
         switch (timeManager.CurrentState)
         {
 			case CommonSE_Proto.E_TIMEOFDAY.night:
+				this.gameObject.transform.position = new Vector3(5, 10, -9);
 				if (princessTransform == null)
 				{
 					this.gameObject.transform.position = new Vector3(5, 2, -9);
