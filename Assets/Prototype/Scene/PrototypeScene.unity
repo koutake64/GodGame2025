@@ -2547,7 +2547,7 @@ MonoBehaviour:
   seSource: {fileID: 1054207567}
   BGMs:
   - {fileID: 8300000, guid: a4f7ba066a14648448a4a2374b05a907, type: 3}
-  - {fileID: 8300000, guid: 25a40ee31eb993a47b9d159e05d97db0, type: 3}
+  - {fileID: 8300000, guid: 82112aa0827b1a14a97b2f282f924e83, type: 3}
   - {fileID: 8300000, guid: a45f3c7a32f869b419abb2562b3d07e8, type: 3}
   - {fileID: 8300000, guid: 0baa6868c2f116c4286a78a5b9624f2e, type: 3}
   - {fileID: 8300000, guid: a9d07fd61b89eae4d96ff27989f6ca17, type: 3}
@@ -2556,10 +2556,10 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 3d51324a7396a7e4b891f79002b6219b, type: 3}
     volume: 1
     loop: 1
-  - clip: {fileID: 8300000, guid: 14201d72444494c4a8dd885126c20b7a, type: 3}
+  - clip: {fileID: 8300000, guid: a88144ed0af33b6419db8caad7c3f6b1, type: 3}
     volume: 1
     loop: 1
-  - clip: {fileID: 8300000, guid: 48ddba1ae2f1ca846bd28af23837f8af, type: 3}
+  - clip: {fileID: 8300000, guid: db404aad169a41d499ee75b1bd8afebd, type: 3}
     volume: 1
     loop: 1
   - clip: {fileID: 8300000, guid: 284d24adefd21b146a5d26ee6b8591b6, type: 3}
