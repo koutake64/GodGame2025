@@ -28,7 +28,6 @@ public class SurveillanceCamera : MonoBehaviour
     // カメラの位置（マス座標）
     private Vector2Int SurveillanceCameraPos = new Vector2Int();
 
-
     // カメラの正面方向（初期は上方向）
     private Vector2 forward = Vector2.up;
 
@@ -133,6 +132,8 @@ public class SurveillanceCamera : MonoBehaviour
             //Debug.LogError("プリンセスが見つかりませんでした");
         }
 
+        GetOffsetsBasedOnWatchState();
+        GetSearchedTileList();
 
         Vector2Int playerGridPos = new Vector2Int((int)playerPos.x, (int)playerPos.z);
 
@@ -158,9 +159,7 @@ public class SurveillanceCamera : MonoBehaviour
                 Debug.Log("カメラの向きが変えられる（上下）");
             }
         }
-        //Debug.Log($"カメラとプレイヤーとの距離X" + (PlayerInRangeX));
-        //Debug.Log($"カメラとプレイヤーとの距離Y" + (PlayerInRangeY));
-
+        
         // 監視範囲の状態をリセット
         ResetCameraRange();
 
@@ -197,7 +196,7 @@ public class SurveillanceCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 現在の監視状態に応じて3×3の索敵範囲を設定し、色を変更する
+    /// 現在の監視状態に応じて3×3の索敵範囲を設定する
     /// </summary>
     private void SearchRange()
     {
@@ -685,8 +684,14 @@ public class SurveillanceCamera : MonoBehaviour
             // 監視範囲の状態をリセット
             ResetCameraRange();
 
+            List<Vector2Int> searchedTiles = GetSearchedTileList();
+
             // 現在の監視状態に応じて索敵処理を実行
             SearchRange();
+
+            fieldDataManager.ChangeColor();
+
+
         }
     }
 }
