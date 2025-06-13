@@ -964,7 +964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8919371dd123af9468cb0e5be5e5bc64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  illuminateRange: {x: 3, y: 5}
+  illuminateRange: {x: 3, y: 4}
   rotateAngle: 45
   shadowDistance: 3
   shadowAngle: 3

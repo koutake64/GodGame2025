@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 /// <summary>
 /// 新しいFieldDataManager
@@ -578,6 +579,7 @@ public class _FieldDataManager : MonoBehaviour
 
                         Quaternion instRot = Quaternion.Euler(0, angle, 0);
 
+                        obj = null;
                         switch (fieldData[x, y][i].state)
                         {
                             case E_FIELDSTATE.outOfRange:
@@ -672,7 +674,7 @@ public class _FieldDataManager : MonoBehaviour
                             case E_FIELDSTATE.sg_searchRange:
                                 break;
                             case E_FIELDSTATE.light:
-                                Instantiate(
+                                obj = Instantiate(
                                     lightObj,
                                     instPos,
                                     instRot
@@ -689,12 +691,12 @@ public class _FieldDataManager : MonoBehaviour
                             fieldData[x, y][i] = temp;
 
                             obj.transform.SetParent(field.transform);
-                        }
 
-                        if (obj.GetComponent<CharacterMoveController>() != null)
-                        {
-                            obj.GetComponent<CharacterMoveController>().SetID(fieldData[x, y][i].alignmentID);
-                            moveGameObjList.Add(obj);
+                            if (obj.GetComponent<CharacterMoveController>() != null)
+                            {
+                                obj.GetComponent<CharacterMoveController>().SetID(fieldData[x, y][i].alignmentID);
+                                moveGameObjList.Add(obj);
+                            }
                         }
 
                     }
@@ -742,9 +744,17 @@ public class _FieldDataManager : MonoBehaviour
                             state[posList[j].x, posList[j].y] = E_FIELDSTATE.sc_searchRange;
                         }
                     }
-                    else if (fieldData[x, y][i].state == E_FIELDSTATE.shadow)
-                    { 
-                        // TODO 影の位置をもらい、ステータスを更新
+                    else if (fieldData[x, y][i].state == E_FIELDSTATE.light)
+                    {
+                        LightObject lo = fieldData[x, y][i].obj.GetComponent<LightObject>();
+
+                        List<Vector2Int> posList = lo.GetShadowList();
+
+                        for (int j = 0; j < posList.Count; ++j)
+                        {
+                            state[posList[j].x, posList[j].y] = E_FIELDSTATE.shadow;
+                        }
+                   
                     }
 
 

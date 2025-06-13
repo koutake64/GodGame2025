@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class LightObject : MonoBehaviour
 {
@@ -59,33 +57,42 @@ public class LightObject : MonoBehaviour
 
     public void Action(Transform playerTransform)
     {
+        // 座標を一度intでキャスト
+        Vector2 playerPos = new Vector2((int)playerTransform.position.x, (int)playerTransform.position.z);
+
         // プレイヤーがライトに対してどの位置にいるか計算
         Vector2 lightForward    = new Vector2(transform.forward.x, transform.forward.z).normalized;
-        Vector2 toPlayer        = new Vector2(playerTransform.position.x - transform.position.x, playerTransform.position.z - transform.position.z).normalized;
-        float dot   = Vector2.Dot(lightForward, toPlayer);
+        Vector2 toPlayer        = new Vector2(playerPos.x - transform.position.x, playerPos.y - transform.position.z).normalized;
+        float dot = Vector2.Dot(lightForward, toPlayer);
+
         float cross = lightForward.x * toPlayer.x - lightForward.y * toPlayer.y;
+
 
         if (dot > 0) // ライトの前方
         {
-            if(cross > 0) // ライトの左側
-            {
-                ChangeDirection((int)direction + LightDirection.Left);
-            }
-            else if(cross < 0) // ライトの右側
-            {
-                ChangeDirection((int)direction + LightDirection.Right);
-            }
+        //    if(cross > 0) // ライトの左側
+        //    {
+        //        ChangeDirection((int)direction + LightDirection.Left);
+        //    }
+        //    else if(cross < 0) // ライトの右側
+        //    {
+        //        ChangeDirection((int)direction + LightDirection.Right);
+        //    }
+        //    else
+        //    {
+        //
+        //    }
         }
         else if(dot < 0) // ライトの後方
         {
-            if (cross > 0) // ライトの左側
-            {
-                ChangeDirection((int)direction + LightDirection.Right);
-            }
-            else if (cross < 0) // ライトの右側
-            {
-                ChangeDirection((int)direction + LightDirection.Left);
-            }
+        //    if (cross > 0) // ライトの左側
+        //    {
+        //        ChangeDirection((int)direction + LightDirection.Right);
+        //    }
+        //    else if (cross < 0) // ライトの右側
+        //    {
+        //        ChangeDirection((int)direction + LightDirection.Left);
+        //    }
         }
         else // 真横   
         {
@@ -273,6 +280,12 @@ public class LightObject : MonoBehaviour
                     }
                 }
             }
+        }
+
+        // 影の情報を登録
+        foreach (var shadow in shadowList)
+        {
+            fieldData.AddInfo(shadow, _FieldDataManager.E_FIELDSTATE.shadow);
         }
     }
 

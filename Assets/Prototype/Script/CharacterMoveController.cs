@@ -120,6 +120,9 @@ public class CharacterMoveController : MonoBehaviour
                 // ˆÚ“®ƒtƒ‰ƒO‚ğ‰º‚°‚é
                 isMove = false;
 
+                // À•W‚ğ‚Ò‚Á‚½‚è‚É‚·‚é
+                this.transform.position = targetPos;
+
                 if(security)
                 {
                     if(security.StartMoveFoundPos())
