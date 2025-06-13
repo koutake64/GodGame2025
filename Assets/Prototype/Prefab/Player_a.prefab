@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1706c19d2460d44b41c2b431ac6c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charaState: 0
+  charaState: 5
   moveSpeed: 2
 --- !u!114 &9144570963111096058
 MonoBehaviour:
@@ -651,6 +651,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 784c00a7-c81a-4c1c-8f0b-c987d8966de0
+    m_ActionName: 'Player/SwitchAction[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
