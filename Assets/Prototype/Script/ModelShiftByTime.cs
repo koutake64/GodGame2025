@@ -53,20 +53,6 @@ public class ModelShiftByTime : MonoBehaviour
             return;
         }
 
-        // --- 位置情報の削除
-        List<Vector2Int> princessPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
-        List<Vector2Int> butlerPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.butler);
-
-        if (princessPos.Count > 0)
-        {
-            fdMng.RemoveInfo(princessPos[0], _FieldDataManager.E_FIELDSTATE.princess);
-        }
-
-        if (butlerPos.Count > 0)
-        {
-            fdMng.RemoveInfo(butlerPos[0], _FieldDataManager.E_FIELDSTATE.butler);
-        }
-
         startOnce = false;
 
         // --- 各モデルをすべて非アクティブにする
