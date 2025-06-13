@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492964ca88c9db14ea3531abaf3848fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noonTime: 30
+  noonTime: 35
   afterNoonTime: 90
   nightTime: 110
   fadeDuration: 5
@@ -753,7 +753,6 @@ GameObject:
   m_Component:
   - component: {fileID: 324205372}
   - component: {fileID: 324205373}
-  - component: {fileID: 324205374}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -789,18 +788,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   a: ClearScene
---- !u!114 &324205374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324205370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c90a74ef81b309246b6fb87406650045, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &324351706
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,7 +845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b308f0049762245a0a5f9af8f66435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sd: {fileID: 11400000, guid: acd3f75f5ca3536428259fb9dcb6e677, type: 2}
+  sd: {fileID: 11400000, guid: a3b5542900354204694676ec9ae3b6f4, type: 2}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
   tileB: {fileID: 7211354190082184439, guid: 60ee7b33ea9f96e4684d479de684389e, type: 3}
@@ -868,7 +855,7 @@ MonoBehaviour:
   player: {fileID: 7808433448352047340, guid: 6967fe1b8b53b2346b574c9a1dc04a2b, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
-  lightObj: {fileID: 919132149155446097, guid: 69fce4ff4e18cd74cb0e6b63a5ac23ec, type: 3}
+  lightObj: {fileID: 6351582861705366359, guid: 796185ce96e388744be8d45169d5a35b, type: 3}
   pillars:
   - {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}
   walls:
