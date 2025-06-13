@@ -164,7 +164,7 @@ MonoBehaviour:
     state: 7
   - pos: {x: 0, y: 14}
     dir: 2
-    id: -1
+    id: 0
     state: 1
   - pos: {x: 13, y: 1}
     dir: 2

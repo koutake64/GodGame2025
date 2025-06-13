@@ -113,7 +113,7 @@ public class _FieldDataManager : MonoBehaviour
     [SerializeField] private GameObject exhibitionStand;
 
     [Header("お宝のプレハブ")]
-    [SerializeField] private GameObject goal;
+    [SerializeField] private List<GameObject> goal;
 
     [Header("警備員巡回ルート(IDはこちらで指定)")]
     [SerializeField] private Dictionary<int, List<Vector2Int>> route = new Dictionary<int, List<Vector2Int>>();
@@ -586,7 +586,7 @@ public class _FieldDataManager : MonoBehaviour
                                 break;
                             case E_FIELDSTATE.goal:
                                 obj = Instantiate(
-                                    goal,
+                                    goal[fieldData[x, y][i].alignmentID],
                                     instPos,
                                     Quaternion.identity
                                     );

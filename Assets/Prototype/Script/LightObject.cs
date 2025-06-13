@@ -274,11 +274,10 @@ public class LightObject : MonoBehaviour
                 }
             }
         }
+    }
 
-        // ‰e‚ð’Ç‰Á
-        foreach (var pos in shadowList)
-        {
-            fieldData.AddInfo(pos, _FieldDataManager.E_FIELDSTATE.shadow);
-        }
+    public List<Vector2Int> GetShadowList()
+    { 
+        return shadowList; 
     }
 }
