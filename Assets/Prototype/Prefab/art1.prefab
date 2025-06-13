@@ -384,6 +384,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Showcase_1x1_ProBuilder
       objectReference: {fileID: 0}
+    - target: {fileID: 7851311470552336560, guid: 7514dc23adaa78b4ab994514bcd624a3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8340014504606620311, guid: 7514dc23adaa78b4ab994514bcd624a3, type: 3}
       propertyPath: m_VersionIndex
       value: 736
