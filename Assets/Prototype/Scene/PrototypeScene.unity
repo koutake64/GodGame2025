@@ -855,7 +855,7 @@ MonoBehaviour:
   player: {fileID: 7808433448352047340, guid: 6967fe1b8b53b2346b574c9a1dc04a2b, type: 3}
   securityGuard_N: {fileID: 2175653325360876618, guid: 5bda46d42417fb341936b2abfda5c9c5, type: 3}
   surveillanceCamera: {fileID: 8513119782857303277, guid: e1f55011758af834dab194fa6f01d0dc, type: 3}
-  lightObj: {fileID: 6351582861705366359, guid: 796185ce96e388744be8d45169d5a35b, type: 3}
+  lightObj: {fileID: 8695242791912244026, guid: 0da837ae9da9e694a8ced6530a1c2d3a, type: 3}
   pillars:
   - {fileID: 3646889175289259197, guid: b57204b5894701544a133618f43983f9, type: 3}
   walls:
@@ -867,7 +867,7 @@ MonoBehaviour:
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal:
   - {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
-  - {fileID: 5500456620918182715, guid: f2b6f5c1e07f2eb4b892c5ae8f85b4af, type: 3}
+  - {fileID: 2952474259421678109, guid: f2b6f5c1e07f2eb4b892c5ae8f85b4af, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
   rope: {fileID: 6181181272637633349, guid: 4a97dc5b166a8c041b1563713ab780ee, type: 3}
   outOfRangeTile: {fileID: 8951184714324223293, guid: 7b244f19c2663d64ab521eaf273933c8, type: 3}
