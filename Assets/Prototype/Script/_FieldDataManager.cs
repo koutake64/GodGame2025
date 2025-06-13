@@ -71,14 +71,15 @@ public class _FieldDataManager : MonoBehaviour
 
     private List<GameObject> moveGameObjList = new List<GameObject>();
 
+    [Header("ステージデータ")]
+    [SerializeField] private StageData sd;
+
     [Header("床の親オブジェクト(空のオブジェクトでOK)\n" +
             "※このゲームオブジェクトにFieldDataManagerをつける")]
     [SerializeField] private GameObject field;
 
-    [Header("ステージのサイズ(マス) X:横, Y:奥\n" +
-            "※範囲は1～50マスに制限してます")]
-    [SerializeField, Range(1, 50)] private int fieldSizeX;
-    [SerializeField, Range(1, 50)] private int fieldSizeY;
+    private int fieldSizeX;
+    private int fieldSizeY;
 
     [Header("床にするプレハブ(2種類)")]
     [SerializeField] private GameObject tileA;
@@ -131,6 +132,10 @@ public class _FieldDataManager : MonoBehaviour
         // --- ヌルチェック
         // TODO 後で
 
+        List<StageData.S_STAGEINFO> data = sd.GetData();
+        fieldSizeX = sd.GetSize().x;
+        fieldSizeY = sd.GetSize().y;
+
         // --- フィールドデータの作成
         Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
         fieldData = new List<S_FIELDINFO>[fieldSize.x, fieldSize.y];
@@ -143,6 +148,11 @@ public class _FieldDataManager : MonoBehaviour
         }
 
         fieldGameObj = new S_TAILPREHUBINFO[fieldSizeX, fieldSizeY];
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            AddInfo(data[i].pos, data[i].state, data[i].dir, data[i].id);
+        }
 
         // ---床の生成
         GameObject obj = null;
@@ -267,78 +277,57 @@ public class _FieldDataManager : MonoBehaviour
         //_outOfRangeTile3.transform.localScale = new Vector3(21, 1, 33);
 
         // プロトタイプ用のステージ作成
-        AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
-        S_FIELDINFO startInfo = GetInfoList(GetStatePos(E_FIELDSTATE.start)[0])[0];
-        AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.butler, startInfo.dir);
-        AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.princess, startInfo.dir);
-
-        AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-        AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(17, 6), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
-
-        AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 1);
-        AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 2);
-        AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 3);
-        AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 4);
-        AddInfo(new Vector2Int(6, 13), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.start, CommonSE_Proto.E_DIRECTION.right);
+        //S_FIELDINFO startInfo = GetInfoList(GetStatePos(E_FIELDSTATE.start)[0])[0];
+        //AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.butler, startInfo.dir);
+        //AddInfo(new Vector2Int(0, 1), E_FIELDSTATE.princess, startInfo.dir);
 
 
-        AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up);
-        AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
-        AddInfo(new Vector2Int(15, 12), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
-        AddInfo(new Vector2Int(9, 13), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.down);
-
-        AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up, 10);
-        List<Vector2Int> route1 = new List<Vector2Int>();
-        route1.Add(new Vector2Int(1, 14));
-        route1.Add(new Vector2Int(1, 13));
-        route.Add(10, route1);
-
-        AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right, 11);
-        List<Vector2Int> route2 = new List<Vector2Int>();
-        route2.Add(new Vector2Int(11, 14));
-        route2.Add(new Vector2Int(19, 14));
-        route.Add(11, route2);
-
-        AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
-
-        AddInfo(new Vector2Int(13, 1), E_FIELDSTATE.talk);
-        AddInfo(new Vector2Int(12, 10), E_FIELDSTATE.talk);
+        //AddInfo(new Vector2Int(0, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(1, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(2, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(3, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(4, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(5, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(8, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(9, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(10, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(13, 0), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(15, 2), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(17, 3), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(17, 6), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(15, 10), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(14, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(11, 10), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(9, 8), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(9, 14), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(5, 8), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(1, 10), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(1, 11), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(3, 11), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(1, 12), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(2, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 1);
+        //AddInfo(new Vector2Int(3, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 2);
+        //AddInfo(new Vector2Int(4, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 3);
+        //AddInfo(new Vector2Int(5, 13), E_FIELDSTATE.wall, CommonSE_Proto.E_DIRECTION.down, 4);
+        //AddInfo(new Vector2Int(6, 13), E_FIELDSTATE.pillar, CommonSE_Proto.E_DIRECTION.down, 0);
+        //AddInfo(new Vector2Int(17, 4), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.up);
+        //AddInfo(new Vector2Int(2, 10), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
+        //AddInfo(new Vector2Int(15, 12), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.right);
+        //AddInfo(new Vector2Int(9, 13), E_FIELDSTATE.surveillanceCamera, CommonSE_Proto.E_DIRECTION.down);
+        //AddInfo(new Vector2Int(1, 13), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.up, 10);
+        //List<Vector2Int> route1 = new List<Vector2Int>();
+        //route1.Add(new Vector2Int(1, 14));
+        //route1.Add(new Vector2Int(1, 13));
+        //route.Add(10, route1);
+        //AddInfo(new Vector2Int(15, 14), E_FIELDSTATE.securityGuard_N, CommonSE_Proto.E_DIRECTION.right, 11);
+        //List<Vector2Int> route2 = new List<Vector2Int>();
+        //route2.Add(new Vector2Int(11, 14));
+        //route2.Add(new Vector2Int(19, 14));
+        //route.Add(11, route2);
+        //AddInfo(new Vector2Int(0, 14), E_FIELDSTATE.goal);
+        //AddInfo(new Vector2Int(13, 1), E_FIELDSTATE.talk);
+        //AddInfo(new Vector2Int(12, 10), E_FIELDSTATE.talk);
 
     }
 

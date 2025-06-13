@@ -87,12 +87,12 @@ public class ModelShiftByTime : MonoBehaviour
 
     private void ModelActive(CommonSE_Proto.E_TIMEOFDAY time)
     {
-        Debug.Log("今は" + time + "です");
+        //Debug.Log("今は" + time + "です");
 
         if (models[(int)time])
         {
             models[(int)time].SetActive(true);
-            Debug.Log(time + "のモデルがアクティブになりました");
+            //Debug.Log(time + "のモデルがアクティブになりました");
         }
     }
 

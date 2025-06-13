@@ -858,9 +858,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b308f0049762245a0a5f9af8f66435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sd: {fileID: 11400000, guid: acd3f75f5ca3536428259fb9dcb6e677, type: 2}
   field: {fileID: 324351706}
-  fieldSizeX: 20
-  fieldSizeY: 15
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
   tileB: {fileID: 7211354190082184439, guid: 60ee7b33ea9f96e4684d479de684389e, type: 3}
   fieldWall: {fileID: 1850335846313603325, guid: 950b8c40df5dae14f9cedd37405877cb, type: 3}

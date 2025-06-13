@@ -90,6 +90,11 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     {
         searchRangePosList.Clear();
 
+        if (fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal).Count <= 0)
+        {
+            return;
+        }
+
         Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
         Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
@@ -114,8 +119,13 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private void DecideTargetPos()
     {
+
         // ゴール座標をセット
-        Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
+        Vector2Int goalPos = new Vector2Int();
+        if (fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal).Count > 0)
+        {
+            goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
+        }
 
         // 柱座標取得
         List<Vector2Int> pillarPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.pillar);

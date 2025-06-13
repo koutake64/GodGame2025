@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class StageData : ScriptableObject
 {
     [System.Serializable]
-    private struct S_STAGEINFO
+    public struct S_STAGEINFO
     {
         [Header("位置"), SerializeField] public Vector2Int pos;
         [Header("向き"), SerializeField] public CommonSE_Proto.E_DIRECTION dir;
@@ -15,5 +15,16 @@ public class StageData : ScriptableObject
 
     [Header("大きさ"), SerializeField] private Vector2Int size;
     [Header("データ"), SerializeField] private List<S_STAGEINFO> data;
+
+    public List<S_STAGEINFO> GetData()
+    {
+        return data;
+    }
+    
+    public Vector2Int GetSize()
+    {
+        return size;
+    }
+
 
 }

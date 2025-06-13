@@ -72,7 +72,7 @@ public class TransparencyObject : MonoBehaviour
     /// </summary>
     public void StartFade(float toAlpha, float speed)
     {
-        Debug.Log($"StartFade: {toAlpha}");
+        //Debug.Log($"StartFade: {toAlpha}");
         goalAlpha = Mathf.Clamp01(toAlpha);
         fadeSpeed = Mathf.Max(speed, 0.01f);
         isFading = true;

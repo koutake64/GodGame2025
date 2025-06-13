@@ -23,13 +23,16 @@ public class GameSystem : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		
+        if (fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal).Count <= 0)
+        {
+            return;
+        }
 
-		// ゴールの位置を取得
-		List<Vector2Int> goalPositions = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal);
+        // ゴールの位置を取得
+        List<Vector2Int> goalPositions = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal);
 		
 		Vector2Int goalPos = goalPositions[0];
-		Debug.Log("ゴール" +  goalPos);
+		//Debug.Log("ゴール" +  goalPos);
 
 		// 夜のみチェック
 		if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
