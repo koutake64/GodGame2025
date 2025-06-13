@@ -74,22 +74,111 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupInfos:
-  - title: New Group Node
+  - title: Dot
+    position:
+      serializedVersion: 2
+      x: 1018
+      y: 914
+      width: 1179
+      height: 1923
+    contents:
+    - model: {fileID: 8926484042661614991}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615047}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615097}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615210}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615006}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615021}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615236}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615117}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615310}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615275}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615281}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615189}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615197}
+      id: 0
+      isStickyNote: 0
+  - title: Star
     position:
       serializedVersion: 2
       x: 0
       y: 0
       width: 100
       height: 100
-    contents: []
+    contents:
+    - model: {fileID: 8926484042661615482}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615314}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615316}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615320}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615397}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615335}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615379}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615458}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615338}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615340}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615395}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615350}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615487}
+      id: 0
+      isStickyNote: 0
+    - model: {fileID: 8926484042661615465}
+      id: 0
+      isStickyNote: 0
   stickyNoteInfos: []
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 3338
-    height: 2811
+    x: 1018
+    y: 914
+    width: 2346
+    height: 1922
 --- !u!114 &8926484042661614991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +197,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615047}
   - {fileID: 8926484042661615097}
   - {fileID: 8926484042661615210}
-  m_UIPosition: {x: 1746, y: 1251}
+  m_UIPosition: {x: 1748, y: 1251}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -306,7 +395,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 1746, y: 1946}
+  m_UIPosition: {x: 1748, y: 1946}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -648,7 +737,7 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children:
   - {fileID: 8926484042661615236}
-  m_UIPosition: {x: 1746, y: 973}
+  m_UIPosition: {x: 1748, y: 974}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -868,7 +957,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615310}
   - {fileID: 8926484042661615275}
   - {fileID: 8926484042661615281}
-  m_UIPosition: {x: 1746, y: 2196}
+  m_UIPosition: {x: 1748, y: 2196}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -986,7 +1075,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 1042, y: 1641}
+  m_UIPosition: {x: 1044, y: 1642}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -1147,7 +1236,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 1271, y: 1664}
+  m_UIPosition: {x: 1273, y: 1664}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -1577,7 +1666,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615242}
   - {fileID: 8926484042661615255}
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_MasterSlot: {fileID: 8926484042661615240}
   m_MasterData:
@@ -2464,7 +2553,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":11.984314918518067,"g":9.961503028869629,"b":0.0,"a":1.0},"time":0.00588998245075345},{"color":{"r":7.0132036209106449,"g":5.904364109039307,"b":0.4437924325466156,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":1.0,"time":0.10000763088464737},{"alpha":0.0,"time":0.800000011920929}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":42.72250747680664,"g":42.72250747680664,"b":0.0,"a":1.0},"time":0.0},{"color":{"r":42.72250747680664,"g":42.72250747680664,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":0.0,"time":1.0}],"gradientMode":0}'
     m_Space: -1
   m_Property:
     name: Color
@@ -3698,7 +3787,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":11.984314918518067,"g":9.961503028869629,"b":0.0,"a":1.0},"time":0.00588998245075345},{"color":{"r":7.0132036209106449,"g":5.904364109039307,"b":0.4437924325466156,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":1.0,"time":0.10000763088464737},{"alpha":0.0,"time":0.800000011920929}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":2.670156717300415,"g":2.2228007316589357,"b":0.0,"a":1.0},"time":0.0},{"color":{"r":170.89002990722657,"g":142.25924682617188,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":0.0,"time":1.0}],"gradientMode":0}'
     m_Space: -1
   m_Property:
     name: Color
@@ -3894,7 +3983,7 @@ MonoBehaviour:
   m_OutputSlots: []
   m_Disabled: 0
   m_ActivationSlot: {fileID: 8926484042661615396}
-  mode: 6
+  mode: 0
   axes: 4
   faceRay: 1
 --- !u!114 &8926484042661615396

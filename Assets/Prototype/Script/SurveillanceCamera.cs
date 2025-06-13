@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using static CommonSE_Proto;
 
 /// <summary>
@@ -58,6 +59,10 @@ public class SurveillanceCamera : MonoBehaviour
     //レイ用
     public float rayLength = 6.0f;   // Rayの長さ（6.0f）
     public int rayCount = 8;         // Rayの本数（例：6本で扇状）
+
+    // インパクトエフェクト
+    private VisualEffect impactEffect;
+
     private void Start()
     {
 
@@ -82,6 +87,16 @@ public class SurveillanceCamera : MonoBehaviour
             );
         }
 
+        // インパクトエフェクトを取得
+        impactEffect = GetComponentInChildren<VisualEffect>();
+        if (!impactEffect)
+        {
+            Debug.LogError(
+                "Script:SurveillanceCamera.cs \n" +
+                "impactEffectがnullです"
+            );
+        }
+        impactEffect.Stop(); // 初期状態ではエフェクトを停止
 
         SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
 
@@ -617,6 +632,7 @@ public class SurveillanceCamera : MonoBehaviour
         if (isPlayerInRange == true && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
         {
             AudioManager.Instance.PlaySE(3);
+            impactEffect.Play(); // インパクトエフェクトを再生
 
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側

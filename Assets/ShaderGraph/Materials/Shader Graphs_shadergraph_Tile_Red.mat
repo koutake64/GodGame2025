@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8851450265175944844
+--- !u!114 &-5101426989640090406
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_shadergraph_Area Light
-  m_Shader: {fileID: -6465566751694194690, guid: 7b56d9a2e4ac3194c8a2d8e7ca43db53, type: 3}
+  m_Name: Shader Graphs_shadergraph_Tile_Red
+  m_Shader: {fileID: -6465566751694194690, guid: 2c06a6232b16cf247938e56dd0fa3fc6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -37,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 3fe853859b5a2e94c94a347c296ba9ab, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,11 +55,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.231
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Tile: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.78431374, b: 0.5882353, a: 0}
-    - _TargetPosition: {r: 0, g: 0, b: 0, a: 0}
+    - _Offset: {r: 0.5, g: 0.5, b: 0.5, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
