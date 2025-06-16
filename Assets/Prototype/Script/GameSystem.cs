@@ -1,39 +1,33 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameSystem : MonoBehaviour
 {
+	[SerializeField, SceneSelector, Header("クリアシーン")] private string a;
+	
+// Hide--------------------------------------------------------------------------------------------------------------------------
 	private TimeManager timeManager;    // タイムマネージャー
-	private _FieldDataManager fdMng;
-	// TOdo 後で直す
-	[SerializeField, SceneSelector] private string a;
+	private _FieldDataManager fieldManager;
 	
 
 	private void Start()
     {
 		timeManager = FindAnyObjectByType<TimeManager>();
-		fdMng = FindAnyObjectByType<_FieldDataManager>();
+		fieldManager = FindAnyObjectByType<_FieldDataManager>();
 	}
-
-    private void FixedUpdate()
-    {
-        
-    }
 
 	private void LateUpdate()
 	{
-        if (fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal).Count <= 0)
+        if (fieldManager.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal).Count <= 0)
         {
             return;
         }
 
         // ゴールの位置を取得
-        List<Vector2Int> goalPositions = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal);
+        List<Vector2Int> goalPositions = fieldManager.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal);
 		
 		Vector2Int goalPos = goalPositions[0];
-		//Debug.Log("ゴール" +  goalPos);
-
+		
 		// 夜のみチェック
 		if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
 		{
@@ -49,11 +43,11 @@ public class GameSystem : MonoBehaviour
 			//List<Vector2Int> princessPositions = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
 
 			Vector3 pos = princessObj.transform.position;
-			Vector2Int pripos = new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));
+			Vector2Int princessPos = new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));
 
 			
 			// ゴールに到達しているか判定
-			if (pripos == goalPos)
+			if (princessPos == goalPos)
 			{
 				Debug.Log("お嬢様がゴール");
 				SceneChanger.ChangeScene(a);
