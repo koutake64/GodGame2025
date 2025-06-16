@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameSystem : MonoBehaviour
 {
-	[SerializeField, SceneSelector, Header("クリアシーン")] private string a;
+	[SerializeField, SceneSelector, Header("クリアシーン")] private string clearScene;
 	
 // Hide--------------------------------------------------------------------------------------------------------------------------
 	private TimeManager timeManager;    // タイムマネージャー
@@ -50,7 +50,7 @@ public class GameSystem : MonoBehaviour
 			if (princessPos == goalPos)
 			{
 				Debug.Log("お嬢様がゴール");
-				SceneChanger.ChangeScene(a);
+				SceneChanger.ChangeScene(clearScene);
 			}
 
 			
