@@ -9,6 +9,7 @@ TagManager:
   - playerObject
   - Security
   - Princess
+  - Treasure
   layers:
   - Default
   - TransparentFX
@@ -18,9 +19,9 @@ TagManager:
   - UI
   - Security
   - Player
-  - 
-  - 
-  - 
+  - Princess
+  - Field
+  - Treasure
   - 
   - 
   - 
