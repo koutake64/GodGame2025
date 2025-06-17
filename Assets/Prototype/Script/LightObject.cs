@@ -23,11 +23,12 @@ public class LightObject : MonoBehaviour
     [SerializeField] private float shadowAngle;
 
 
-    private _FieldDataManager   fieldData;  // _FieldDataManager
-    private LightDirection      direction;  // 現在の方向
-    private Vector2Int          pos;        // オブジェクトのマス
-    private Vector2Int          fieldSize;  // フィールドサイズ
-    private List<Vector2Int>    shadowList; // 影にする座標配列
+    private _FieldDataManager   fieldData;      // _FieldDataManager
+    private LightDirection      direction;      // 現在の方向
+    private Vector2Int          pos;            // オブジェクトのマス
+    private Vector2Int          fieldSize;      // フィールドサイズ
+    private List<Vector2Int>    shadowList;     // 影にする座標配列
+    private Vector2             lightForward;   // ライトの向き
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,6 +46,7 @@ public class LightObject : MonoBehaviour
         pos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         fieldSize = fieldData.GetFieldSize();
         shadowList = new List<Vector2Int>();
+        lightForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
 
         // 初期位置の影を計算
         CalcShadow();
@@ -57,67 +59,53 @@ public class LightObject : MonoBehaviour
 
     public void Action(Transform playerTransform)
     {
-        // 座標を一度intでキャスト
-        Vector2 playerPos = new Vector2((int)playerTransform.position.x, (int)playerTransform.position.z);
-
         // プレイヤーがライトに対してどの位置にいるか計算
-        Vector2 lightForward    = new Vector2(transform.forward.x, transform.forward.z).normalized;
-        Vector2 toPlayer        = new Vector2(playerPos.x - transform.position.x, playerPos.y - transform.position.z).normalized;
+        Vector2 toPlayer        = new Vector2(playerTransform.position.x - this.transform.position.x, playerTransform.position.z - this.transform.position.z).normalized;
+        
+        // 内積の計算により、ライトの向きに対しての位置関係を計算
         float dot = Vector2.Dot(lightForward, toPlayer);
 
-        float cross = lightForward.x * toPlayer.x - lightForward.y * toPlayer.y;
-
-
-        if (dot > 0) // ライトの前方
+        // しきい値で横にいても0にならない場合に対応
+        if(Mathf.Abs(dot) < 0.01)
         {
-        //    if(cross > 0) // ライトの左側
-        //    {
-        //        ChangeDirection((int)direction + LightDirection.Left);
-        //    }
-        //    else if(cross < 0) // ライトの右側
-        //    {
-        //        ChangeDirection((int)direction + LightDirection.Right);
-        //    }
-        //    else
-        //    {
-        //
-        //    }
+            dot = 0.0f;
         }
-        else if(dot < 0) // ライトの後方
-        {
-        //    if (cross > 0) // ライトの左側
-        //    {
-        //        ChangeDirection((int)direction + LightDirection.Right);
-        //    }
-        //    else if (cross < 0) // ライトの右側
-        //    {
-        //        ChangeDirection((int)direction + LightDirection.Left);
-        //    }
-        }
-        else // 真横   
+        
+        // 外積の計算を用いてライトに対して左右どちらにいるか判定
+        float cross = lightForward.x * toPlayer.y - lightForward.y * toPlayer.x;
+
+        // 横にいる場合にのみ処理を行う
+        if(dot == 0)
         {
             if (cross > 0) // ライトの左側
             {
-                ChangeDirection((int)direction + LightDirection.Right);
+                ChangeDirection(LightDirection.Right);
             }
             else if (cross < 0) // ライトの右側
             {
-                ChangeDirection((int)direction + LightDirection.Left);
+                ChangeDirection(LightDirection.Left);
             }
         }
     }
-    public void ChangeDirection(LightDirection newDirection)
+    public void ChangeDirection(LightDirection changeDirection)
     {
+        LightDirection newDirection = (int)direction + changeDirection;
+
         // 現在の方向と新しい方向で計算して方向を変えていいか計算する
-        int num = (int)(direction) + (int)(newDirection);
-        if(num < -1 || num > 1)
+        if(Mathf.Abs((int)newDirection) > 1)
         {
             return;
         }
 
         // 角度を更新
+        Vector3 currentAngle = transform.eulerAngles;
+
+        // 向きを更新
         direction = newDirection;
-        transform.rotation = Quaternion.Euler(0.0f, (float)direction * rotateAngle, 0.0f);
+
+        // 新しい方向を適用
+        currentAngle.y += (int)changeDirection * rotateAngle;
+        transform.eulerAngles = currentAngle;
         
         // 影の位置を再計算
         CalcShadow();
@@ -125,12 +113,16 @@ public class LightObject : MonoBehaviour
 
     private void CalcShadow()
     {
-        // 影を一度削除
-        foreach (var pos in shadowList)
+        // リストに要素があれば削除処理を実行
+        if (shadowList.Count > 0)
         {
-            fieldData.RemoveInfo(pos, _FieldDataManager.E_FIELDSTATE.shadow);
+            // 影を一度削除
+            foreach (var pos in shadowList)
+            {
+                fieldData.RemoveInfo(pos, _FieldDataManager.E_FIELDSTATE.shadow);
+            }
+            shadowList.Clear();
         }
-        shadowList.Clear();
 
         // 向いている方向
         Vector3 forward = transform.forward.normalized;
