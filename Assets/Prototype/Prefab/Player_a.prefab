@@ -127,6 +127,10 @@ PrefabInstance:
       value: SitujiModel
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 186a569949d88004f913b8df7b105a5f, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 186a569949d88004f913b8df7b105a5f, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -442,6 +446,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3ea6e2c5bb94d08479d9e4cc309fe77c, type: 3}
       propertyPath: m_Name
       value: Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3ea6e2c5bb94d08479d9e4cc309fe77c, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3ea6e2c5bb94d08479d9e4cc309fe77c, type: 3}
       propertyPath: m_IsActive

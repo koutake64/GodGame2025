@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2420902188870895393}
   - component: {fileID: 1152402442701406350}
   - component: {fileID: 2076246554502723337}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: vfxgraph_Impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1258899348915399607}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Goal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,6 +214,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
       propertyPath: m_Name
       value: Gakubuti2_10bai
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
       propertyPath: m_StaticEditorFlags

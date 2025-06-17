@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6003664098117285720}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FieldWall_ProBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 4761281964705966996}
   - component: {fileID: 3556416784140081374}
   - component: {fileID: 3091554720383549216}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8467213005563330967}
   - component: {fileID: 2535991989601560953}
   - component: {fileID: 4917263316823094982}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Window Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1487,7 +1487,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6003664098117285720}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FieldWall_Window_ProBuilder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1528,7 +1528,7 @@ GameObject:
   - component: {fileID: 7018655158591887164}
   - component: {fileID: 7252575078075682622}
   - component: {fileID: 5232095162241425420}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Window
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1880,7 +1880,7 @@ GameObject:
   - component: {fileID: 4761281964705966996}
   - component: {fileID: 3556416784140081374}
   - component: {fileID: 3091554720383549216}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3306,7 +3306,7 @@ GameObject:
   - component: {fileID: 731951102188532531}
   - component: {fileID: 7708854523965093700}
   - component: {fileID: 4413780296611597859}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Light0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3405,7 +3405,7 @@ GameObject:
   - component: {fileID: 4940265792028441757}
   - component: {fileID: 689418751440245102}
   - component: {fileID: 5914745147384102273}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Light1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
