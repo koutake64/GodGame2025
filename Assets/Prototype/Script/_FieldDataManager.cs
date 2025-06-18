@@ -155,6 +155,13 @@ public class _FieldDataManager : MonoBehaviour
             AddInfo(data[i].pos, data[i].state, data[i].dir, data[i].id);
         }
 
+        List<StageData.S_ROUTEINFO> routeList = sd.GetRoute();
+
+        for (int i = 0; i < routeList.Count; i++)
+        {
+            route.Add(routeList[i].id, routeList[i].route);
+        }
+
         // ---床の生成
         GameObject obj = null;
         bool tileType = false;

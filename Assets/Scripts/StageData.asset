@@ -174,3 +174,12 @@ MonoBehaviour:
     dir: 2
     id: -1
     state: 13
+  route:
+  - id: 10
+    route:
+    - {x: 1, y: 14}
+    - {x: 1, y: 13}
+  - id: 11
+    route:
+    - {x: 11, y: 14}
+    - {x: 19, y: 14}

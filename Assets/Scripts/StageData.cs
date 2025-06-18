@@ -13,8 +13,16 @@ public class StageData : ScriptableObject
         [Header("種類"), SerializeField] public _FieldDataManager.E_FIELDSTATE state;
     }
 
+    [System.Serializable]
+    public struct S_ROUTEINFO
+    {
+        [Header("ID<動かす警備員と同じID>"), SerializeField] public int id;
+        [Header("ルート"), SerializeField] public List<Vector2Int> route;
+    }
+
     [Header("大きさ"), SerializeField] private Vector2Int size;
     [Header("データ"), SerializeField] private List<S_STAGEINFO> data;
+    [Header("警備員ルート"), SerializeField] private List<S_ROUTEINFO> route;
 
     public List<S_STAGEINFO> GetData()
     {
@@ -26,5 +34,9 @@ public class StageData : ScriptableObject
         return size;
     }
 
+    public List<S_ROUTEINFO> GetRoute()
+    {
+        return route;
+    }
 
 }
