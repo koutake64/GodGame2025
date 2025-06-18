@@ -903,6 +903,15 @@ MonoBehaviour:
   princessTag: Princess
   offsetPosition: {x: 0, y: 10, z: -10}
   fixedRotation: {x: 40, y: 0, z: 0}
+  cinematicCullingMask:
+    serializedVersion: 2
+    m_Bits: 1792
+  cameraOffset: {x: 0, y: 3, z: -10}
+  treasureOffset0: {x: 0, y: 5, z: 0}
+  treasureOffset1: {x: 0, y: 3, z: -1}
+  spinSpeed: 60
+  targetFOV: 20
+  zoomSpeed: 5
 --- !u!114 &316948682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,7 +1028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b308f0049762245a0a5f9af8f66435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sd: {fileID: 11400000, guid: acd3f75f5ca3536428259fb9dcb6e677, type: 2}
+  sd: {fileID: 11400000, guid: a3b5542900354204694676ec9ae3b6f4, type: 2}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
   tileB: {fileID: 7211354190082184439, guid: 60ee7b33ea9f96e4684d479de684389e, type: 3}
@@ -1040,7 +1049,7 @@ MonoBehaviour:
   - {fileID: 1795901532624376505, guid: 29273c488a684ac4da43045bf69d7b17, type: 3}
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal:
-  - {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
+  - {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
   - {fileID: 2952474259421678109, guid: f2b6f5c1e07f2eb4b892c5ae8f85b4af, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
   rope: {fileID: 6181181272637633349, guid: 4a97dc5b166a8c041b1563713ab780ee, type: 3}

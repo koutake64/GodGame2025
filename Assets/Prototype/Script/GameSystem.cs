@@ -8,9 +8,10 @@ public class GameSystem : MonoBehaviour
 // Hide--------------------------------------------------------------------------------------------------------------------------
 	private TimeManager timeManager;    // タイムマネージャー
 	private _FieldDataManager fieldManager;
-	
 
-	private void Start()
+	private bool isGoal = false; // ゴールに到達したかのフラグ
+
+    private void Start()
     {
 		timeManager = FindAnyObjectByType<TimeManager>();
 		fieldManager = FindAnyObjectByType<_FieldDataManager>();
@@ -49,13 +50,21 @@ public class GameSystem : MonoBehaviour
 			// ゴールに到達しているか判定
 			if (princessPos == goalPos)
 			{
-				Debug.Log("お嬢様がゴール");
-				SceneChanger.ChangeScene(clearScene);
-			}
+				if (isGoal) return; // 既にゴールしている場合は何もしない
+				isGoal = true; // ゴールフラグを立てる
 
-			
+				// CameraManager に演出開始を通知
+				CameraManager camMgr = FindAnyObjectByType<CameraManager>();
+                if (camMgr != null)
+                {
+                    camMgr.StartCinematic();
+                }
+            }
 		}
-
-		
 	}
+
+	public bool GetIsGoal()
+	{
+		return isGoal;
+    }
 }
