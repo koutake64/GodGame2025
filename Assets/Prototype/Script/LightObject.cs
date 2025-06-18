@@ -28,7 +28,9 @@ public class LightObject : MonoBehaviour
     private Vector2Int          pos;            // オブジェクトのマス
     private Vector2Int          fieldSize;      // フィールドサイズ
     private List<Vector2Int>    shadowList;     // 影にする座標配列
-    private Vector2             lightForward;   // ライトの向き
+    private Vector2             lightForward;   // ライトの進行方向
+    private Vector2Int          lightDir;       // ライトの向き
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -47,6 +49,17 @@ public class LightObject : MonoBehaviour
         fieldSize = fieldData.GetFieldSize();
         shadowList = new List<Vector2Int>();
         lightForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
+
+
+        // 向いている方向
+        if (Mathf.Abs(lightForward.x) > Mathf.Abs(lightForward.y))
+        {
+            lightDir = lightForward.x > 0 ? Vector2Int.right : Vector2Int.left;
+        }
+        else
+        {
+            lightDir = lightForward.y > 0 ? Vector2Int.up : Vector2Int.down;
+        }
 
         // 初期位置の影を計算
         CalcShadow();
@@ -125,17 +138,6 @@ public class LightObject : MonoBehaviour
 
             // フィールドの色を変更
             fieldData.ChangeColor();
-        }
-
-        // 向いている方向
-        Vector2Int lightDir;
-        if (Mathf.Abs(lightForward.x) > Mathf.Abs(lightForward.y))
-        {
-            lightDir = lightForward.x > 0 ? Vector2Int.right : Vector2Int.left;
-        }
-        else
-        {
-            lightDir = lightForward.y > 0 ? Vector2Int.up : Vector2Int.down;
         }
 
         // 方向に応じて加算する値を変更する
@@ -242,11 +244,26 @@ public class LightObject : MonoBehaviour
                             // 右奥と左奥の遠い方を計算
                             float distLeft = Vector2Int.Distance(pos, backLeft);
                             float distRight = Vector2Int.Distance(pos, backRight);
-                            Vector2Int fartherSide = (distLeft > distRight) ? backLeft : backRight;
+                            Vector2Int fartherSide = new Vector2Int();
+                            if (distLeft == distRight)
+                            {
+                                if(direction == LightDirection.Left)
+                                {
+                                    fartherSide = backRight;
+                                }
+                                else 
+                                {
+                                    fartherSide = backLeft;
+                                }
+                            }
+                            else
+                            {
+                                fartherSide = distLeft > distRight ? backLeft : backRight;
+                            }
 
                             // オブジェクトとの角度を計算して角度に応じた影の位置を算出
-                            Vector3 toTargetVector = info.obj.transform.position - transform.position;
-                            float angle = Vector3.Angle(transform.forward, toTargetVector);
+                            Vector3 toTargetVector = (info.obj.transform.position - transform.position).normalized;
+                            float angle = Vector3.Angle(lightForward, toTargetVector);
 
                             if (angle <= shadowAngle || shadowDistance > distance)
                             {
@@ -277,7 +294,7 @@ public class LightObject : MonoBehaviour
                                 shadowList.Remove(targetPos);
                             }
 
-                            // 柱があったら他を処理する必要はないので終了
+                            // 柱があったらこのマスの後ろを処理する必要はないので終了
                             break;
                         }
                     }
