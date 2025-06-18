@@ -68,6 +68,24 @@ public class CameraManager : MonoBehaviour
 					if (playerObj != null)
 					{
 						playerTransform = playerObj.transform;
+
+						// プレイヤー初期位置が左端 or 右端か確認し、カメラ初期位置を調整
+						 fieldSize = fieldDataManager.GetFieldSize();
+						float playerX = playerTransform.position.x;
+
+						if (playerX < fieldSize.x / 2)
+						{
+							// 左端スタート：右に5マス離す
+							transform.position = playerTransform.position + new Vector3(5, offsetPosition.y, offsetPosition.z);
+						}
+						else
+						{
+							// 右端スタート：左に5マス離す
+							transform.position = playerTransform.position + new Vector3(-5, offsetPosition.y, offsetPosition.z);
+						}
+
+						// カメラ角度維持
+						transform.eulerAngles = fixedRotation;
 					}
 					else
 					{
@@ -76,11 +94,12 @@ public class CameraManager : MonoBehaviour
 					}
 				}
 
+				// 通常のカメラ追従処理
 				Vector2Int fieldSizeDay = fieldDataManager.GetFieldSize();
-				float playerX = playerTransform.position.x;
+				float playerXPos = playerTransform.position.x;
 				Vector3 targetPosDay = playerTransform.position + offsetPosition;
 
-				if (playerX < 5 || playerX > fieldSizeDay.x - 6)
+				if (playerXPos < 5 || playerXPos > fieldSizeDay.x - 6)
 				{
 					targetPosDay.x = transform.position.x;
 				}
