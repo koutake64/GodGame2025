@@ -60,12 +60,12 @@ public class LightObject : MonoBehaviour
     public void Action(Transform playerTransform)
     {
         // プレイヤーがライトに対してどの位置にいるか計算
-        Vector2 toPlayer        = new Vector2(playerTransform.position.x - this.transform.position.x, playerTransform.position.z - this.transform.position.z).normalized;
+        Vector2 toPlayer = new Vector2(playerTransform.position.x - this.transform.position.x, playerTransform.position.z - this.transform.position.z).normalized;
         
         // 内積の計算により、ライトの向きに対しての位置関係を計算
         float dot = Vector2.Dot(lightForward, toPlayer);
 
-        // しきい値で横にいても0にならない場合に対応
+        // しきい値で横にいても0.0fにならない場合に対応
         if(Mathf.Abs(dot) < 0.01)
         {
             dot = 0.0f;
@@ -122,22 +122,36 @@ public class LightObject : MonoBehaviour
                 fieldData.RemoveInfo(pos, _FieldDataManager.E_FIELDSTATE.shadow);
             }
             shadowList.Clear();
+
+            // フィールドの色を変更
+            fieldData.ChangeColor();
         }
 
         // 向いている方向
-        Vector3 forward = transform.forward.normalized;
         Vector2Int lightDir;
-        if (Mathf.Abs(forward.x) > Mathf.Abs(forward.z))
+        if (Mathf.Abs(lightForward.x) > Mathf.Abs(lightForward.y))
         {
-            lightDir = forward.x > 0 ? Vector2Int.right : Vector2Int.left;
+            lightDir = lightForward.x > 0 ? Vector2Int.right : Vector2Int.left;
         }
         else
         {
-            lightDir = forward.z > 0 ? Vector2Int.up : Vector2Int.down;
+            lightDir = lightForward.y > 0 ? Vector2Int.up : Vector2Int.down;
         }
 
-        // 横方向を取得
-        Vector2Int lateralDir = new Vector2Int(-lightDir.y, lightDir.x);
+        // 方向に応じて加算する値を変更する
+        Vector2Int lateralDir = new Vector2Int();
+        switch (direction)
+        {
+            case LightDirection.Left:
+                lateralDir = new Vector2Int(lightDir.y, lightDir.x);
+                break;
+            case LightDirection.Right:
+                lateralDir = new Vector2Int(lightDir.y, -lightDir.x);
+                break;
+            case LightDirection.Center:
+                lateralDir = new Vector2Int(-lightDir.y, lightDir.x);
+                break;
+        }
 
         // 障害物があった際の影フラグ
         bool isShadow = false;
@@ -202,11 +216,8 @@ public class LightObject : MonoBehaviour
             {
                 for (int j = 0; j < illuminateRange.y; ++j)
                 {
-                    // 前後どちらを向いているかで加算する値が変わるので計算
-                    int dirSign = ((lightDir == Vector2Int.right || lightDir == Vector2Int.up) ? 1 : -1) * (int)direction;
-
                     // 対象マスの座標を計算
-                    Vector2Int targetPos = pos + lightDir * (j + 1) + (lateralDir * i) * dirSign;
+                    Vector2Int targetPos = pos + lightDir * (j + 1) + lateralDir * i;
 
                     // 範囲外チェック
                     if (targetPos.x < 0 || targetPos.x >= fieldSize.x || targetPos.y < 0 || targetPos.y >= fieldSize.y)

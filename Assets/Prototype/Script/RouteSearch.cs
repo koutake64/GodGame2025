@@ -7,9 +7,6 @@ public class RouteSearch : MonoBehaviour
     private Vector2Int          fieldSize;  // フィールドサイズ
     private SecurityController  security;   // SecurityController
 
-    // TODO プロト終わったら消す
-    List<Vector2Int>            routed;     // デバッグ用通った道
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -108,13 +105,6 @@ public class RouteSearch : MonoBehaviour
         // リストの要素を反対にする
         route.Reverse();
 
-        // TODO プロト終わったら消す
-        Color color = Color.red;
-        foreach (var i in route)
-        {
-            //fieldData.SetColor(i, color);
-        }
-
         if (isInverse)
         {
             List<Vector2Int> routeKeep = new List<Vector2Int>(route);
@@ -122,7 +112,6 @@ public class RouteSearch : MonoBehaviour
             route.AddRange(routeKeep);
         }
 
-        routed = route;
         return route;
     }
     private bool IsWalkable(Vector2Int pos)
@@ -140,23 +129,5 @@ public class RouteSearch : MonoBehaviour
         }
 
         return true;
-    }
-
-    // TODO プロト終わったら消す
-    public void ResetTileColor()
-    {
-    //    foreach (var i in routed)
-    //    {
-    //        int num = i.x + i.y;
-    //
-    //        if(num % 2 == 0)
-    //        {
-    //            fieldData.SetColor(i, Color.gray);
-    //        }
-    //        else
-    //        {
-    //            fieldData.SetColor(i, Color.white);
-    //        }
-    //    }
     }
 }
