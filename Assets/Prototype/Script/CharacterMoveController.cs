@@ -369,13 +369,20 @@ public class CharacterMoveController : MonoBehaviour
         var objList = fieldData.GetInfoList(nextPos);
         foreach (var obj in objList)
         {
+            // í©ÇÕÇ®èÏólÇ∆é∑éñÇÇ©Ç‘Ç¡ÇƒÇ‡Ç¢Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
+            if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon && 
+                charaState == _FieldDataManager.E_FIELDSTATE.butler     && obj.state == _FieldDataManager.E_FIELDSTATE.princess ||
+                charaState == _FieldDataManager.E_FIELDSTATE.princess   && obj.state == _FieldDataManager.E_FIELDSTATE.butler)
+            {
+                return false;
+            }
+
             if (obj.state == _FieldDataManager.E_FIELDSTATE.butler ||
                 obj.state == _FieldDataManager.E_FIELDSTATE.princess ||
                 obj.state == _FieldDataManager.E_FIELDSTATE.securityGuard_N)
             {
                 return true;
             }
-
         }
         return false;
     }
