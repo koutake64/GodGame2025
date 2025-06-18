@@ -40,19 +40,19 @@ MonoBehaviour:
     state: 9
   - pos: {x: 8, y: 7}
     dir: 2
-    id: -1
+    id: 11
     state: 7
   - pos: {x: 16, y: 9}
     dir: 3
-    id: -1
+    id: 12
     state: 7
   - pos: {x: 17, y: 11}
     dir: 3
-    id: -1
+    id: 13
     state: 7
   - pos: {x: 0, y: 17}
     dir: 1
-    id: -1
+    id: 14
     state: 7
   - pos: {x: 19, y: 18}
     dir: 2
@@ -85,7 +85,7 @@ MonoBehaviour:
   - pos: {x: 4, y: 2}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 1, y: 14}
     dir: 2
     id: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   - pos: {x: 5, y: 12}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 5, y: 15}
     dir: 2
     id: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   - pos: {x: 7, y: 17}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 9, y: 3}
     dir: 2
     id: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   - pos: {x: 10, y: 12}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 10, y: 17}
     dir: 2
     id: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   - pos: {x: 14, y: 18}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 15, y: 13}
     dir: 2
     id: 0
@@ -186,3 +186,20 @@ MonoBehaviour:
     dir: 3
     id: -1
     state: 5
+  route:
+  - id: 14
+    route:
+    - {x: 2, y: 17}
+    - {x: 0, y: 17}
+  - id: 13
+    route:
+    - {x: 17, y: 6}
+    - {x: 17, y: 11}
+  - id: 12
+    route:
+    - {x: 11, y: 9}
+    - {x: 16, y: 9}
+  - id: 11
+    route:
+    - {x: 8, y: 0}
+    - {x: 8, y: 7}
