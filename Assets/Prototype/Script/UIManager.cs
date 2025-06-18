@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
         performance,// 画面演出
         backPanel,  // 背景パネル
         perforMemo, // 演出用メモ
+        gameClear,  // ゲームクリア
     }
 
     /// <summary>
@@ -119,6 +120,7 @@ public class UIManager : MonoBehaviour
         UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(false);
         UIDictionary.GetValueOrDefault(E_UI_KIND.backPanel).SetActive(false);
         UIDictionary.GetValueOrDefault(E_UI_KIND.perforMemo).SetActive(false);
+        UIDictionary.GetValueOrDefault(E_UI_KIND.gameClear).SetActive(false);
     }
 
     // Update is called once per frame
@@ -154,7 +156,6 @@ public class UIManager : MonoBehaviour
     {
         // 現在のフラグ状況を更新
         currentFlag = useMemo || usePerformance;
-
 
         // Tabキーでメモをポップアップする
         //if (Input.GetKeyDown(KeyCode.Tab))
@@ -205,17 +206,21 @@ public class UIManager : MonoBehaviour
         if(UIDictionary.TryGetValue(kind,out GameObject obj) && obj != null)
         {
             obj.SetActive(active);
+            switch (kind)
+            {
+                case E_UI_KIND.memo:
+                    useMemo = use;
+                    break;
+                case E_UI_KIND.timeIcon:
+                    break;
+                case E_UI_KIND.gameClear:
+                    obj.GetComponent<UIAnimator>().Play();
+                    break;
+                default:
+                    break;
+            }
         }
-        switch(kind)
-        {
-            case E_UI_KIND.memo:
-                useMemo = use;
-                break;
-            case E_UI_KIND.timeIcon:
-                break;
-            default:
-                break;
-        }
+       
     }
 
     /// <summary>

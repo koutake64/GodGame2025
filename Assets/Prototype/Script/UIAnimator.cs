@@ -44,7 +44,10 @@ public class UIAnimator : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        if (isCurrentPos)
+        {
+            startPos = this.GetComponent<RectTransform>().anchoredPosition;
+        }
     }
 
     // Update is called once per frame
