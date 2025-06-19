@@ -205,7 +205,11 @@ public class CameraManager : MonoBehaviour
                 if (treasure == null && obj.gameObject.layer == treasureLayer)
                 { 
                     treasure = obj;
-                    treasureEffect = treasure.GetComponentInChildren<TreasureEffect>();
+                    treasureEffect = treasure.GetComponent<TreasureEffect>();
+                    if (treasureEffect == null)
+                    {
+                        Debug.LogError("TreasureEffectコンポーネントが見つかりません。宝物オブジェクトにアタッチしてください。");
+                    }
                 }
 
                 if (obj.gameObject.layer == securityLayer)
@@ -213,7 +217,10 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        treasureEffect.StartGetEffect(); // 宝物の取得エフェクトを開始
+        if (treasureEffect != null)
+        {
+            treasureEffect.StartGetEffect(); // 宝物の取得エフェクトを開始
+        }
 
         StartCoroutine(MoveCameraToPrincess());
     }
