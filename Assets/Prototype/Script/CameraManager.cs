@@ -13,11 +13,13 @@ public class CameraManager : MonoBehaviour
     private _FieldDataManager fieldDataManager;
     private GameSystem gameSystem;
     private UIManager uiManager;
+    private TreasureEffect treasureEffect;
     private bool initNightPos = false;
 
     private Camera mainCamera;
     private Transform princess;
     private Transform treasure;
+    private Transform security;
 
     [Header("***ゴール演出***")]
 
@@ -28,8 +30,8 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Vector3 cameraOffset = new Vector3(0, 3f, -10f);
 
     [Header("お宝の頭上オフセット")]
-    [SerializeField] private Vector3 treasureOffset0 = new Vector3(0, 5f, 0);
-    [SerializeField] private Vector3 treasureOffset1 = new Vector3(0, 3f, -1f);
+    [SerializeField] private Vector3 treasureOffset0 = new Vector3(0, 3f, 0);
+    [SerializeField] private Vector3 treasureOffset1 = new Vector3(0, 1f, -1f);
 
     [Header("宝物の回転速度")]
     [SerializeField] private float spinSpeed = 60f;
@@ -178,7 +180,7 @@ public class CameraManager : MonoBehaviour
             mainCamera.fieldOfView = Mathf.MoveTowards(mainCamera.fieldOfView, targetFOV, zoomSpeed * Time.deltaTime);
             // 宝物をくるくる回転
             treasure.Rotate(Vector3.up * spinSpeed * Time.deltaTime, Space.World);
-            Invoke("GameClear", 10.0f); // ゲームクリアUI表示)
+            Invoke("GameClear", 6.0f); // ゲームクリアUI表示)
         }
     }
 
@@ -188,8 +190,9 @@ public class CameraManager : MonoBehaviour
 
         int princessLayer = LayerMask.NameToLayer("Princess");
         int treasureLayer = LayerMask.NameToLayer("Treasure");
+        int securityLayer = LayerMask.NameToLayer("Security");
 
-        if (princess == null || treasure == null)
+        if (princess == null || treasure == null || security == null)
         {
             var allObjects = GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None);
 
@@ -200,9 +203,17 @@ public class CameraManager : MonoBehaviour
                     princess = obj;
 
                 if (treasure == null && obj.gameObject.layer == treasureLayer)
+                { 
                     treasure = obj;
+                    treasureEffect = treasure.GetComponentInChildren<TreasureEffect>();
+                }
+
+                if (obj.gameObject.layer == securityLayer)
+                    Destroy(obj.gameObject);
             }
         }
+
+        treasureEffect.StartGetEffect(); // 宝物の取得エフェクトを開始
 
         StartCoroutine(MoveCameraToPrincess());
     }

@@ -31,6 +31,7 @@ public class SecurityController : MonoBehaviour
     private Vector2Int              initPos;        // 初期位置
     private TimeManager             timeManager;    // タイムマネージャー
     private UIManager               uiManager;      // UIマネージャー
+    private SecurityEffect          securityEffect; // セキュリティエフェクト
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -67,6 +68,15 @@ public class SecurityController : MonoBehaviour
             Debug.LogError(
                "Script:CharacterMoveController.cs \n" +
                "uiManagerがnullです"
+            );
+        }
+
+        securityEffect = GetComponentInChildren<SecurityEffect>();
+        if(!securityEffect)
+        {
+            Debug.LogError(
+               "Script:SecurityController.cs \n" +
+               "securityEffectがnullです"
             );
         }
 
@@ -176,6 +186,8 @@ public class SecurityController : MonoBehaviour
                         return;
                     }
                 }
+
+                securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
 
                 // お姫様を発見
                 uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);

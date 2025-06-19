@@ -63,6 +63,9 @@ public class SurveillanceCamera : MonoBehaviour
     // インパクトエフェクト
     private VisualEffect impactEffect;
 
+    // 警備員のエフェクトスクリプト
+    private SecurityEffect securityEffect;
+
     private void Start()
     {
 
@@ -417,6 +420,12 @@ public class SurveillanceCamera : MonoBehaviour
 
                             // ターゲット座標を通知
                             obj.FoundPrincess(targetPos);
+
+                            securityEffect = obj.GetComponent<SecurityEffect>();
+                            if (securityEffect != null)
+                            {
+                                securityEffect.StartSingleAlertEffect(); // エフェクトを再生
+                            }
 
                             frameCount = 0;
                         }
