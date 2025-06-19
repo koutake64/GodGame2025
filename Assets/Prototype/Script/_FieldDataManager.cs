@@ -37,7 +37,8 @@ public class _FieldDataManager : MonoBehaviour
         shadow,             // 影
 
         // --- その他
-        talk                // お花しするマス
+        talk,               // お花しするマス
+        testtttttttt        // 消す
 
     }
 
@@ -734,6 +735,25 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
+        _PrincessDecideTargetPos pdtp = GameObject.FindWithTag("Princess").GetComponent<_PrincessDecideTargetPos>();
+        if (pdtp != null)
+        {
+            List<Vector2Int> range = pdtp.GetRange();
+
+            for (int i = 0; i < range.Count; ++i)
+            {
+                int x = range[i].x;
+                int y = range[i].y;
+
+                if (x >= 0 && x < state.GetLength(0) && y >= 0 && y < state.GetLength(1))
+                {
+                    state[x, y] = E_FIELDSTATE.testtttttttt;
+                }
+
+            }
+
+        }
+
         for (int y = 0; y < fieldSize.y; ++y)
         {
             for (int x = 0; x < fieldSize.x; ++x)
@@ -764,7 +784,6 @@ public class _FieldDataManager : MonoBehaviour
                    
                     }
 
-
                 }
 
             }
@@ -788,6 +807,12 @@ public class _FieldDataManager : MonoBehaviour
                     var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
                     renderer.material = new Material(renderer.sharedMaterial);
                     renderer.material.color = Color.black;
+                }
+                else if (state[x, y] == E_FIELDSTATE.testtttttttt)
+                {
+                    var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
+                    renderer.material = new Material(renderer.sharedMaterial);
+                    renderer.material.color = Color.cyan;
                 }
                 else
                 {
@@ -817,4 +842,10 @@ public class _FieldDataManager : MonoBehaviour
             }
         }
     }
+
+    public int GetStageNum()
+    {
+        return sd.GetStageNum();
+    }
+
 }

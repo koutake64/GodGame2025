@@ -20,9 +20,15 @@ public class StageData : ScriptableObject
         [Header("ルート"), SerializeField] public List<Vector2Int> route;
     }
 
+    [Header("ステージナンバー"), SerializeField] private int stageNum;
     [Header("大きさ"), SerializeField] private Vector2Int size;
     [Header("データ"), SerializeField] private List<S_STAGEINFO> data;
     [Header("警備員ルート"), SerializeField] private List<S_ROUTEINFO> route;
+
+    public int GetStageNum()
+    {
+        return stageNum;
+    }
 
     public List<S_STAGEINFO> GetData()
     {

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 168245a7c07a4894db3b57baa5f9816e, type: 3}
   m_Name: Stage2
   m_EditorClassIdentifier: 
+  stageNum: 2
   size: {x: 20, y: 19}
   data:
   - pos: {x: 19, y: 1}

@@ -36,7 +36,14 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             Debug.Log("owari");
         }
 
-        keyList.Add(5);
+        if (fdMng.GetStageNum() == 1)
+        {
+            keyList.Add(5);
+        }
+        else if (fdMng.GetStageNum() == 2)
+        {
+            keyList.Add(3);
+        }
 
     }
 
@@ -62,9 +69,9 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     private void MorningUpdate()
     {
         // 仮
+        SetSearchRange();
         if (!cmController.GetAutoMove())
         {
-            SetSearchRange();
             DecideTargetPos();
             cmController.StartAutoMove(nextTargetPos);
             //Debug.Log(
@@ -75,9 +82,9 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private void NightUpdate()
     {
+        SetSearchRange();
         if (!cmController.GetAutoMove())
         {
-            SetSearchRange();
             DecideTargetPos();
             cmController.StartAutoMove(nextTargetPos);
             //Debug.Log(
@@ -90,32 +97,35 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     {
         searchRangePosList.Clear();
 
-        if (fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal).Count <= 0)
-        {
-            return;
-        }
+        List<Vector2Int> goalList = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal);
+        if (goalList.Count <= 0) return;
 
-        Vector2Int goalPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal)[0];
+        Vector2Int goalPos = goalList[0];
         Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
-
         Vector2Int direction = goalPos - princessPos;
 
-        Vector2Int offset = new Vector2Int();
-        offset.x = direction.x >= 0 ? (searchRange - 1) * -1 : 0;
-        offset.y = direction.y >= 0 ? (searchRange - 1) * -1 : 0;
-
-        Vector2Int start = princessPos + offset;
+        // x, y方向の向きを決定（+1 or -1）
+        int dirX = direction.x >= 0 ? 1 : -1;
+        int dirY = direction.y >= 0 ? 1 : -1;
 
         for (int y = 0; y < searchRange; ++y)
         {
             for (int x = 0; x < searchRange; ++x)
             {
-                Vector2Int p = start + new Vector2Int(x, y);
-                searchRangePosList.Add(p);
+                Vector2Int offset = new Vector2Int(x * dirX, y * dirY);
+                Vector2Int p = princessPos + offset;
+
+                // 範囲チェック（任意：マップ外アクセス防止）
+                if (p.x >= 0 && p.y >= 0)
+                {
+                    searchRangePosList.Add(p);
+                }
             }
         }
 
+        fdMng.ChangeColor();
     }
+
 
     private void DecideTargetPos()
     {
@@ -133,6 +143,9 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         // 壁座標取得
         List<Vector2Int> wallPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.wall);
 
+        // 影の座標取得
+        List<Vector2Int> shadowPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.shadow);
+
         // 展示台座標取得
         List<Vector2Int> exhibitionStandPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.exhibitionStand);
 
@@ -141,109 +154,6 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
         // Dictionaryで配列を確保
         Dictionary<int, List<_FieldDataManager.S_FIELDINFO>> alignmentGroups = new Dictionary<int, List<_FieldDataManager.S_FIELDINFO>>();
-
-        //// IDごとにグループ化
-        //void GroupByAlignment(List<Vector2Int> positions)
-        //{
-        //    foreach (var pos in positions)
-        //    {
-        //        var infoList = fdMng.GetInfoList(pos);
-        //        foreach (var info in infoList)
-        //        {
-        //            // IDが入っていなければ次へ
-        //            if (info.alignmentID == -1) continue;
-
-        //            // 一度もそのIDで配列確保されていなければIDの添字で配列確保
-        //            if (!alignmentGroups.ContainsKey(info.alignmentID))
-        //            {
-        //                alignmentGroups[info.alignmentID] = new List<_FieldDataManager.S_FIELDINFO>();
-        //            }
-
-        //            // IDの添字に情報追加
-        //            alignmentGroups[info.alignmentID].Add(info);
-        //        }
-        //    }
-        //}
-
-        //// IDごとに配列に格納
-        //GroupByAlignment(wallPos);
-        //GroupByAlignment(exhibitionStandPos);
-
-        //foreach (var kv in alignmentGroups)
-        //{
-        //    var group = kv.Value;
-
-        //    // グループ内の要素数が2未満の場合は次へ
-        //    if (group.Count < 2) continue;
-
-        //    // 方向が左右のどちらかならtrue
-        //    bool isHorizontal = group[0].dir == CommonSE_Proto.E_DIRECTION.right || group[0].dir == CommonSE_Proto.E_DIRECTION.left;
-
-        //    // 方向に応じてソート
-        //    group.Sort((a, b) => isHorizontal ? a.pos.x.CompareTo(b.pos.x) : a.pos.y.CompareTo(b.pos.y));
-
-        //    // グループの端の座標を取得
-        //    List<Vector2Int> first = new List<Vector2Int>();
-        //    if (fdMng.GetIsThrough(group[0].pos + Vector2Int.up))
-        //        first.Add(group[0].pos + Vector2Int.up);
-        //    if (fdMng.GetIsThrough(group[0].pos + Vector2Int.right))
-        //        first.Add(group[0].pos + Vector2Int.right);
-        //    if (fdMng.GetIsThrough(group[0].pos + Vector2Int.down))
-        //        first.Add(group[0].pos + Vector2Int.down);
-        //    if (fdMng.GetIsThrough(group[0].pos + Vector2Int.left))
-        //        first.Add(group[0].pos + Vector2Int.left);
-
-        //   List<Vector2Int> last = new List<Vector2Int>();
-        //    if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.up))
-        //        first.Add(group[^1].pos + Vector2Int.up);
-        //    if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.right))
-        //        first.Add(group[^1].pos + Vector2Int.right);
-        //    if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.down))
-        //        first.Add(group[^1].pos + Vector2Int.down);
-        //    if (fdMng.GetIsThrough(group[^1].pos + Vector2Int.left))
-        //        first.Add(group[^1].pos + Vector2Int.left);
-
-        //    for(int j = 0; j < first.Count; ++j)
-        //    {
-        //        for (int i = 0; i < last.Count; ++i)
-        //        {
-        //            if (princessPos == first[j] && prevEdgeTargetPos != last[i])
-        //            {
-        //                if (j < 2)
-        //                {
-        //                    prevTargetPos = nextTargetPos;
-        //                    nextTargetPos = last[j];
-        //                    prevEdgeTargetPos = first[j];
-        //                }
-        //                else
-        //                {
-        //                    prevTargetPos = nextTargetPos;
-        //                    nextTargetPos = last[j];
-        //                    prevEdgeTargetPos = first[j];
-        //                }
-        //            }
-        //        }
-        //    }
-
-
-            //if (princessPos == first && last != prevEdgeTargetPos)
-            //{
-            //    return;
-            //}
-
-            // 対象がグループの端にいて、過去座標ともう一方の端座標が違う場合、もう一方の端をターゲットに設定
-            //if (princessPos == first && last != prevEdgeTargetPos)
-            //{
-            //    return;
-            //}
-            //else if (princessPos == last && first != prevEdgeTargetPos)
-            //{
-            //    prevTargetPos = nextTargetPos;
-            //    nextTargetPos = first;
-            //    prevEdgeTargetPos = last;
-            //    return;
-            //}
-        //}
 
         // ターゲット候補の座標リストにゴール座標を追加
         //List<Vector2Int> candidatePosDic = new List<Vector2Int>();
@@ -285,46 +195,25 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             cnt++;
         }
 
-        //void AddAroundWithAlignmentCheck(List<Vector2Int> baseList)
-        //{
-        //    foreach (var pos in baseList)
-        //    {
-        //        var infoList = fdMng.GetInfoList(pos);
-        //        foreach (var info in infoList)
-        //        {
-        //            // IDがない場合は次へ
-        //            if (info.alignmentID == -1) continue;
-
-        //            // 指定座標の周囲4箇所を移動候補リストに追加
-        //            if (fdMng.GetIsThrough(info.pos + Vector2Int.up))
-        //            {
-        //                candidatePosDic.Add(info.pos + Vector2Int.up);
-        //            }
-        //            if (fdMng.GetIsThrough(info.pos + Vector2Int.right))
-        //            {
-        //                candidatePosDic.Add(info.pos + Vector2Int.right);
-        //            }
-        //            if (fdMng.GetIsThrough(info.pos + Vector2Int.down))
-        //            {
-        //                candidatePosDic.Add(info.pos + Vector2Int.down);
-        //            }
-        //            if (fdMng.GetIsThrough(info.pos + Vector2Int.left))
-        //            {
-        //                candidatePosDic.Add(info.pos + Vector2Int.left);
-        //            }
-        //        }
-        //    }
-        //}
-
-        // 壁と展示台の周囲の座標を移動候補リストに追加
-        //AddAroundWithAlignmentCheck(wallPos);
-        //AddAroundWithAlignmentCheck(exhibitionStandPos);
-
         // 最適なターゲット座標を算出するための距離
         int minDistToPrincess = int.MaxValue;
         int minDistToGoal = int.MaxValue;
         Vector2Int bestTarget = princessPos;
         int key = 0;
+
+        // 範囲内に影があれば優先して移動する
+        for (int i = 0; i < shadowPos.Count; ++i)
+        {
+            for (int j = 0; j < searchRangePosList.Count; ++j)
+            {
+                if (shadowPos[i] == searchRangePosList[j] && shadowPos[i] != prevTargetPos)
+                {
+                    prevTargetPos = nextTargetPos;
+                    nextTargetPos = shadowPos[i];
+                    return;
+                }
+            }
+        }
 
         // 移動候補リストの中でプリンセスとゴールとの距離を計算しターゲットを決定
         foreach (var list in candidatePosDic)
@@ -368,8 +257,14 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
 
-        //Debug.Log(
-        //    "key : " + currentKey
-        //    );
+        Debug.Log(
+            "key : " + currentKey
+            );
     }
+
+    public List<Vector2Int> GetRange()
+    {
+        return searchRangePosList;
+    }
+
 }
