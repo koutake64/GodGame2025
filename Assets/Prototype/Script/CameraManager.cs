@@ -186,16 +186,19 @@ public class CameraManager : MonoBehaviour
 
     public void StartCinematic()
     {
-        Camera.main.cullingMask = cinematicCullingMask; // カリングマスクを変更
+        Camera.main.cullingMask = cinematicCullingMask;
+        StartCoroutine(FindObjectsAndStartCinematic());
+    }
 
+    IEnumerator FindObjectsAndStartCinematic()
+    {
         int princessLayer = LayerMask.NameToLayer("Princess");
         int treasureLayer = LayerMask.NameToLayer("Treasure");
         int securityLayer = LayerMask.NameToLayer("Security");
 
-        if (princess == null || treasure == null || security == null)
+        while (princess == null || treasure == null)
         {
             var allObjects = GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None);
-
 
             foreach (var obj in allObjects)
             {
@@ -203,28 +206,35 @@ public class CameraManager : MonoBehaviour
                     princess = obj;
 
                 if (treasure == null && obj.gameObject.layer == treasureLayer)
-                { 
                     treasure = obj;
-                    treasureEffect = treasure.GetComponent<TreasureEffect>();
-                    //obj.gameObject.GetComponent<TreasureEffect>();
-                    if (treasureEffect == null)
-                    {
-                        Debug.LogWarning("TreasureEffectコンポーネントが見つかりません。宝物オブジェクトにアタッチしてください。");
-                    }
-                }
-
-                if (obj.gameObject.layer == securityLayer)
-                    Destroy(obj.gameObject);
             }
+
+            yield return null;
         }
 
-        if (treasureEffect != null)
+        // 警備員は取得でき次第削除
+        foreach (var obj in GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None))
         {
-            treasureEffect.StartGetEffect(); // 宝物の取得エフェクトを開始
+            if (obj.gameObject.layer == securityLayer)
+                Destroy(obj.gameObject);
+        }
+
+        // TreasureEffect を待つ
+        while (treasureEffect == null)
+        {
+            treasureEffect = treasure.GetComponent<TreasureEffect>();
+            if (treasureEffect != null)
+            {
+                treasureEffect.StartGetEffect(); // エフェクト再生
+                break;
+            }
+
+            yield return null; // 次フレームへ
         }
 
         StartCoroutine(MoveCameraToPrincess());
     }
+
 
     private IEnumerator MoveCameraToPrincess()
     {
