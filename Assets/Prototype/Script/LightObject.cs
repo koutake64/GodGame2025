@@ -135,9 +135,6 @@ public class LightObject : MonoBehaviour
                 fieldData.RemoveInfo(pos, _FieldDataManager.E_FIELDSTATE.shadow);
             }
             shadowList.Clear();
-
-            // フィールドの色を変更
-            fieldData.ChangeColor();
         }
 
         // 方向に応じて加算する値を変更する
@@ -311,6 +308,9 @@ public class LightObject : MonoBehaviour
         {
             fieldData.AddInfo(shadow, _FieldDataManager.E_FIELDSTATE.shadow);
         }
+
+        // フィールドの色を変更
+        fieldData.ChangeColor();
     }
 
     public List<Vector2Int> GetShadowList()
