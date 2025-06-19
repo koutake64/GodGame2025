@@ -241,8 +241,10 @@ public class LightObject : MonoBehaviour
                             
                             // ‰e‚É‚·‚éŒó•â‚ÌÀ•W‚ðŒvŽZ
                             Vector2Int back         = targetPos + lightDir;
-                            Vector2Int backLeft     = back + lateralDir;
-                            Vector2Int backRight    = back - lateralDir;
+
+                            // ƒJƒƒ‰‚ÌŒü‚«‚É‚æ‚Á‚Ä‰e‚Ì¶‰E‚ª•Ï‚í‚ç‚È‚¢‚æ‚¤‚É“ñæ‚µ‚Ä‘S‚Ä+‚É‚·‚é
+                            Vector2Int backLeft     = back + new Vector2Int(lateralDir.x * lateralDir.x, lateralDir.y * lateralDir.y);
+                            Vector2Int backRight    = back - new Vector2Int(lateralDir.x * lateralDir.x, lateralDir.y * lateralDir.y);
 
                             // ‰E‰œ‚Æ¶‰œ‚Ì‰“‚¢•û‚ðŒvŽZ
                             float distLeft = Vector2Int.Distance(pos, backLeft);
@@ -250,13 +252,29 @@ public class LightObject : MonoBehaviour
                             Vector2Int fartherSide = new Vector2Int();
                             if (distLeft == distRight)
                             {
-                                if(direction == LightDirection.Left)
+                                if (lightDir.x > 0 || lightDir.y > 0)
                                 {
-                                    fartherSide = backRight;
+                                    if (direction == LightDirection.Left)
+                                    {
+                                        fartherSide = backLeft;
+                                    }
+                                    else
+                                    {
+                                        fartherSide = backRight;
+                                    }
+
+
                                 }
-                                else 
+                                else if (lightDir.x < 0 || lightDir.y < 0)
                                 {
-                                    fartherSide = backLeft;
+                                    if (direction == LightDirection.Left)
+                                    {
+                                        fartherSide = backRight;
+                                    }
+                                    else
+                                    {
+                                        fartherSide = backLeft;
+                                    }
                                 }
                             }
                             else
