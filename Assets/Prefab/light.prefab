@@ -83,5 +83,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   illuminateRange: {x: 3, y: 5}
   rotateAngle: 45
-  shadowDistance: 3
-  shadowAngle: 3
+  diagonalShadowDistance: 2
+  backShadowDistance: 2
+  shadowAngle: 15

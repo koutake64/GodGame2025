@@ -16,8 +16,11 @@ public class LightObject : MonoBehaviour
     [Header("•ûŒü‚ð‚¸‚ç‚µ‚½Û‚Ì‰ñ“]Šp“x")]
     [SerializeField, Range(0, 90)] private float rotateAngle;
 
-    [Header("‰e‚ª2‚Â‚É‚È‚é‹——£")]
-    [SerializeField] private float shadowDistance;
+    [Header("‚±‚Ì’l‚ð’´‚¦‚½‚çŽÎ‚ß‚É‚µ‚©‰e‚ðì‚ç‚È‚¢‹——£")]
+    [SerializeField] private float diagonalShadowDistance;
+
+    [Header("‚±‚Ì‹——£ˆÈã‚É‚È‚Á‚½‚çŒã‚ë‚É‚µ‚©‰e‚É‚µ‚È‚¢")]
+    [SerializeField] private float backShadowDistance;
 
     [Header("‰e‚ª2‚Â‚É‚È‚éŠp“x")]
     [SerializeField] private float shadowAngle;
@@ -142,12 +145,12 @@ public class LightObject : MonoBehaviour
         switch (direction)
         {
             case LightDirection.Left:
-                lateralDir = new Vector2Int(lightDir.y, lightDir.x);
+                lateralDir = new Vector2Int(-lightDir.y, lightDir.x);
                 break;
             case LightDirection.Right:
                 lateralDir = new Vector2Int(lightDir.y, -lightDir.x);
                 break;
-            case LightDirection.Center:
+            default:  // Center
                 lateralDir = new Vector2Int(-lightDir.y, lightDir.x);
                 break;
         }
@@ -252,30 +255,10 @@ public class LightObject : MonoBehaviour
                             Vector2Int fartherSide = new Vector2Int();
                             if (distLeft == distRight)
                             {
-                                if (lightDir.x > 0 || lightDir.y > 0)
-                                {
-                                    if (direction == LightDirection.Left)
-                                    {
-                                        fartherSide = backLeft;
-                                    }
-                                    else
-                                    {
-                                        fartherSide = backRight;
-                                    }
-
-
-                                }
-                                else if (lightDir.x < 0 || lightDir.y < 0)
-                                {
-                                    if (direction == LightDirection.Left)
-                                    {
-                                        fartherSide = backRight;
-                                    }
-                                    else
-                                    {
-                                        fartherSide = backLeft;
-                                    }
-                                }
+                                if (direction == LightDirection.Left)
+                                    fartherSide = backLeft;
+                                else if (direction == LightDirection.Right)
+                                    fartherSide = backRight;
                             }
                             else
                             {
@@ -292,12 +275,28 @@ public class LightObject : MonoBehaviour
                                 shadowList.Add(back);
                             }
 
-                            // Žw’èŠp“xˆÈ“à‚É‚È‚Á‚½‚ç
-                            if (angle <= shadowAngle && shadowDistance >= distance)
+                            // Žw’èŠp“xˆÈã‚É‚È‚Á‚½‚ç
+                            if (angle > shadowAngle)
                             {
-                                if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
+                                if (diagonalShadowDistance < distance)
                                 {
-                                    shadowList.Add(fartherSide);
+                                    if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
+                                    {
+                                        shadowList.Add(fartherSide);
+                                    }
+
+                                    // ŽÎ‚ß‚É‚µ‚©‰e‚ðì‚è‚½‚­‚È‚¢‚Ì‚ÅŒã‚ë‚ðíœ
+                                    if (shadowList.Contains(back))
+                                    {
+                                        shadowList.Remove(back);
+                                    }
+                                }
+                                else
+                                {
+                                    if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
+                                    {
+                                        shadowList.Add(fartherSide);
+                                    }
                                 }
                             }
 
