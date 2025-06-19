@@ -186,55 +186,49 @@ public class CameraManager : MonoBehaviour
 
     public void StartCinematic()
     {
+        // カリングマスク変更
         Camera.main.cullingMask = cinematicCullingMask;
-        StartCoroutine(FindObjectsAndStartCinematic());
-    }
 
-    IEnumerator FindObjectsAndStartCinematic()
-    {
-        int princessLayer = LayerMask.NameToLayer("Princess");
-        int treasureLayer = LayerMask.NameToLayer("Treasure");
-        int securityLayer = LayerMask.NameToLayer("Security");
+        // Princess取得
+        GameObject princessObj = GameObject.FindWithTag("Princess");
+        if (princessObj != null)
+            princess = princessObj.transform;
+        else
+            Debug.LogError("Princessタグがついたオブジェクトが見つかりません");
 
-        while (princess == null || treasure == null)
+        // Treasure取得
+        GameObject treasureObj = GameObject.FindWithTag("Treasure");
+        if (treasureObj != null)
         {
-            var allObjects = GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None);
+            treasure = treasureObj.transform;
 
-            foreach (var obj in allObjects)
+            // 子オブジェクトも含めて TreasureEffect を取得
+            treasureEffect = treasure.GetComponentInChildren<TreasureEffect>();
+            if (treasureEffect == null)
             {
-                if (princess == null && obj.gameObject.layer == princessLayer)
-                    princess = obj;
-
-                if (treasure == null && obj.gameObject.layer == treasureLayer)
-                    treasure = obj;
+                Debug.LogError("TreasureEffect コンポーネントが Treasure またはその子に見つかりません");
             }
-
-            yield return null;
+        }
+        else
+        {
+            Debug.LogError("Treasureタグがついたオブジェクトが見つかりません");
         }
 
-        // 警備員は取得でき次第削除
-        foreach (var obj in GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None))
+        // 警備員削除
+        int securityLayer = LayerMask.NameToLayer("Security");
+        var allObjects = GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None);
+        foreach (var obj in allObjects)
         {
             if (obj.gameObject.layer == securityLayer)
                 Destroy(obj.gameObject);
         }
 
-        // TreasureEffect を待つ
-        while (treasureEffect == null)
-        {
-            treasureEffect = treasure.GetComponent<TreasureEffect>();
-            if (treasureEffect != null)
-            {
-                treasureEffect.StartGetEffect(); // エフェクト再生
-                break;
-            }
+        // エフェクト再生
+        treasureEffect?.StartGetEffect();
 
-            yield return null; // 次フレームへ
-        }
-
+        // カメラ演出開始
         StartCoroutine(MoveCameraToPrincess());
     }
-
 
     private IEnumerator MoveCameraToPrincess()
     {
