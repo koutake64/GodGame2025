@@ -206,9 +206,10 @@ public class CameraManager : MonoBehaviour
                 { 
                     treasure = obj;
                     treasureEffect = treasure.GetComponent<TreasureEffect>();
+                    //obj.gameObject.GetComponent<TreasureEffect>();
                     if (treasureEffect == null)
                     {
-                        Debug.LogError("TreasureEffectコンポーネントが見つかりません。宝物オブジェクトにアタッチしてください。");
+                        Debug.LogWarning("TreasureEffectコンポーネントが見つかりません。宝物オブジェクトにアタッチしてください。");
                     }
                 }
 
