@@ -92,6 +92,9 @@ public class PlayerMove : MonoBehaviour
 			var infoList = fieldData.GetInfoList(targetPos);
 			foreach (var info in infoList) 
 			{
+				// オブジェクトがない場合は次へ
+				if (!info.obj) continue;
+
 				var camera = info.obj.GetComponent<SurveillanceCamera>();
 				if(camera)
 				{
