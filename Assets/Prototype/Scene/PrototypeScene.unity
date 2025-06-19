@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b308f0049762245a0a5f9af8f66435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sd: {fileID: 11400000, guid: a3b5542900354204694676ec9ae3b6f4, type: 2}
+  sd: {fileID: 11400000, guid: acd3f75f5ca3536428259fb9dcb6e677, type: 2}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
   tileB: {fileID: 7211354190082184439, guid: 60ee7b33ea9f96e4684d479de684389e, type: 3}
@@ -1051,6 +1051,7 @@ MonoBehaviour:
   goal:
   - {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
   - {fileID: 2952474259421678109, guid: f2b6f5c1e07f2eb4b892c5ae8f85b4af, type: 3}
+  - {fileID: 1603426483798060309, guid: d154514669df01a4eab465a0e092ac9f, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
   rope: {fileID: 6181181272637633349, guid: 4a97dc5b166a8c041b1563713ab780ee, type: 3}
   outOfRangeTile: {fileID: 8951184714324223293, guid: 7b244f19c2663d64ab521eaf273933c8, type: 3}
