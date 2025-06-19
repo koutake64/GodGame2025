@@ -214,6 +214,9 @@ public class LightObject : MonoBehaviour
         }
         else
         {
+            // 目標座標配列
+            List<Vector2Int> targetPosList = new List<Vector2Int>();
+
             for (int i = 0; i < illuminateRange.x; ++i)
             {
                 for (int j = 0; j < illuminateRange.y; ++j)
@@ -233,6 +236,9 @@ public class LightObject : MonoBehaviour
                     {
                         if (info.state == _FieldDataManager.E_FIELDSTATE.pillar)
                         {
+                            // 目標座標リストに追加
+                            targetPosList.Add(targetPos);
+
                             // 自身とターゲット座標の差分を計算
                             float distance = Vector2Int.Distance(targetPos, pos);
                             
@@ -288,16 +294,19 @@ public class LightObject : MonoBehaviour
                                 }
                             }
 
-                            // オブジェクトの座標と被らないように被っていたら破棄
-                            if (shadowList.Contains(targetPos))
-                            {
-                                shadowList.Remove(targetPos);
-                            }
-
                             // 柱があったらこのマスの後ろを処理する必要はないので終了
                             break;
                         }
                     }
+                }
+            }
+
+            // オブジェクトの座標と被らないように被っていたら破棄
+            foreach (var pos in targetPosList)
+            {
+                if (shadowList.Contains(pos))
+                {
+                    shadowList.Remove(pos);
                 }
             }
         }
