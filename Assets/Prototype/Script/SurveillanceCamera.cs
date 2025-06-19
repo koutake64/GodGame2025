@@ -422,6 +422,10 @@ public class SurveillanceCamera : MonoBehaviour
                             obj.FoundPrincess(targetPos);
 
                             securityEffect = obj.GetComponent<SecurityEffect>();
+                            if (securityEffect == null)
+                            {
+                                Debug.LogWarning("SurveillanceCamera：SecurityEffectが取得できませんでした");
+                            }
                             if (securityEffect != null)
                             {
                                 securityEffect.StartSingleAlertEffect(); // エフェクトを再生
