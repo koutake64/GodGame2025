@@ -244,6 +244,9 @@ public class CharacterMoveController : MonoBehaviour
 
     public void StartAutoMove(Vector2Int goal)
     {
+        // ˆÚ“®’†‚Ìê‡‚ÍI—¹
+        if (isMove) return;
+
         // ©“®ˆÚ“®’†ƒtƒ‰ƒO‚ğ‚ ‚°‚é
         isAutoMoving = true;
 

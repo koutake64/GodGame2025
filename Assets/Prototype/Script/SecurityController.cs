@@ -8,6 +8,9 @@ public class SecurityController : MonoBehaviour
     [Header("前方監視範囲")]
     [SerializeField] private int monitoringRange;
 
+    [Header("周囲の監視範囲")]
+    [SerializeField] private Vector2Int surroundingsRange;
+
     [Header("足音が聞こえる範囲")]
     [SerializeField] private int footstepsRange;
 
@@ -131,6 +134,13 @@ public class SecurityController : MonoBehaviour
     {
         addNum *= -1;
     }
+
+    private void SurroundingsMonitoring()
+    {
+
+
+    }
+
     private void ForwardMonitoring()
     {
         // 夜以外はスルー
