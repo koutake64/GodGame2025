@@ -735,23 +735,27 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
-        _PrincessDecideTargetPos pdtp = GameObject.FindWithTag("Princess").GetComponent<_PrincessDecideTargetPos>();
-        if (pdtp != null)
+        GameObject obj = GameObject.FindWithTag("Princess");
+        if (obj != null)
         {
-            List<Vector2Int> range = pdtp.GetRange();
-
-            for (int i = 0; i < range.Count; ++i)
+            _PrincessDecideTargetPos pdtp = obj.GetComponent<_PrincessDecideTargetPos>();
+            if (pdtp != null)
             {
-                int x = range[i].x;
-                int y = range[i].y;
+                List<Vector2Int> range = pdtp.GetRange();
 
-                if (x >= 0 && x < state.GetLength(0) && y >= 0 && y < state.GetLength(1))
+                for (int i = 0; i < range.Count; ++i)
                 {
-                    state[x, y] = E_FIELDSTATE.testtttttttt;
+                    int x = range[i].x;
+                    int y = range[i].y;
+
+                    if (x >= 0 && x < state.GetLength(0) && y >= 0 && y < state.GetLength(1))
+                    {
+                        state[x, y] = E_FIELDSTATE.testtttttttt;
+                    }
+
                 }
 
             }
-
         }
 
         for (int y = 0; y < fieldSize.y; ++y)
