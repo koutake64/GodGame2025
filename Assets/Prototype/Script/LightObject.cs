@@ -286,21 +286,18 @@ public class LightObject : MonoBehaviour
                             Vector3 toTargetVector = (info.obj.transform.position - transform.position).normalized;
                             float angle = Vector3.Angle(lightForward, toTargetVector);
 
+                            // オブジェクトの後ろを影に
+                            if (back.x >= 0 && back.x < fieldSize.x && back.y >= 0 && back.y < fieldSize.y)
+                            {
+                                shadowList.Add(back);
+                            }
+
                             // 指定角度以内になったら
-                            if (angle <= shadowAngle)
+                            if (angle <= shadowAngle && shadowDistance >= distance)
                             {
                                 if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
                                 {
                                     shadowList.Add(fartherSide);
-                                }
-                            }
-
-                            // 影を作る範囲距離内にいたら
-                            if (shadowDistance > distance)
-                            {
-                                if (back.x >= 0 && back.x < fieldSize.x && back.y >= 0 && back.y < fieldSize.y)
-                                {
-                                    shadowList.Add(back);
                                 }
                             }
 
