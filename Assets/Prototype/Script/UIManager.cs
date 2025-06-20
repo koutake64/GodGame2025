@@ -38,12 +38,14 @@ public class UIManager : MonoBehaviour
 
 
     private Animator memoAnimator;  // メモUIアニメーター
+    private UIAnimator clearAnimator;
     private TimeManager timeMng;
     private _FieldDataManager fieldDataMng; // フィールドデータ
     private TextManager textMng;
 
     private bool useMemo;       // メモを開いているかどうか
     private bool usePerformance;
+    private bool isClear = false; // ゲームクリアフラグ
     private bool currentFlag;   // 現在のフラグ状況
     private bool prevFlag;      // 1フレーム前のフラグ状況
     private float gameTime;     // ゲーム内の時間
@@ -51,6 +53,7 @@ public class UIManager : MonoBehaviour
     private float nightTimeStart;
     private bool isSwitchNoon = false;
     private bool isSwitchNight = false;
+    private float waitTime = 0.0f; // 演出待機時間
 
 
     // InputSystem
@@ -92,7 +95,16 @@ public class UIManager : MonoBehaviour
                 Debug.LogError("UI_MenoにAnimatorコンポーネントを追加してください。");
         }
         else
-            Debug.LogError("メモUIがDictiopnaryに登録されていません");
+            Debug.LogError("メモUIがDictionaryに登録されていません");
+
+        if(UIDictionary.TryGetValue(E_UI_KIND.gameClear,out GameObject clearObj))
+        {
+            clearAnimator = clearObj.GetComponent<UIAnimator>();
+            if (!clearAnimator)
+                Debug.LogError("GameClearUIにUIAnimatorコンポーネントを追加してください。");
+        }
+        else
+            Debug.LogError("GameClearUIがDictionaryに登録されていません");
 
         // TimeManagerの取得
         timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
@@ -127,11 +139,13 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         gameTime = timeMng.GetCurrentTime();
+        waitTime += Time.deltaTime;
 
         InputUpdate();
         UpdateAnimator();
         UpdateTimeScale();
         ObjectFlagUpdate();
+        SceneChngeUpdate();
 
         // 過去フラグ状況の更新
         prevFlag = currentFlag;
@@ -282,6 +296,19 @@ public class UIManager : MonoBehaviour
         {
             // メモをポップアップする
             useMemo = !useMemo;
+        }
+    }
+
+    private void SceneChngeUpdate()
+    {
+        if(clearAnimator.GetIsFinished() && !isClear)
+        {
+            isClear = true;
+            waitTime = 0;
+        }
+        if(waitTime >= 3.0f && isClear)
+        {
+            SceneChanger.ChangeScene("ClearScene");
         }
     }
 }

@@ -28,6 +28,8 @@ public class UIAnimator : MonoBehaviour
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+    private bool isPlaying = false;
+    private bool isFinished = false;
 
     private void Awake()
     {
@@ -77,6 +79,8 @@ public class UIAnimator : MonoBehaviour
 
         while(timer < duaration)
         {
+            isPlaying = true;
+            isFinished = false;
             float t = timer / duaration;
             float easeT = easing.Evaluate(t);
 
@@ -108,5 +112,13 @@ public class UIAnimator : MonoBehaviour
                 onCustomAnimationUpdate?.Invoke(1f);
                 break;
         }
+
+        isFinished = true;
+        isPlaying = false;
+    }
+
+    public bool GetIsFinished()
+    {
+        return isFinished;
     }
 }
