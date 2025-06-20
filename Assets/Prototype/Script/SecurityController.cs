@@ -116,7 +116,7 @@ public class SecurityController : MonoBehaviour
         }
 
         // 夜以外はスルー
-        if (timeManager.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.night)
+        if (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night)
         {
             // 進行方向に対してチェックを行う
             ForwardMonitoring();
@@ -167,6 +167,8 @@ public class SecurityController : MonoBehaviour
         {
             charaDir = charaForward.y > 0 ? Vector2Int.up : Vector2Int.down;
         }
+
+
 
 
 
