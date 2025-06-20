@@ -71,73 +71,60 @@ public class TimeManager : MonoBehaviour
 
 	private void Update()
 	{
-		prevState = currentState;
+        prevState = currentState;
 
-		time += Time.deltaTime;
-		timeText.text = time.ToString("0" + "•b");
+        time += Time.deltaTime;
+        timeText.text = time.ToString("0" + "•b");
 
-		float sunAngle = 0f;
+        float sunAngle = 0f;
 
-		if (time < noonTime - fadeDuration)
-		{
-			currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
-			sunAngle = 0f;
-		}
-		else if (time < noonTime)
-		{
-			float t = (time - (noonTime - fadeDuration)) / fadeDuration;
-			currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
-			prevState = currentState;
+        if (time < noonTime - fadeDuration)
+        {
+            currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
+            sunAngle = 0f;
+        }
+        else if (time < noonTime)
+        {
+            float t = (time - (noonTime - fadeDuration)) / fadeDuration;
+            currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
+            sunAngle = Mathf.Lerp(0f, 30f, t);
+        }
+        else if (time < afterNoonTime - fadeDuration)
+        {
+            currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
+            sunAngle = 30f;
+        }
+        else if (time < afterNoonTime)
+        {
+            float t = (time - (afterNoonTime - fadeDuration)) / fadeDuration;
+            currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
+            sunAngle = Mathf.Lerp(30f, 185f, t);
+        }
+        else if (time < nightTime - fadeDuration)
+        {
+            currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
+            sunAngle = 185f;
+        }
+        else if (time < nightTime)
+        {
+            float t = (time - (nightTime - fadeDuration)) / fadeDuration;
+            currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
+            sunAngle = Mathf.Lerp(185f, 200f, t);
+        }
+        else
+        {
+            currentState = CommonSE_Proto.E_TIMEOFDAY.night;
+            sunAngle = 200f;
+        }
 
-			time += Time.deltaTime;
-			timeText.text = $"{time:0}•b";
+        // ó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚Ì‚ÝƒeƒLƒXƒgXV
+        if (currentState != prevState)
+        {
+            UpdateLevelText();
+        }
 
-			sunAngle = 0f;
-
-			if (time < noonTime - fadeDuration)
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
-				sunAngle = 0f;
-			}
-			else if (time < noonTime)
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
-				sunAngle = Mathf.Lerp(0f, 30f, (time - (noonTime - fadeDuration)) / fadeDuration);
-			}
-			else if (time < afterNoonTime - fadeDuration)
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
-				sunAngle = 30f;
-			}
-			else if (time < afterNoonTime)
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
-				sunAngle = Mathf.Lerp(30f, 185f, (time - (afterNoonTime - fadeDuration)) / fadeDuration);
-			}
-			else if (time < nightTime - fadeDuration)
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
-				sunAngle = 185f;
-			}
-			else if (time < nightTime)
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
-				sunAngle = Mathf.Lerp(185f, 200f, (time - (nightTime - fadeDuration)) / fadeDuration);
-			}
-			else
-			{
-				currentState = CommonSE_Proto.E_TIMEOFDAY.night;
-				sunAngle = 200f;
-			}
-
-			if (currentState != prevState)
-			{
-				UpdateLevelText();
-			}
-
-			SunMove(sunAngle);
-		}
-	}
+        SunMove(sunAngle);
+    }
 
    
 	/// <summary>
