@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 
 
 public class SecurityController : MonoBehaviour
@@ -27,6 +28,8 @@ public class SecurityController : MonoBehaviour
     private Vector2Int              foundPos;               // お嬢様を見つけた座標
     private bool                    isStartMoveFoundPos;    // お嬢様を見つけた座標に移動を開始しているか
     private bool                    isFootstepsRange;       // 足音の聞こえる範囲にいるか
+    Vector2                         charaForward;           // 進行方向
+    Vector2Int                      charaDir;               // マス目上で向いてる方向
 
     private Vector2Int              initPos;        // 初期位置
     private TimeManager             timeManager;    // タイムマネージャー
@@ -112,8 +115,15 @@ public class SecurityController : MonoBehaviour
             isEndMovement = false;
         }
 
-        // 進行方向に対してチェックを行う
-        ForwardMonitoring();
+        // 夜以外はスルー
+        if (timeManager.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.night)
+        {
+            // 進行方向に対してチェックを行う
+            ForwardMonitoring();
+
+            // 周囲に対して監視を行う
+            SurroundingsMonitoring();
+        }
     }
 
     public void EndMovement()
@@ -147,18 +157,23 @@ public class SecurityController : MonoBehaviour
 
     private void SurroundingsMonitoring()
     {
+        // 向いている方向
+        charaForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
+        if (Mathf.Abs(charaForward.x) > Mathf.Abs(charaForward.y))
+        {
+            charaDir = charaForward.x > 0 ? Vector2Int.right : Vector2Int.left;
+        }
+        else
+        {
+            charaDir = charaForward.y > 0 ? Vector2Int.up : Vector2Int.down;
+        }
+
 
 
     }
 
     private void ForwardMonitoring()
     {
-        // 夜以外はスルー
-        if (timeManager.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.night)
-        {
-            return;
-        }
-
         // デバッグ用
         Ray ray = new Ray(transform.position, transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * monitoringRange, Color.green);

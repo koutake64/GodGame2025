@@ -64,8 +64,7 @@ public class PlayerMove : MonoBehaviour
 			inputTimer = inputCooldown;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Return) && timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon ||
-            Input.GetKeyDown(KeyCode.Return) && timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon)
+		if (Input.GetKeyDown(KeyCode.Return) && (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon || timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon))
 		{
 			ChangeObjectDirection();
 		}
