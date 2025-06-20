@@ -9,6 +9,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField, Header("カメラの固定角度")] private Vector3 fixedRotation;
 
     private Transform playerTransform;
+    private Transform princessTransform;
     private TimeManager timeManager;
     private _FieldDataManager fieldDataManager;
     private GameSystem gameSystem;
@@ -62,53 +63,65 @@ public class CameraManager : MonoBehaviour
         switch (timeManager.CurrentState)
 		{
 			case CommonSE_Proto.E_TIMEOFDAY.night:
-				if (princess == null)
-				{
-					GameObject princessObj = GameObject.FindWithTag(princessTag);
-					if (princessObj != null)
-					{
-						princess = princessObj.transform;
-					}
-					else
-					{
-						if (!initNightPos)
-						{
-							transform.position = new Vector3(5, 2, -9);
-							initNightPos = true;
-						}
-						Debug.LogWarning("princessが見つかりません。タグを確認してください。");
-						return;
-					}
-				}
+                Vector2Int fieldSize = fieldDataManager.GetFieldSize();
+                if (princessTransform == null)
+                {
+                    GameObject princessObj = GameObject.FindWithTag(princessTag);
+                    if (princessObj != null)
+                    {
+                        princessTransform = princessObj.transform;
 
-				// princess が見つかればフラグをリセット
-				initNightPos = false;
+                        // プレイヤー初期位置が左端 or 右端か確認し、カメラ初期位置を調整
+                        fieldSize = fieldDataManager.GetFieldSize();
+                        float princessX = princessTransform.position.x;
 
-				Vector2Int fieldSize = fieldDataManager.GetFieldSize();
-				float princessX = princess.position.x;
-				Vector3 targetPos = princess.position + offsetPosition;
+                        if (princessX < fieldSize.x / 2)
+                        {
+                            // 左端スタート：右に5マス離す
+                            transform.position = princessTransform.position + new Vector3(5, offsetPosition.y, offsetPosition.z);
+                        }
+                        else
+                        {
+                            // 右端スタート：左に5マス離す
+                            transform.position = princessTransform.position + new Vector3(-5, offsetPosition.y, offsetPosition.z);
+                        }
 
-				if (princessX < 5 || princessX > fieldSize.x - 6)
-				{
-					targetPos.x = transform.position.x;
-				}
+                        // カメラ角度維持
+                        transform.eulerAngles = fixedRotation;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
+                        return;
+                    }
+                }
 
-				transform.position = targetPos;
-				break;
+                // 通常のカメラ追従処理
+                Vector2Int fieldSizeDay = fieldDataManager.GetFieldSize();
+                float princessXPos = princessTransform.position.x;
+                Vector3 targetPosDay = princessTransform.position + offsetPosition;
+
+                if (princessXPos < 5 || princessXPos > fieldSizeDay.x - 6)
+                {
+                    targetPosDay.x = transform.position.x;
+                }
+
+                transform.position = targetPosDay;
+                break;
 
 			case CommonSE_Proto.E_TIMEOFDAY.morning:
-				eee();
+				PlayerStartPos();
 				break;
 			case CommonSE_Proto.E_TIMEOFDAY.noon:
-				eee();
+				PlayerStartPos();
 				break;
 			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-				eee();
+				PlayerStartPos();
 				break;
 		}
 	}
 
-	private void eee()
+	private void PlayerStartPos()
 	{
 		Vector2Int fieldSize = fieldDataManager.GetFieldSize();
 		if (playerTransform == null)
