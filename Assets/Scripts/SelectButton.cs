@@ -22,12 +22,12 @@ public class SelectButton : MonoBehaviour
     private void Update()
     {
         // Todo InputSystem‚É’uŠ·
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.A))
         {
             currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
             ChangeColor();
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.D))
         {
             currentIndex = (currentIndex + 1) % buttons.Length;
             ChangeColor();
