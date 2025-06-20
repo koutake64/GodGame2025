@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
+using static UnityEditor.PlayerSettings;
+using UnityEngine.UI;
 
 
 public class SecurityController : MonoBehaviour
@@ -168,10 +170,87 @@ public class SecurityController : MonoBehaviour
             charaDir = charaForward.y > 0 ? Vector2Int.up : Vector2Int.down;
         }
 
+        // 加算する方向を計算
+        Vector2Int lateralDir = new Vector2Int();
+        if (charaDir.x != 0)
+        {
+            lateralDir = new Vector2Int(1, 0);
+        }
+        else
+        {
+            lateralDir = new Vector2Int(0, 1);
+        }
 
+        // 現在の座標
+        Vector2Int pos = moveController.GetCurrentPos();
 
+        for (int j = 0; j < surroundingsRange.y; ++j)
+        {
+            // 警備員に対して右側
+            for (int i = 1; i <= (surroundingsRange.x / 2); ++i)
+            {
+                // 対象マスの座標を計算
+                Vector2Int targetPos = pos + charaDir * (j + 1) + lateralDir * i;
 
+                // 範囲外チェック
+                if (targetPos.x < 0 || targetPos.x >= fieldSize.x || targetPos.y < 0 || targetPos.y >= fieldSize.y)
+                {
+                    continue;
+                }
 
+                // マスの情報を取得
+                var infoArray = fieldData.GetInfoList(targetPos);
+                foreach (var info in infoArray)
+                {
+                    // 障害物があったら以降を確認しない
+                    if (info.state == _FieldDataManager.E_FIELDSTATE.pillar ||
+                        info.state == _FieldDataManager.E_FIELDSTATE.wall)
+                    {
+                        break;
+                    }
+
+                    if (info.state == _FieldDataManager.E_FIELDSTATE.princess)
+                    {
+                        // お姫様を発見
+                        securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
+                        uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
+                        SceneChanger.ChangeScene(sceneName);
+                    }
+                }
+            }
+            // 警備員に対して左側
+            for (int i = -1; i >= -(surroundingsRange.x / 2); --i)
+            {
+                // 対象マスの座標を計算
+                Vector2Int targetPos = pos + charaDir * (j + 1) + lateralDir * i;
+
+                // 範囲外チェック
+                if (targetPos.x < 0 || targetPos.x >= fieldSize.x || targetPos.y < 0 || targetPos.y >= fieldSize.y)
+                {
+                    continue;
+                }
+
+                // マスの情報を取得
+                var infoArray = fieldData.GetInfoList(targetPos);
+                foreach (var info in infoArray)
+                {
+                    // 障害物があったら以降を確認しない
+                    if (info.state == _FieldDataManager.E_FIELDSTATE.pillar ||
+                        info.state == _FieldDataManager.E_FIELDSTATE.wall)
+                    {
+                        break;
+                    }
+
+                    if (info.state == _FieldDataManager.E_FIELDSTATE.princess)
+                    {
+                        // お姫様を発見
+                        securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
+                        uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
+                        SceneChanger.ChangeScene(sceneName);
+                    }
+                }
+            }
+        }
     }
 
     private void ForwardMonitoring()
@@ -204,9 +283,8 @@ public class SecurityController : MonoBehaviour
                     }
                 }
 
-                securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
-
                 // お姫様を発見
+                securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
                 uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
                 SceneChanger.ChangeScene(sceneName);
             }
