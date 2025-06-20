@@ -139,6 +139,8 @@ public class LightObject : MonoBehaviour
             shadowList.Clear();
         }
 
+        List<List<Vector2Int>> test = new List<List<Vector2Int>>(); 
+
         // 方向に応じて加算する値を変更する
         Vector2Int lateralDir = new Vector2Int();
         switch (direction)
@@ -241,6 +243,10 @@ public class LightObject : MonoBehaviour
                             // 自身とターゲット座標の差分を計算
                             float distance = Vector2Int.Distance(targetPos, pos);
                             
+                            List<Vector2Int> test1 = new List<Vector2Int>();
+                            test1.Add(targetPos);
+
+
                             // 影にする候補の座標を計算
                             Vector2Int back         = targetPos + lightDir;
 
@@ -271,6 +277,7 @@ public class LightObject : MonoBehaviour
                             // オブジェクトの後ろを影に
                             if (back.x >= 0 && back.x < fieldSize.x && back.y >= 0 && back.y < fieldSize.y)
                             {
+                                test1.Add(back);
                                 shadowList.Add(back);
                             }
 
@@ -281,12 +288,14 @@ public class LightObject : MonoBehaviour
                                 {
                                     if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
                                     {
+                                        test1.Add(fartherSide);
                                         shadowList.Add(fartherSide);
                                     }
 
                                     // 斜めにしか影を作りたくないので後ろを削除
                                     if (shadowList.Contains(back))
                                     {
+                                        test1.Remove(back);
                                         shadowList.Remove(back);
                                     }
                                 }
@@ -294,10 +303,13 @@ public class LightObject : MonoBehaviour
                                 {
                                     if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
                                     {
+                                        test1.Add(fartherSide);
                                         shadowList.Add(fartherSide);
                                     }
                                 }
                             }
+
+                            test.Add(test1);
 
                             // 柱があったらこのマスの後ろを処理する必要はないので終了
                             break;
@@ -324,6 +336,10 @@ public class LightObject : MonoBehaviour
 
         // フィールドの色を変更
         fieldData.ChangeColor();
+
+
+        this.gameObject.GetComponent<ShadowExpression>().SetArrayShadow(test);
+
     }
 
     public List<Vector2Int> GetShadowList()
