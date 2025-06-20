@@ -2759,6 +2759,9 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: e4636000189424a4ca0bf9747635e8a9, type: 3}
     volume: 1
     loop: 0
+  - clip: {fileID: 8300000, guid: 64df19681368a1a4b97e88851c1fe95f, type: 3}
+    volume: 1
+    loop: 0
 --- !u!4 &1892366280
 Transform:
   m_ObjectHideFlags: 0

@@ -225,21 +225,23 @@ public class SurveillanceCamera : MonoBehaviour
         // 状態に応じてスライド方向を決定
         if (forward == Vector2.right || forward == Vector2.left)
         {
-
             if (watchState == E_WATCHSTATE.Left)
             {
                 offsetValue = 2;
                 transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
+                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Center)
             {
                 offsetValue = 0;
                 transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Right)
             {
                 offsetValue = -2;
                 transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
+                AudioManager.Instance.PlaySE(3);
             }
         }
         if (forward == Vector2.up || forward == Vector2.down)
@@ -249,16 +251,19 @@ public class SurveillanceCamera : MonoBehaviour
             {
                 offsetValue = 2;
                 transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
+                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Center)
             {
                 offsetValue = 0;
                 transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Right)
             {
                 offsetValue = -2;
                 transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
+                AudioManager.Instance.PlaySE(3);
             }
         }
         // スライド方向を現在の向きに回転
@@ -644,7 +649,6 @@ public class SurveillanceCamera : MonoBehaviour
 
         if (isPlayerInRange == true && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
         {
-            AudioManager.Instance.PlaySE(3);
             impactEffect.Play(); // インパクトエフェクトを再生
 
             if (forward == Vector2.up)

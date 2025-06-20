@@ -104,7 +104,7 @@ public class PlayerMove : MonoBehaviour
 						// 対象オブジェクトの方を見る
 						LookAtObject(objPos);
                     }
-
+                    AudioManager.Instance.PlaySE(6);
                     camera.CameraAction(this.transform);
 					break;
 				}
@@ -117,7 +117,7 @@ public class PlayerMove : MonoBehaviour
                         // 対象オブジェクトの方を見る
                         LookAtObject(objPos);
                     }
-
+                    AudioManager.Instance.PlaySE(6);
                     light.Action(this.transform);
                     break;
                 }
