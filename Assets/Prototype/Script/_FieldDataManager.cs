@@ -248,6 +248,22 @@ public class _FieldDataManager : MonoBehaviour
             Quaternion.identity
             );
 
+        fwPos = new Vector3(fieldSizeX, 0.0f, 24.0f);
+
+        obj = Instantiate(
+            fieldWallWindow,
+            fwPos,
+            Quaternion.identity
+            );
+
+        fwPos = new Vector3(fieldSizeX, 0.0f, -6.0f);
+
+        obj = Instantiate(
+            fieldWallWindow,
+            fwPos,
+            Quaternion.identity
+            );
+
         // ----- ポールとロープの生成
         Vector3 basePos = new Vector3(-1.0f, 0.0f, -1.0f);
         Vector3 hRopeScale = new Vector3(0.8f, 0.8f, 0.85f);
@@ -735,28 +751,28 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
-        GameObject obj = GameObject.FindWithTag("Princess");
-        if (obj != null)
-        {
-            _PrincessDecideTargetPos pdtp = obj.GetComponent<_PrincessDecideTargetPos>();
-            if (pdtp != null)
-            {
-                List<Vector2Int> range = pdtp.GetRange();
+        //GameObject obj = GameObject.FindWithTag("Princess");
+        //if (obj != null)
+        //{
+        //    _PrincessDecideTargetPos pdtp = obj.GetComponent<_PrincessDecideTargetPos>();
+        //    if (pdtp != null)
+        //    {
+        //        List<Vector2Int> range = pdtp.GetRange();
 
-                for (int i = 0; i < range.Count; ++i)
-                {
-                    int x = range[i].x;
-                    int y = range[i].y;
+        //        for (int i = 0; i < range.Count; ++i)
+        //        {
+        //            int x = range[i].x;
+        //            int y = range[i].y;
 
-                    if (x >= 0 && x < state.GetLength(0) && y >= 0 && y < state.GetLength(1))
-                    {
-                        state[x, y] = E_FIELDSTATE.testtttttttt;
-                    }
+        //            if (x >= 0 && x < state.GetLength(0) && y >= 0 && y < state.GetLength(1))
+        //            {
+        //                state[x, y] = E_FIELDSTATE.testtttttttt;
+        //            }
 
-                }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         for (int y = 0; y < fieldSize.y; ++y)
         {
