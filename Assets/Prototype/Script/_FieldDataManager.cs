@@ -868,4 +868,8 @@ public class _FieldDataManager : MonoBehaviour
         return sd.GetStageNum();
     }
 
+    public StageData GetStageData()
+    {
+        return sd;
+    }
 }

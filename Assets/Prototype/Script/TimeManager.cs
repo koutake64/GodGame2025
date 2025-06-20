@@ -7,6 +7,8 @@ using UnityEditor;
 
 public class TimeManager : MonoBehaviour
 {
+	[SerializeField] private StageData stageData;
+	[SerializeField] private System.Collections.Generic.List<StageTimeData> stageTimeSet;
     // ====== シリアライズ =====
     [SerializeField, Header("昼開始時刻(秒)")]		private float noonTime;
     [SerializeField, Header("夕方背景時刻(秒)")]	private float afterNoonTime;
@@ -17,6 +19,16 @@ public class TimeManager : MonoBehaviour
     [SerializeField, Header("太陽光")]				private GameObject sun;
 	[SerializeField, Header("ゲーム内速度"), Range(0, 2)] private float gameSpeed;
 
+
+	[System.Serializable]
+	public class StageTimeData
+	{
+		public StageData stageData;
+		public float noonTime;
+		public float afterNoonTime;
+		public float nightTime;
+	}
+
     // --- 変数 ---
     private float time = 0; // 時間管理
     private CommonSE_Proto.E_TIMEOFDAY currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
@@ -24,16 +36,44 @@ public class TimeManager : MonoBehaviour
 
 	private void Start()
     {
-        levelText.text = time.ToString("朝");
+        var fieldDataManager = FindFirstObjectByType<_FieldDataManager>();
+        if (fieldDataManager != null)
+        {
+            stageData = fieldDataManager.GetStageData();
+        }
+        else
+        {
+            Debug.LogWarning("_FieldDataManager が見つかりませんでした。");
+        }
+
+        ApplyTimeSettings();
+
+        levelText.text = "朝";
         SunMove(0f);
-		SetTimeScale(gameSpeed);
+        SetTimeScale(gameSpeed);
     }
 
-    private void Update()
+    private void ApplyTimeSettings()
     {
-        prevState = currentState;
+        foreach (var setting in stageTimeSet)
+        {
+            if (setting.stageData == stageData)
+            {
+                noonTime = setting.noonTime;
+                afterNoonTime = setting.afterNoonTime;
+                nightTime = setting.nightTime;
+                return;
+            }
+        }
 
-        time += Time.deltaTime;
+        Debug.LogWarning("一致するステージ時間設定が見つかりませんでした。");
+    }
+
+	private void Update()
+	{
+		prevState = currentState;
+
+		time += Time.deltaTime;
 		timeText.text = time.ToString("0" + "秒");
 
 		float sunAngle = 0f;
@@ -47,43 +87,56 @@ public class TimeManager : MonoBehaviour
 		{
 			float t = (time - (noonTime - fadeDuration)) / fadeDuration;
 			currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
-			sunAngle = Mathf.Lerp(0f, 30f, t);
-		}
-		else if (time < afterNoonTime - fadeDuration)
-		{
-			currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
-			sunAngle = 30f;
-		}
-		else if (time < afterNoonTime)
-		{
-			float t = (time - (afterNoonTime - fadeDuration)) / fadeDuration;
-			currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
-			sunAngle = Mathf.Lerp(30f, 185f, t);
-		}
-		else if (time < nightTime - fadeDuration)
-		{
-			currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
-			sunAngle = 185f;
-		}
-		else if (time < nightTime)
-		{
-			float t = (time - (nightTime - fadeDuration)) / fadeDuration;
-			currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
-			sunAngle = Mathf.Lerp(185f, 200f, t);
-		}
-		else
-		{
-			currentState = CommonSE_Proto.E_TIMEOFDAY.night;
-			sunAngle = 200f;
-		}
+			prevState = currentState;
 
-		// 状態が変わったときのみテキスト更新
-		if (currentState != prevState)
-		{
-			UpdateLevelText();
-		}
+			time += Time.deltaTime;
+			timeText.text = $"{time:0}秒";
 
-		SunMove(sunAngle);
+			sunAngle = 0f;
+
+			if (time < noonTime - fadeDuration)
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
+				sunAngle = 0f;
+			}
+			else if (time < noonTime)
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
+				sunAngle = Mathf.Lerp(0f, 30f, (time - (noonTime - fadeDuration)) / fadeDuration);
+			}
+			else if (time < afterNoonTime - fadeDuration)
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
+				sunAngle = 30f;
+			}
+			else if (time < afterNoonTime)
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.noon;
+				sunAngle = Mathf.Lerp(30f, 185f, (time - (afterNoonTime - fadeDuration)) / fadeDuration);
+			}
+			else if (time < nightTime - fadeDuration)
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
+				sunAngle = 185f;
+			}
+			else if (time < nightTime)
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.afternoon;
+				sunAngle = Mathf.Lerp(185f, 200f, (time - (nightTime - fadeDuration)) / fadeDuration);
+			}
+			else
+			{
+				currentState = CommonSE_Proto.E_TIMEOFDAY.night;
+				sunAngle = 200f;
+			}
+
+			if (currentState != prevState)
+			{
+				UpdateLevelText();
+			}
+
+			SunMove(sunAngle);
+		}
 	}
 
    
@@ -120,39 +173,40 @@ public class TimeManager : MonoBehaviour
 
 	public CommonSE_Proto.E_TIMEOFDAY CurrentState => currentState;
 
-//#if UNITY_EDITOR
-//	// デバッグ用：特定の時間帯に強制変更
-//	public void ForceChangeState(CommonSE_Proto.E_TIMEOFDAY newState)
-//	{
-//		prevState = currentState;
-//		currentState = newState;
-//		//prevState = newState;
+/*#if UNITY_EDITOR
+	// デバッグ用：特定の時間帯に強制変更
+	public void ForceChangeState(CommonSE_Proto.E_TIMEOFDAY newState)
+	{
+		prevState = currentState;
+		currentState = newState;
+		//prevState = newState;
 
-//		switch (newState)
-//		{
-//			case CommonSE_Proto.E_TIMEOFDAY.morning:
-//				time = 0;
-//				SunMove(0f);
-//				break;
-//			case CommonSE_Proto.E_TIMEOFDAY.noon:
-//				time = noonTime;
-//				SunMove(30f);
-//				break;
-//			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-//				time = afterNoonTime;
-//				SunMove(185f);
-//				break;
-//			case CommonSE_Proto.E_TIMEOFDAY.night:
-//				time = nightTime;
-//				SunMove(200f);
-//				break;
-//		}
+		switch (newState)
+		{
+			case CommonSE_Proto.E_TIMEOFDAY.morning:
+				time = 0;
+				SunMove(0f);
+				break;
+			case CommonSE_Proto.E_TIMEOFDAY.noon:
+				time = noonTime;
+				SunMove(30f);
+				break;
+			case CommonSE_Proto.E_TIMEOFDAY.afternoon:
+				time = afterNoonTime;
+				SunMove(185f);
+				break;
+			case CommonSE_Proto.E_TIMEOFDAY.night:
+				time = nightTime;
+				SunMove(200f);
+				break;
+		}
 
-//		UpdateLevelText();
-//		FindAnyObjectByType<ModelShiftByTime>()?.Refresh();
+		UpdateLevelText();
+		FindAnyObjectByType<ModelShiftByTime>()?.Refresh();
 
-//	}
-//#endif
+	}
+#endif
+*/
 
 	public CommonSE_Proto.E_TIMEOFDAY GetCurState()
 	{
