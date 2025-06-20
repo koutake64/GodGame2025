@@ -105,9 +105,8 @@ public class LightObject : MonoBehaviour
     }
     public void ChangeDirection(LightDirection changeDirection)
     {
+        // 前の方向とずらしたい方向を足して変更可能な値か確認
         LightDirection newDirection = (int)direction + changeDirection;
-
-        // 現在の方向と新しい方向で計算して方向を変えていいか計算する
         if(Mathf.Abs((int)newDirection) > 1)
         {
             return;
@@ -150,7 +149,7 @@ public class LightObject : MonoBehaviour
             case LightDirection.Right:
                 lateralDir = new Vector2Int(lightDir.y, -lightDir.x);
                 break;
-            default:  // Center
+            case LightDirection.Center:
                 lateralDir = new Vector2Int(-lightDir.y, lightDir.x);
                 break;
         }
