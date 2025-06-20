@@ -13,5 +13,9 @@ public class GameManager : MonoBehaviour
         {
             Cursor.visible = true;
         }
+        if (Input.GetMouseButton(0))
+        {
+            Cursor.visible = false;
+        }
     }
 }
