@@ -20,6 +20,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     private int currentKey = -1;
 
     List<int> keyList = new List<int>();
+    List<int> shadowKeyList = new List<int>();
 
     private void Start()
     {
@@ -145,6 +146,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
         // 影の座標取得
         List<Vector2Int> shadowPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.shadow);
+        Dictionary<int, Vector2Int> shadowCandidatePos = new Dictionary<int, Vector2Int>();
 
         // 展示台座標取得
         List<Vector2Int> exhibitionStandPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.exhibitionStand);
@@ -162,6 +164,15 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         goalPosList.Add(goalPos);
         candidatePosDic.Add(0, goalPosList);
         int cnt = 1;
+
+        // 影とキーを登録
+        for (int i = 0; i < shadowPos.Count; ++i)
+        {
+            shadowCandidatePos.Add(cnt, shadowPos[i]);
+            cnt++;
+        }
+
+        cnt = 1;
 
         // 柱の周囲4箇所を移動候補リストに追加
         foreach (var pillar in pillarPos)
@@ -202,17 +213,24 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         int key = 0;
 
         // 範囲内に影があれば優先して移動する
-        for (int i = 0; i < shadowPos.Count; ++i)
+        foreach(var list in shadowCandidatePos)
         {
-            for (int j = 0; j < searchRangePosList.Count; ++j)
+            if (shadowKeyList.Contains(list.Key))
             {
-                if (shadowPos[i] == searchRangePosList[j] && shadowPos[i] != prevTargetPos)
+                continue;
+            }
+
+            for (int i = 0; i < searchRangePosList.Count; ++i)
+            {
+                if (list.Value == searchRangePosList[i])
                 {
                     prevTargetPos = nextTargetPos;
-                    nextTargetPos = shadowPos[i];
+                    nextTargetPos = bestTarget;
+                    shadowKeyList.Add(list.Key);
                     return;
                 }
             }
+
         }
 
         // 移動候補リストの中でプリンセスとゴールとの距離を計算しターゲットを決定
