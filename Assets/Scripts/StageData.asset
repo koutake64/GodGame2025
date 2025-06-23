@@ -34,19 +34,19 @@ MonoBehaviour:
   - pos: {x: 1, y: 2}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 2, y: 2}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 3, y: 2}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 4, y: 2}
     dir: 2
     id: 0
-    state: 2
+    state: 3
   - pos: {x: 5, y: 2}
     dir: 2
     id: 0

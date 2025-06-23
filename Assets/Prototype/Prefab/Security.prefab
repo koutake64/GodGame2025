@@ -80,8 +80,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monitoringRange: 5
-  surroundingsRange: {x: 0, y: 0}
-  footstepsRange: 0
+  surroundingsRange: {x: 5, y: 3}
+  footstepsRange: 3
   sceneName: GameOverScene
 --- !u!65 &94649804299236929
 BoxCollider:

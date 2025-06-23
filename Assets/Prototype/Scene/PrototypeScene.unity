@@ -654,6 +654,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492964ca88c9db14ea3531abaf3848fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: a3b5542900354204694676ec9ae3b6f4, type: 2}
+  stageTimeSet:
+  - stageData: {fileID: 11400000, guid: a3b5542900354204694676ec9ae3b6f4, type: 2}
+    noonTime: 35
+    afterNoonTime: 90
+    nightTime: 110
   noonTime: 35
   afterNoonTime: 90
   nightTime: 110
@@ -907,8 +913,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   cameraOffset: {x: 0, y: 3, z: -10}
-  treasureOffset0: {x: 0, y: 5, z: 0}
-  treasureOffset1: {x: 0, y: 3, z: -1}
+  treasureOffset0: {x: 0, y: 3, z: 0}
+  treasureOffset1: {x: 0, y: 1, z: -1}
   spinSpeed: 60
   targetFOV: 20
   zoomSpeed: 5
@@ -1028,7 +1034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b308f0049762245a0a5f9af8f66435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sd: {fileID: 11400000, guid: acd3f75f5ca3536428259fb9dcb6e677, type: 2}
+  sd: {fileID: 11400000, guid: a3b5542900354204694676ec9ae3b6f4, type: 2}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
   tileB: {fileID: 7211354190082184439, guid: 60ee7b33ea9f96e4684d479de684389e, type: 3}
@@ -2154,10 +2160,10 @@ MonoBehaviour:
   - Texts/NO_1-1
   - Texts/NI_1-1
   - 
-  charInterval: 0.05
+  charInterval: 0.03
   isUseTMPro: 0
-  autoDelay: 1
-  isAuto: 1
+  autoDelay: 0.5
+  isAuto: 0
   backgroundPanel: {fileID: 748128809}
   mainTextObj: {fileID: 563647271}
   nameTextObj: {fileID: 1237518191}
@@ -2711,6 +2717,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1892366280}
   - component: {fileID: 1892366279}
+  - component: {fileID: 1892366281}
   m_Layer: 0
   m_Name: MasterAudio
   m_TagString: Untagged
@@ -2777,6 +2784,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1892366281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892366278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd43c5ab7e465724ca5309e4be56e94f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1997729984
 GameObject:
   m_ObjectHideFlags: 0
