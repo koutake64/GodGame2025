@@ -139,7 +139,8 @@ public class LightObject : MonoBehaviour
             shadowList.Clear();
         }
 
-        List<List<Vector2Int>> test = new List<List<Vector2Int>>(); 
+        // 影オブジェクト生成スクリプトに送るデータ
+        List<List<Vector2Int>> shadowGroup = new List<List<Vector2Int>>();
 
         // 方向に応じて加算する値を変更する
         Vector2Int lateralDir = new Vector2Int();
@@ -162,10 +163,19 @@ public class LightObject : MonoBehaviour
         // 向いている方向に応じた影の生成処理
         if (direction == LightDirection.Center)
         {
+            // このマスが影になったかフラグ
+            bool isThisShadow;
+
+            // 影グループに追加用データ
+            List<Vector2Int> group = new List<Vector2Int>();
+
             for (int i = -1; i < illuminateRange.x - 1; ++i)
             {
                 // 違う列に影が行かないようにフラグを下げる
                 isShadow = false;
+
+                // 一番手前のオブジェクトに対してのみ影を生成する
+                bool isEndLoop = false;
 
                 for(int j = 0; j < illuminateRange.y; ++j)
                 {
@@ -178,8 +188,8 @@ public class LightObject : MonoBehaviour
                         continue;
                     }
 
-                    // このマスが影になったかフラグ
-                    bool isThisShadow = false;
+                    // フラグを一度下げる
+                    isThisShadow = false;
 
                     // 影フラグが立っていたら
                     if(isShadow)
@@ -187,8 +197,20 @@ public class LightObject : MonoBehaviour
                         // フィールドに影情報を登録する
                         shadowList.Add(targetPos);
 
+                        // 1つ前のループの座標を基準にする
+                        group.Add(targetPos - lightDir);
+
+                        // 影を登録
+                        group.Add(targetPos);
+
+                        // このマスに影フラグを立てる
                         isThisShadow = true;
+
+                        // 影生成フラグを下げる
                         isShadow = false;
+
+                        // ループ終了フラグを立てる
+                        isEndLoop = true;
                     }
 
                     // マスの情報を取得
@@ -200,17 +222,38 @@ public class LightObject : MonoBehaviour
                             if (isThisShadow)
                             {
                                 // このマスの影設定を解除
-                                shadowList.Remove(targetPos);
+                                if (shadowList.Contains(targetPos))
+                                {
+                                    shadowList.Remove(targetPos);
+                                }
                             }
+
+                            // 一度影グループをリセット
+                            group.Clear();
 
                             // 次のマスを影マスにするためにフラグを立てる
                             isShadow = true;
-                        }
 
-                        // 柱があったら他を処理する必要はないので終了
+                            // ループ終了フラグを下げる
+                            isEndLoop = false;
+
+                            // 柱があったら他を処理する必要はないので終了
+                            break;
+                        }
+                    }
+
+                    // ループ終了フラグが立ってらこのループを終了
+                    if(isEndLoop)
+                    {
                         break;
                     }
                 }
+            }
+
+            // 影グループを送信用データに追加
+            if (group.Count > 0)
+            {
+                shadowGroup.Add(group);
             }
         }
         else
@@ -220,8 +263,17 @@ public class LightObject : MonoBehaviour
 
             for (int i = 0; i < illuminateRange.x; ++i)
             {
+                // 下のループの終了フラグ
+                bool isEndLoop = false;
+
                 for (int j = 0; j < illuminateRange.y; ++j)
                 {
+                    // ループ終了フラグが立っていたら終了
+                    if (isEndLoop)
+                    {
+                        break;
+                    }
+
                     // 対象マスの座標を計算
                     Vector2Int targetPos = pos + lightDir * (j + 1) + lateralDir * i;
 
@@ -243,9 +295,11 @@ public class LightObject : MonoBehaviour
                             // 自身とターゲット座標の差分を計算
                             float distance = Vector2Int.Distance(targetPos, pos);
                             
-                            List<Vector2Int> test1 = new List<Vector2Int>();
-                            test1.Add(targetPos);
-
+                            // 影グループに追加用データ
+                            List<Vector2Int> group = new List<Vector2Int>();
+                            
+                            // 先頭に基準となるオブジェクト
+                            group.Add(targetPos);
 
                             // 影にする候補の座標を計算
                             Vector2Int back         = targetPos + lightDir;
@@ -277,8 +331,9 @@ public class LightObject : MonoBehaviour
                             // オブジェクトの後ろを影に
                             if (back.x >= 0 && back.x < fieldSize.x && back.y >= 0 && back.y < fieldSize.y)
                             {
-                                test1.Add(back);
                                 shadowList.Add(back);
+                                group.Add(back);
+
                             }
 
                             // 指定角度以上になったら
@@ -288,14 +343,14 @@ public class LightObject : MonoBehaviour
                                 {
                                     if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
                                     {
-                                        test1.Add(fartherSide);
+                                        group.Add(fartherSide);
                                         shadowList.Add(fartherSide);
                                     }
 
                                     // 斜めにしか影を作りたくないので後ろを削除
                                     if (shadowList.Contains(back))
                                     {
-                                        test1.Remove(back);
+                                        group.Remove(back);
                                         shadowList.Remove(back);
                                     }
                                 }
@@ -303,15 +358,22 @@ public class LightObject : MonoBehaviour
                                 {
                                     if (fartherSide.x >= 0 && fartherSide.x < fieldSize.x && fartherSide.y >= 0 && fartherSide.y < fieldSize.y)
                                     {
-                                        test1.Add(fartherSide);
+                                        group.Add(fartherSide);
                                         shadowList.Add(fartherSide);
                                     }
                                 }
                             }
 
-                            test.Add(test1);
+                            // 影グループを送信用データに追加
+                            if (group.Count > 0)
+                            {
+                                shadowGroup.Add(group);
+                            }
 
                             // 柱があったらこのマスの後ろを処理する必要はないので終了
+                            isEndLoop = true;
+
+                            // 柱があったら他を処理する必要はないので終了
                             break;
                         }
                     }
@@ -337,9 +399,8 @@ public class LightObject : MonoBehaviour
         // フィールドの色を変更
         fieldData.ChangeColor();
 
-
-        this.gameObject.GetComponent<ShadowExpression>().SetArrayShadow(test);
-
+        // グループ化したデータを影生成に送信
+        this.gameObject.GetComponent<ShadowExpression>().SetArrayShadow(shadowGroup);
     }
 
     public List<Vector2Int> GetShadowList()
