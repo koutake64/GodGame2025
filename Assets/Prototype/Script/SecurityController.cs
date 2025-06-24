@@ -174,11 +174,11 @@ public class SecurityController : MonoBehaviour
         Vector2Int lateralDir = new Vector2Int();
         if (charaDir.x != 0)
         {
-            lateralDir = new Vector2Int(1, 0);
+            lateralDir = new Vector2Int(0, 1);
         }
         else
         {
-            lateralDir = new Vector2Int(0, 1);
+            lateralDir = new Vector2Int(1, 0);
         }
 
         // åªç›ÇÃç¿ïW
