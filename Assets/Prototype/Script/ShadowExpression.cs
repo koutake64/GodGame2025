@@ -1,8 +1,6 @@
-using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
+
 
 public class ShadowExpression : MonoBehaviour
 {
@@ -64,5 +62,4 @@ public class ShadowExpression : MonoBehaviour
             }
         }
     }
-
 }

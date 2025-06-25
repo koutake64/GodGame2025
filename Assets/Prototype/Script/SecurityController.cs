@@ -1,10 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
-using static UnityEditor.PlayerSettings;
-using UnityEngine.UI;
-
 
 public class SecurityController : MonoBehaviour
 {
