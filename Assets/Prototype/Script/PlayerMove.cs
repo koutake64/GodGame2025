@@ -6,9 +6,10 @@ public class PlayerMove : MonoBehaviour
 	private CharacterMoveController moveController;
 	private TimeManager timeManager;
 	private _FieldDataManager fieldData;
+	private UIManager uiManager;
 
 	private Vector2 moveInput; // ì¸óÕíl
-	private float inputCooldown = 0.2f; // ì¸óÕä‘äu
+	private float inputCooldown = 0f; // ì¸óÕä‘äu
 	private float inputTimer = 0f;
 	private Vector2Int fieldSize;
 
@@ -21,6 +22,7 @@ public class PlayerMove : MonoBehaviour
 	{
 		moveController = GetComponent<CharacterMoveController>();
 		timeManager = FindFirstObjectByType<TimeManager>();
+		uiManager = FindFirstObjectByType<UIManager>();
 
         fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();
         if (!fieldData)
@@ -35,8 +37,7 @@ public class PlayerMove : MonoBehaviour
 
 	void Update()
 	{
-		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon
-			&& timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.afternoon)
+		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon || timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon || uiManager.GetÇ¢Ç∏ÇøÇ•ÇÒÇ∂Ç»Ç¢Ç∆Ç†Ç…ÇﬂÅ[ÇµÇÂÇÒÇ∏())
 			return;
 
 		inputTimer -= Time.deltaTime;
@@ -64,7 +65,7 @@ public class PlayerMove : MonoBehaviour
 			inputTimer = inputCooldown;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Return) && (timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon || timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon))
+		if (Input.GetKeyDown(KeyCode.Return))
 		{
 			ChangeObjectDirection();
 		}
