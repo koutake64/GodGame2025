@@ -18,6 +18,8 @@ public class ModelShiftByTime : MonoBehaviour
 
     private _FieldDataManager fdMng;
 
+    private int updateCnt;
+
     private void Start()
     {
         timeMng = GameObject.Find("Canvas").GetComponent<TimeManager>();
@@ -64,22 +66,51 @@ public class ModelShiftByTime : MonoBehaviour
             }
 
             model.SetActive(false);
+
+            // --- 情報の削除
+            var princessList = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
+            var butlerList = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.butler);
+
+            if (princessList.Count > 0)
+            {
+                Vector2Int princessPos = princessList[0];
+                fdMng.RemoveInfo(princessPos, _FieldDataManager.E_FIELDSTATE.princess);
+            }
+            if (butlerList.Count > 0)
+            {
+                Vector2Int butlerPos = butlerList[0];
+                fdMng.RemoveInfo(butlerPos, _FieldDataManager.E_FIELDSTATE.butler);
+            }
+
         }
 
         // --- 時間帯にあったモデルをアクティブにする
         ModelActive(timeMng.GetCurState());
-        
+
+        updateCnt++;
+
     }
 
     private void ModelActive(CommonSE_Proto.E_TIMEOFDAY time)
     {
-        //Debug.Log("今は" + time + "です");
-
         if (models[(int)time])
         {
             models[(int)time].SetActive(true);
-            //Debug.Log(time + "のモデルがアクティブになりました");
+
+            GameObject obj = this.gameObject;
+            Vector2Int startPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.start)[0];
+
+            if (obj.name == "Princess_a")
+            {
+                fdMng.AddInfo(startPos, _FieldDataManager.E_FIELDSTATE.princess);
+            }
+            if (obj.name == "Player_a")
+            {
+                fdMng.AddInfo(startPos, _FieldDataManager.E_FIELDSTATE.butler);
+            }
+
         }
+
     }
 
 	public void Refresh()

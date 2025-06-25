@@ -38,7 +38,8 @@ public class _FieldDataManager : MonoBehaviour
 
         // --- その他
         talk,               // お花しするマス
-        testtttttttt        // 消す
+        testtttttttt,        // 消す
+        none
 
     }
 

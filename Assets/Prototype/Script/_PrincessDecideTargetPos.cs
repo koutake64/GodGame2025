@@ -41,10 +41,6 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         {
             keyList.Add(5);
         }
-        else if (fdMng.GetStageNum() == 2)
-        {
-            keyList.Add(3);
-        }
 
     }
 
@@ -79,6 +75,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             //    "nextTargetPos : " + nextTargetPos
             //    );
         }
+        fdMng.ChangeColor();
     }
 
     private void NightUpdate()
@@ -123,8 +120,6 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 }
             }
         }
-
-        fdMng.ChangeColor();
     }
 
 
@@ -225,7 +220,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 if (list.Value == searchRangePosList[i])
                 {
                     prevTargetPos = nextTargetPos;
-                    nextTargetPos = bestTarget;
+                    nextTargetPos = list.Value;
                     shadowKeyList.Add(list.Key);
                     return;
                 }
@@ -283,6 +278,11 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     public List<Vector2Int> GetRange()
     {
         return searchRangePosList;
+    }
+
+    public Vector2Int GetNextPos()
+    {
+        return nextTargetPos;
     }
 
 }
