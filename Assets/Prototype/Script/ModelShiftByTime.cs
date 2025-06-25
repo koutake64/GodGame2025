@@ -66,22 +66,6 @@ public class ModelShiftByTime : MonoBehaviour
             }
 
             model.SetActive(false);
-
-            // --- 情報の削除
-            var princessList = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.princess);
-            var butlerList = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.butler);
-
-            if (princessList.Count > 0)
-            {
-                Vector2Int princessPos = princessList[0];
-                fdMng.RemoveInfo(princessPos, _FieldDataManager.E_FIELDSTATE.princess);
-            }
-            if (butlerList.Count > 0)
-            {
-                Vector2Int butlerPos = butlerList[0];
-                fdMng.RemoveInfo(butlerPos, _FieldDataManager.E_FIELDSTATE.butler);
-            }
-
         }
 
         // --- 時間帯にあったモデルをアクティブにする

@@ -380,6 +380,12 @@ public class CharacterMoveController : MonoBehaviour
                 return false;
             }
 
+            // ñÈÇÕé∑éñÇÃç¿ïWÇí ÇÍÇÈÇÊÇ§Ç…Ç∑ÇÈ
+            if(timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.night && obj.state == _FieldDataManager.E_FIELDSTATE.butler)
+            {
+                return false;
+            }
+
             if (obj.state == _FieldDataManager.E_FIELDSTATE.butler ||
                 obj.state == _FieldDataManager.E_FIELDSTATE.princess ||
                 obj.state == _FieldDataManager.E_FIELDSTATE.securityGuard_N)
