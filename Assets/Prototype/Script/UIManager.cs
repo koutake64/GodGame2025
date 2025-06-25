@@ -311,4 +311,9 @@ public class UIManager : MonoBehaviour
             SceneChanger.ChangeScene("ClearScene");
         }
     }
+
+    public bool GetÇ¢Ç∏ÇøÇ•ÇÒÇ∂Ç»Ç¢Ç∆Ç†Ç…ÇﬂÅ[ÇµÇÂÇÒÇ∏()
+    {
+        return isSwitchNight; 
+    }
 }
