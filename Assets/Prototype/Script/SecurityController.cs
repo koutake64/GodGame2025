@@ -179,11 +179,23 @@ public class SecurityController : MonoBehaviour
         // 現在の座標
         Vector2Int pos = moveController.GetCurrentPos();
 
+        // 遮るオブジェクトがあったら終了させるフラグ
+        bool isEndCheck = false;
+
         for (int j = 0; j < surroundingsRange.y; ++j)
         {
-            // 警備員に対して右側
+            // 確認終了フラグを下げる
+            isEndCheck = false;
+
+            // 警備員に対して左側
             for (int i = 1; i <= (surroundingsRange.x / 2); ++i)
             {
+                // 確認終了フラグがあったら終了
+                if (isEndCheck)
+                {
+                    break;
+                }
+
                 // 対象マスの座標を計算
                 Vector2Int targetPos = pos + charaDir * (j + 1) + lateralDir * i;
 
@@ -201,6 +213,8 @@ public class SecurityController : MonoBehaviour
                     if (info.state == _FieldDataManager.E_FIELDSTATE.pillar ||
                         info.state == _FieldDataManager.E_FIELDSTATE.wall)
                     {
+                        // 確認終了フラグを立てる
+                        isEndCheck = true;
                         break;
                     }
 
@@ -213,9 +227,19 @@ public class SecurityController : MonoBehaviour
                     }
                 }
             }
-            // 警備員に対して左側
+
+            // 確認終了フラグを下げる
+            isEndCheck = false;
+
+            // 警備員に対して右側
             for (int i = -1; i >= -(surroundingsRange.x / 2); --i)
             {
+                // 確認終了フラグがあったら終了
+                if (isEndCheck)
+                {
+                    break;
+                }
+
                 // 対象マスの座標を計算
                 Vector2Int targetPos = pos + charaDir * (j + 1) + lateralDir * i;
 
@@ -233,6 +257,8 @@ public class SecurityController : MonoBehaviour
                     if (info.state == _FieldDataManager.E_FIELDSTATE.pillar ||
                         info.state == _FieldDataManager.E_FIELDSTATE.wall)
                     {
+                        // 確認終了フラグを立てる
+                        isEndCheck = true;
                         break;
                     }
 
