@@ -75,7 +75,7 @@ public class PrincessTalk : MonoBehaviour
                 fieldMng.RemoveInfo(princessPos, _FieldDataManager.E_FIELDSTATE.talk);
 
                 backgroundPanel.SetActive(true);
-                textMng.StartTalk(talkCnt);
+                textMng.StartTalk(talkCnt,false);
 
                 isTalk = true;
                 talkCnt++;
