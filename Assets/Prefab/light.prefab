@@ -101,5 +101,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e170dc69a14014e428a328d3aa6e5e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shadowFrontObj: {fileID: 5407622411942901779, guid: c9e1e430a7de2c64ca02b1da05a3553c, type: 3}
-  _shadowDiagonalObj: {fileID: 5419631168798456142, guid: 20cd827610bffb34283d1127a0597540, type: 3}
+  _shadowFrontObj: {fileID: 5419631168798456142, guid: 20cd827610bffb34283d1127a0597540, type: 3}
+  _shadowDiagonalObj: {fileID: 5407622411942901779, guid: c9e1e430a7de2c64ca02b1da05a3553c, type: 3}

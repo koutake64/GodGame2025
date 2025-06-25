@@ -229,19 +229,16 @@ public class SurveillanceCamera : MonoBehaviour
             {
                 offsetValue = 2;
                 transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
-                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Center)
             {
                 offsetValue = 0;
                 transform.rotation = Quaternion.Euler(0f, angleY, 0f);
-                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Right)
             {
                 offsetValue = -2;
                 transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
-                AudioManager.Instance.PlaySE(3);
             }
         }
         if (forward == Vector2.up || forward == Vector2.down)
@@ -251,19 +248,16 @@ public class SurveillanceCamera : MonoBehaviour
             {
                 offsetValue = 2;
                 transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
-                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Center)
             {
                 offsetValue = 0;
                 transform.rotation = Quaternion.Euler(0f, angleY, 0f);
-                AudioManager.Instance.PlaySE(3);
             }
             else if (watchState == E_WATCHSTATE.Right)
             {
                 offsetValue = -2;
                 transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
-                AudioManager.Instance.PlaySE(3);
             }
         }
         // スライド方向を現在の向きに回転
@@ -650,7 +644,7 @@ public class SurveillanceCamera : MonoBehaviour
         if (isPlayerInRange == true && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
         {
             impactEffect.Play(); // インパクトエフェクトを再生
-
+            AudioManager.Instance.PlaySE(3);
             if (forward == Vector2.up)
                 if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
                 {
