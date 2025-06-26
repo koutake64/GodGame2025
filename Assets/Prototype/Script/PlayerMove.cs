@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,9 @@ public class PlayerMove : MonoBehaviour
 	private float inputCooldown = 0f; // ì¸óÕä‘äu
 	private float inputTimer = 0f;
 	private Vector2Int fieldSize;
+	private bool afterNoon = false;
+	private float noonTime;
+	private float gameTime;
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
@@ -33,11 +37,18 @@ public class PlayerMove : MonoBehaviour
             );
         }
 		fieldSize = fieldData.GetFieldSize();
-    }
+		noonTime = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) + 120f;
+	}
 
 	void Update()
 	{
-		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon || timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.afternoon || uiManager.GetÇ¢Ç∏ÇøÇ•ÇÒÇ∂Ç»Ç¢Ç∆Ç†Ç…ÇﬂÅ[ÇµÇÂÇÒÇ∏())
+		gameTime = timeManager.GetCurrentTime();
+		if (gameTime <= noonTime)
+		{
+			afterNoon = true;
+		}
+
+		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon || afterNoon)
 			return;
 
 		inputTimer -= Time.deltaTime;
