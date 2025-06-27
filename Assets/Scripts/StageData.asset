@@ -36,8 +36,8 @@ MonoBehaviour:
     id: 0
     state: 3
   - pos: {x: 2, y: 2}
-    dir: 2
-    id: 0
+    dir: 0
+    id: 5
     state: 3
   - pos: {x: 3, y: 2}
     dir: 2
@@ -104,11 +104,11 @@ MonoBehaviour:
     id: 0
     state: 2
   - pos: {x: 1, y: 10}
-    dir: 2
+    dir: 1
     id: 0
     state: 3
   - pos: {x: 1, y: 11}
-    dir: 2
+    dir: 1
     id: 0
     state: 3
   - pos: {x: 3, y: 11}
@@ -116,7 +116,7 @@ MonoBehaviour:
     id: 0
     state: 2
   - pos: {x: 1, y: 12}
-    dir: 2
+    dir: 1
     id: 0
     state: 3
   - pos: {x: 2, y: 13}
@@ -164,7 +164,7 @@ MonoBehaviour:
     id: 11
     state: 7
   - pos: {x: 0, y: 14}
-    dir: 2
+    dir: 0
     id: 0
     state: 1
   - pos: {x: 13, y: 1}
