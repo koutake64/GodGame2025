@@ -600,6 +600,8 @@ public class SurveillanceCamera : MonoBehaviour
             Debug.Log($"視認可能な索敵マス: {pos}");
         }
 
+        //this.GetComponent<MonitoringRangeGanerate>().SetArrayMonitoring(searchedTileList);
+
         return searchedTileList;
     }
 
