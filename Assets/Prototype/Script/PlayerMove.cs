@@ -42,13 +42,8 @@ public class PlayerMove : MonoBehaviour
 
 	void Update()
 	{
-		gameTime = timeManager.GetCurrentTime();
-		if (gameTime <= noonTime)
-		{
-			afterNoon = true;
-		}
 
-		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon || afterNoon)
+		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.afternoon) 
 			return;
 
 		inputTimer -= Time.deltaTime;
