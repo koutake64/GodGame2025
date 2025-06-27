@@ -342,6 +342,10 @@ PrefabInstance:
       value: ExhibitionArt1
       objectReference: {fileID: 0}
     - target: {fileID: 3919150794458702374, guid: 62d850b8cb7fde741a84d9e898a85a6a, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919150794458702374, guid: 62d850b8cb7fde741a84d9e898a85a6a, type: 3}
       propertyPath: m_LightProbeUsage
       value: 4
       objectReference: {fileID: 0}
