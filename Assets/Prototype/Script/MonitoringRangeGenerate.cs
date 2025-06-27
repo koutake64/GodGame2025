@@ -23,6 +23,7 @@ public class MonitoringRangeGanerate : MonoBehaviour
         monitoring = array;
 
         CreateMonitoringObject();
+        Debug.Log("SetArrayShadow");
     }
 
     private void CreateMonitoringObject()
@@ -54,10 +55,12 @@ public class MonitoringRangeGanerate : MonoBehaviour
                 GameObject obj;
                 if (different.x == 0 || different.y == 0)
                 {
+                    Debug.Log("Front");
                     obj = Instantiate(monitoringFrontObj, createPos, Quaternion.identity);
                 }
                 else
                 {
+                    Debug.Log("Diagonal");
                     obj = Instantiate(monitoringDiagonalObj, createPos, Quaternion.identity);
                 }
 
@@ -67,6 +70,44 @@ public class MonitoringRangeGanerate : MonoBehaviour
                 // 生成済みオブジェクト配列に追加
                 monitoringObject.Add(obj);
             }
+        }
+    }
+    /// <summary>
+    /// カメラ位置を含む索敵マスリストを元に監視範囲オブジェクトを生成
+    /// </summary>
+    public void SetArrayMonitoring(List<Vector2Int> searchedTiles)
+    {
+        if (searchedTiles == null || searchedTiles.Count == 0) return;
+
+        // 既存のオブジェクトを削除
+        foreach (var obj in monitoringObject)
+        {
+            Destroy(obj);
+        }
+        monitoringObject.Clear();
+
+        Vector2Int standard = searchedTiles[0];
+        Vector3 standardPos = new Vector3(standard.x, 0f, standard.y);
+
+        for (int i = 1; i < searchedTiles.Count; i++)
+        {
+            Vector2Int shadowPos = searchedTiles[i];
+            Vector3 createPos = new Vector3(shadowPos.x, 0f, shadowPos.y);
+
+            Vector2Int different = standard - shadowPos;
+
+            GameObject obj;
+            if (different.x == 0 || different.y == 0)
+            {
+                obj = Instantiate(monitoringFrontObj, createPos, Quaternion.identity);
+            }
+            else
+            {
+                obj = Instantiate(monitoringDiagonalObj, createPos, Quaternion.identity);
+            }
+
+            obj.transform.LookAt(standardPos);
+            monitoringObject.Add(obj);
         }
     }
 }
