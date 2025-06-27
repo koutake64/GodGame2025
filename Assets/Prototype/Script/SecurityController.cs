@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class SecurityController : MonoBehaviour
 {
@@ -177,7 +178,7 @@ public class SecurityController : MonoBehaviour
         }
 
         // 現在の座標
-        Vector2Int pos = moveController.GetCurrentPos();
+        Vector2Int pos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
 
         // 遮るオブジェクトがあったら終了させるフラグ
         bool isEndCheck = false;
@@ -187,7 +188,7 @@ public class SecurityController : MonoBehaviour
             // 確認終了フラグを下げる
             isEndCheck = false;
 
-            // 警備員に対して左側
+            // 警備員に対して横方向に確認
             for (int i = 1; i <= (surroundingsRange.x / 2); ++i)
             {
                 // 確認終了フラグがあったら終了
@@ -220,10 +221,34 @@ public class SecurityController : MonoBehaviour
 
                     if (info.state == _FieldDataManager.E_FIELDSTATE.princess)
                     {
-                        // お姫様を発見
-                        securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
-                        uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
-                        SceneChanger.ChangeScene(sceneName);
+                        // ヒット情報を格納する変数
+                        RaycastHit hit;
+
+                        // 相手の座標
+                        Vector3 otherPos = new Vector3(info.pos.x, 0.0f, info.pos.y);
+
+                        // レイ生成する方向を計算
+                        Vector3 rayDirection = (otherPos - transform.position).normalized;
+
+                        // レイの長さを計算
+                        float rayDistance = Vector3.Distance(transform.position, otherPos);
+
+                        // 警備員とお嬢様の間にレイを生成し障害物がないか確認
+                        Ray ray = new Ray(transform.position, rayDirection);
+                        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.green);
+
+                        // レイキャストを実行
+                        if (Physics.Raycast(transform.position, rayDirection, out hit, rayDistance))
+                        {
+                            // ヒットしたオブジェクトのタグで判定
+                            if (hit.collider.CompareTag("Princess"))
+                            {
+                                // お姫様を発見
+                                securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
+                                uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
+                                SceneChanger.ChangeScene(sceneName);
+                            }
+                        }
                     }
                 }
             }
@@ -231,7 +256,7 @@ public class SecurityController : MonoBehaviour
             // 確認終了フラグを下げる
             isEndCheck = false;
 
-            // 警備員に対して右側
+            // 警備員に対して横方向に確認
             for (int i = -1; i >= -(surroundingsRange.x / 2); --i)
             {
                 // 確認終了フラグがあったら終了
@@ -264,10 +289,34 @@ public class SecurityController : MonoBehaviour
 
                     if (info.state == _FieldDataManager.E_FIELDSTATE.princess)
                     {
-                        // お姫様を発見
-                        securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
-                        uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
-                        SceneChanger.ChangeScene(sceneName);
+                        // ヒット情報を格納する変数
+                        RaycastHit hit;
+
+                        // 相手の座標
+                        Vector3 otherPos = new Vector3(info.pos.x, 0.0f, info.pos.y);
+
+                        // レイ生成する方向を計算
+                        Vector3 rayDirection = (otherPos - transform.position).normalized;
+
+                        // レイの長さを計算
+                        float rayDistance = Vector3.Distance(transform.position, otherPos);
+
+                        // 警備員とお嬢様の間にレイを生成し障害物がないか確認
+                        Ray ray = new Ray(transform.position, rayDirection);
+                        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.green);
+
+                        // レイキャストを実行
+                        if (Physics.Raycast(transform.position, rayDirection, out hit, rayDistance))
+                        {
+                            // ヒットしたオブジェクトのタグで判定
+                            if (hit.collider.CompareTag("Princess"))
+                            {
+                                // お姫様を発見
+                                securityEffect.StartDoubleAlertEffect(); // エフェクトを再生
+                                uiManager.SetUIActive(UIManager.E_UI_KIND.gameOver, true);
+                                SceneChanger.ChangeScene(sceneName);
+                            }
+                        }
                     }
                 }
             }

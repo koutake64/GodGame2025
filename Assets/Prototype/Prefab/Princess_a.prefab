@@ -317,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1706c19d2460d44b41c2b431ac6c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charaState: 0
+  charaState: 6
   moveSpeed: 2
 --- !u!114 &4327197013295994911
 MonoBehaviour:
