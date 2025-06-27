@@ -572,9 +572,10 @@ public class SurveillanceCamera : MonoBehaviour
 
         Vector2Int center = SurveillanceCameraPos;
         Vector2Int[] offsets = GetOffsetsBasedOnWatchState();
-
-        // レイの発射点（監視カメラの世界座標）
         Vector3 rayOrigin = GetRayStartPoint(center, CameraDir);
+
+        // 先頭にカメラ自身の位置を追加
+        searchedTileList.Add(center);
 
         foreach (var offset in offsets)
         {
@@ -584,17 +585,12 @@ public class SurveillanceCamera : MonoBehaviour
             Vector3 dirToTarget = (targetWorld - rayOrigin).normalized;
             float dist = Vector3.Distance(rayOrigin, targetWorld);
 
-            // 壁に遮られているかどうか判定
+            // 遮蔽物チェック（LayerMask 指定）
             if (Physics.Raycast(rayOrigin, dirToTarget, out RaycastHit hit, dist))
             {
-                if (hit.collider.gameObject)
-                {
-                    // 壁があるため、このマスは視認不可
-                    continue;
-                }
+                continue; // 遮られているためスキップ
             }
 
-            // 遮蔽物なし＝視認可能なマスなのでリストに追加
             searchedTileList.Add(targetGrid);
         }
 
