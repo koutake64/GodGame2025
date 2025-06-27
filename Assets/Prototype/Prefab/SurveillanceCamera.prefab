@@ -179,8 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f4a835ac85ca3a42a08b91ad539cb94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monitoringFrontObj: {fileID: 5406214391919177696, guid: 4d165d1b6024a064c829c7c67dfb0ce3, type: 3}
-  monitoringDiagonalObj: {fileID: 5406214391919177696, guid: 4d165d1b6024a064c829c7c67dfb0ce3, type: 3}
+  monitoringFrontObj: {fileID: 4724916732475247546, guid: 0b98ce9f2ef8bb843ab36e335714c6e6, type: 3}
+  monitoringDiagonalObj: {fileID: 4724916732475247546, guid: 0b98ce9f2ef8bb843ab36e335714c6e6, type: 3}
 --- !u!1001 &2385587393044377219
 PrefabInstance:
   m_ObjectHideFlags: 0
