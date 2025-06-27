@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
               "TextManagerがnullです");
 
         // 各演出開始時間の取得
-        noonTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) - 5.0f;
+        noonTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon);
         nightTimeStart = timeMng.GetTime(CommonSE_Proto.E_TIMEOFDAY.night) - 5.0f;
 
         UIDictionary.GetValueOrDefault(E_UI_KIND.performance).SetActive(false);
