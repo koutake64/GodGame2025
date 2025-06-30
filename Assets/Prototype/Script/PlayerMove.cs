@@ -43,39 +43,47 @@ public class PlayerMove : MonoBehaviour
 	void Update()
 	{
 
-		if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.afternoon) 
-			return;
+        gameTime = timeManager.GetCurrentTime();
+        float nightStartTime = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.night);
 
-		inputTimer -= Time.deltaTime;
-		if (inputTimer > 0) return;
+        // —[•û¨–éˆÚ“®ˆ—
+        if (gameTime >= nightStartTime - 5.5f && gameTime < nightStartTime)
+            return;
 
-		// —Dæ‡ˆÊFã‰º¨¶‰E
-		if (moveInput.y > 0.5f)
-		{
-			moveController.AddPosY(1);
-			inputTimer = inputCooldown;
-		}
-		else if (moveInput.y < -0.5f)
-		{
-			moveController.AddPosY(-1);
-			inputTimer = inputCooldown;
-		}
-		else if (moveInput.x > 0.5f)
-		{
-			moveController.AddPosX(1);
-			inputTimer = inputCooldown;
-		}
-		else if (moveInput.x < -0.5f)
-		{
-			moveController.AddPosX(-1);
-			inputTimer = inputCooldown;
-		}
+        if (timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.noon &&
+            timeManager.CurrentState != CommonSE_Proto.E_TIMEOFDAY.afternoon)
+            return;
 
-		if (Input.GetKeyDown(KeyCode.Return))
-		{
-			ChangeObjectDirection();
-		}
-	}
+        inputTimer -= Time.deltaTime;
+        if (inputTimer > 0) return;
+
+        // —Dæ‡ˆÊFã‰º¨¶‰E
+        if (moveInput.y > 0.5f)
+        {
+            moveController.AddPosY(1);
+            inputTimer = inputCooldown;
+        }
+        else if (moveInput.y < -0.5f)
+        {
+            moveController.AddPosY(-1);
+            inputTimer = inputCooldown;
+        }
+        else if (moveInput.x > 0.5f)
+        {
+            moveController.AddPosX(1);
+            inputTimer = inputCooldown;
+        }
+        else if (moveInput.x < -0.5f)
+        {
+            moveController.AddPosX(-1);
+            inputTimer = inputCooldown;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            ChangeObjectDirection();
+        }
+    }
 
 	private void ChangeObjectDirection()
 	{
