@@ -781,18 +781,19 @@ public class _FieldDataManager : MonoBehaviour
             {
                 for(int i = 0; i < fieldData[x, y].Count; ++i)
                 {
-                    if (fieldData[x, y][i].state == E_FIELDSTATE.surveillanceCamera)
-                    {
-                        SurveillanceCamera sc = fieldData[x, y][i].obj.GetComponent<SurveillanceCamera>();
+                    //if (fieldData[x, y][i].state == E_FIELDSTATE.surveillanceCamera)
+                    //{
+                    //    SurveillanceCamera sc = fieldData[x, y][i].obj.GetComponent<SurveillanceCamera>();
 
-                        List<Vector2Int> posList = sc.GetSearchedTileList();
+                    //    List<Vector2Int> posList = sc.GetSearchedTileList();
 
-                        for (int j = 0; j < posList.Count; ++j)
-                        {
-                            state[posList[j].x, posList[j].y] = E_FIELDSTATE.sc_searchRange;
-                        }
-                    }
-                    else if (fieldData[x, y][i].state == E_FIELDSTATE.light)
+                    //    for (int j = 0; j < posList.Count; ++j)
+                    //    {
+                    //        state[posList[j].x, posList[j].y] = E_FIELDSTATE.sc_searchRange;
+                    //    }
+                    //}
+                    //else
+                    if (fieldData[x, y][i].state == E_FIELDSTATE.light)
                     {
                         LightObject lo = fieldData[x, y][i].obj.GetComponent<LightObject>();
 

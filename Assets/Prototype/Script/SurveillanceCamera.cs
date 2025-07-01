@@ -66,6 +66,8 @@ public class SurveillanceCamera : MonoBehaviour
     // 警備員のエフェクトスクリプト
     private SecurityEffect securityEffect;
 
+    private bool needUpdateTileList = true;
+
     private void Start()
     {
 
@@ -151,7 +153,7 @@ public class SurveillanceCamera : MonoBehaviour
         }
 
         GetOffsetsBasedOnWatchState();
-        GetSearchedTileList();
+        //GetSearchedTileList();
 
         Vector2Int playerGridPos = new Vector2Int((int)playerPos.x, (int)playerPos.z);
 
@@ -177,7 +179,14 @@ public class SurveillanceCamera : MonoBehaviour
                 Debug.Log("カメラの向きが変えられる（上下）");
             }
         }
-        
+
+        if (needUpdateTileList)
+        {
+            GetSearchedTileList(); // ✅ 必要なときだけ更新
+            needUpdateTileList = false;
+        }
+
+
         // 監視範囲の状態をリセット
         ResetCameraRange();
 
@@ -556,13 +565,9 @@ public class SurveillanceCamera : MonoBehaviour
         return obj.CompareTag("Wall"); // 壁には"Wall"タグをつけておく
     }
 
-
     // 索敵範囲のマス座標を保持するリスト
     private List<Vector2Int> searchedTileList = new List<Vector2Int>();
 
-    /// <summary>
-    /// 現在の監視状態に応じて索敵しているマスのリストを返す
-    /// </summary>
     /// <summary>
     /// 現在の監視状態に応じて索敵しているマスのリストを返す
     /// </summary>
@@ -636,88 +641,95 @@ public class SurveillanceCamera : MonoBehaviour
         return isFoundTarget;
     }
 
+    private bool isCameraRotating = false;
+
     public void CameraAction(Transform playerTransform)
     {
+        // 多重実行防止（連打防止）
+        if (isCameraRotating) return;
 
-        if (isPlayerInRange == true && (timeManager.GetCurState() == E_TIMEOFDAY.noon || timeManager.GetCurState() == E_TIMEOFDAY.afternoon))
+        if (!isPlayerInRange) return;
+
+        var state = timeManager.GetCurState();
+        if (state != E_TIMEOFDAY.noon && state != E_TIMEOFDAY.afternoon) return;
+
+        isCameraRotating = true;
+
+        impactEffect.Play(); // インパクトエフェクトを再生
+        AudioManager.Instance.PlaySE(3); // 効果音再生
+
+        E_WATCHSTATE prevState = watchState;
+
+        // カメラの向きとプレイヤーの相対位置で watchState を更新
+        Vector3 cameraPos = transform.position;
+
+        if (forward == Vector2.up)
         {
-            impactEffect.Play(); // インパクトエフェクトを再生
-            AudioManager.Instance.PlaySE(3);
-            if (forward == Vector2.up)
-                if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの左側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Right;
-                    else if (watchState == E_WATCHSTATE.Left)
-                        watchState = E_WATCHSTATE.Center;
-                }
-                else if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの右側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Left;
-                    else if (watchState == E_WATCHSTATE.Right)
-                        watchState = E_WATCHSTATE.Center;
-                }
-
-            if (forward == Vector2.down)
-                if (playerPos.x < this.transform.position.x) // プレイヤーがカメラの左側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Right;
-                    else if (watchState == E_WATCHSTATE.Left)
-                        watchState = E_WATCHSTATE.Center;
-                }
-                else if (playerPos.x > this.transform.position.x) // プレイヤーがカメラの右側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Left;
-                    else if (watchState == E_WATCHSTATE.Right)
-                        watchState = E_WATCHSTATE.Center;
-                }
-
-            if (forward == Vector2.left)
-                if (playerPos.z < this.transform.position.z) // プレイヤーがカメラの左側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Right;
-                    else if (watchState == E_WATCHSTATE.Left)
-                        watchState = E_WATCHSTATE.Center;
-                }
-                else if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの右側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Left;
-                    else if (watchState == E_WATCHSTATE.Right)
-                        watchState = E_WATCHSTATE.Center;
-                }
-
-            if (forward == Vector2.right)
-                if (playerPos.z > this.transform.position.z) // プレイヤーがカメラの左側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Right;
-                    else if (watchState == E_WATCHSTATE.Left)
-                        watchState = E_WATCHSTATE.Center;
-                }
-                else if (playerPos.z < this.transform.position.z) // プレイヤーがカメラの右側
-                {
-                    if (watchState == E_WATCHSTATE.Center)
-                        watchState = E_WATCHSTATE.Left;
-                    else if (watchState == E_WATCHSTATE.Right)
-                        watchState = E_WATCHSTATE.Center;
-                }
-            // 監視範囲の状態をリセット
-            ResetCameraRange();
-
-            List<Vector2Int> searchedTiles = GetSearchedTileList();
-
-            // 現在の監視状態に応じて索敵処理を実行
-            SearchRange();
-
-            fieldDataManager.ChangeColor();
-
-
+            if (playerPos.x > cameraPos.x) // プレイヤーが左
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
+                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
+            }
+            else if (playerPos.x < cameraPos.x) // プレイヤーが右
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
+                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
+            }
         }
+        else if (forward == Vector2.down)
+        {
+            if (playerPos.x < cameraPos.x) // プレイヤーが左
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
+                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
+            }
+            else if (playerPos.x > cameraPos.x) // プレイヤーが右
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
+                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
+            }
+        }
+        else if (forward == Vector2.left)
+        {
+            if (playerPos.z < cameraPos.z) // プレイヤーが左
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
+                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
+            }
+            else if (playerPos.z > cameraPos.z) // プレイヤーが右
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
+                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
+            }
+        }
+        else if (forward == Vector2.right)
+        {
+            if (playerPos.z > cameraPos.z) // プレイヤーが左
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
+                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
+            }
+            else if (playerPos.z < cameraPos.z) // プレイヤーが右
+            {
+                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
+                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
+            }
+        }
+        needUpdateTileList = true;
+        
+            
+            ResetCameraRange();
+            GetSearchedTileList();
+            SearchRange();
+        
+
+        // 0.3秒後に再入力を許可
+        Invoke(nameof(UnlockCameraRotate), 0.3f);
+    }
+
+    private void UnlockCameraRotate()
+    {
+        isCameraRotating = false;
     }
 }
 
