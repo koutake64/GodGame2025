@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
         backPanel,  // 背景パネル
         perforMemo, // 演出用メモ
         gameClear,  // ゲームクリア
+        Pause,      // ポーズ画面
     }
 
     /// <summary>
@@ -45,6 +46,7 @@ public class UIManager : MonoBehaviour
 
     private bool useMemo;       // メモを開いているかどうか
     private bool usePerformance;
+    private bool usePause;
     private bool isClear = false; // ゲームクリアフラグ
     private bool currentFlag;   // 現在のフラグ状況
     private bool prevFlag;      // 1フレーム前のフラグ状況
@@ -133,6 +135,7 @@ public class UIManager : MonoBehaviour
         UIDictionary.GetValueOrDefault(E_UI_KIND.backPanel).SetActive(false);
         UIDictionary.GetValueOrDefault(E_UI_KIND.perforMemo).SetActive(false);
         UIDictionary.GetValueOrDefault(E_UI_KIND.gameClear).SetActive(false);
+        UIDictionary.GetValueOrDefault(E_UI_KIND.Pause).SetActive(false);
     }
 
     // Update is called once per frame
@@ -169,7 +172,10 @@ public class UIManager : MonoBehaviour
     void InputUpdate()
     {
         // 現在のフラグ状況を更新
-        currentFlag = useMemo || usePerformance;
+        currentFlag = useMemo || usePerformance || usePause;
+
+        if (Input.GetKeyDown(KeyCode.P))
+            usePause = !usePause;
 
         // Tabキーでメモをポップアップする
         //if (Input.GetKeyDown(KeyCode.Tab))
@@ -185,7 +191,7 @@ public class UIManager : MonoBehaviour
         if (timeMng == null) return;
 
         // ここの条件はUIを開いている間、裏のゲーム自体を止めたい場合
-        if(useMemo || usePerformance || textMng.talkFlg)
+        if(useMemo || usePerformance || textMng.talkFlg || usePause)
         {
             timeMng.SetTimeScale(0.0f);
         }
@@ -271,6 +277,15 @@ public class UIManager : MonoBehaviour
         if(usePerformance && !UIDictionary.GetValueOrDefault(E_UI_KIND.performance).GetComponent<ScreenPerformance>().GetIsPerformance())
         {
             usePerformance = false;
+        }
+
+        if(usePause)
+        {
+            UIDictionary.GetValueOrDefault(E_UI_KIND.Pause).SetActive(true);
+        }
+        else
+        {
+            UIDictionary.GetValueOrDefault(E_UI_KIND.Pause).SetActive(false);
         }
     }
 

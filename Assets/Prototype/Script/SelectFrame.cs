@@ -26,11 +26,16 @@ public class SelectFrame : MonoBehaviour
     void Update()
     {
         InputMove();
+        DecideButton();
         this.transform.position = Vector3.Lerp(this.transform.position, targetPos, Time.deltaTime * MoveSpeed);
     }
 
+    /// <summary>
+    /// カーソル移動
+    /// </summary>
     void InputMove()
     {
+        // 上下ボタン
         if (Input.GetKeyDown(KeyCode.S))
         {
             currentButtonIndex++;
@@ -49,6 +54,29 @@ public class SelectFrame : MonoBehaviour
             }
             targetPos = selMng.GetButtonPos(currentButtonIndex);
         }
-       
+
+        // 左右ボタン
+        if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
+        {
+            if( currentButtonIndex == 0 || 
+                currentButtonIndex == 1 || 
+                currentButtonIndex == 2 )
+            {
+                currentButtonIndex = 3;
+                targetPos = selMng.GetButtonPos(currentButtonIndex);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// ボタンの決定
+    /// </summary>
+    void DecideButton()
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            StartCoroutine(selMng.ActionButton(currentButtonIndex));
+        }
     }
 }

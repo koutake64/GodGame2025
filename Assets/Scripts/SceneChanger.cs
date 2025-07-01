@@ -33,6 +33,15 @@ public class SceneChanger : MonoBehaviour
 		SceneManager.LoadScene(sceneName);
 	}
 
-	// Todo ”ñ“¯Šúˆ—
-	// ChangeScene(Name, bool); true:—LŒø false:–³Œø
+	public static void EndGame()
+	{
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    // Todo ”ñ“¯Šúˆ—
+    // ChangeScene(Name, bool); true:—LŒø false:–³Œø
 }
