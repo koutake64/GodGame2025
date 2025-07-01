@@ -102,5 +102,8 @@ public class ModelShiftByTime : MonoBehaviour
 		startOnce = true; // Ÿ‚Ì LateUpdate ‚Åƒ‚ƒfƒ‹‚ğÄ•]‰¿‚³‚¹‚é
 	}
 
+    public void MovieModelActive()
+    {
 
+    }
 }
