@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class InteractiveIcon : MonoBehaviour
 {
     Vector3 Offset;
-    [SerializeField] private GameObject obj;
+    [SerializeField,Header("カメラ動かせるアイコン")] private GameObject obj;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 771c1ab2131a6cb4a814e903a911ee5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 7966883586886314967}
+  obj: {fileID: 3534777831671806834}
 --- !u!1 &3534777831671806834
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 1687351910534309547}
   - component: {fileID: 5081001056219221197}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Return
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

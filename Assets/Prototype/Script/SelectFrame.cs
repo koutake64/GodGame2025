@@ -4,9 +4,11 @@ using UnityEngine.UI;
 public class SelectFrame : MonoBehaviour
 {
     [SerializeField, Header("カーソルスピード")] private float MoveSpeed = 8f;
+    [SerializeField, Header("カーソルの動きの有無")] private bool isLerp = true;
     private Vector3 targetPos;
     private StageSelectManager selMng;
     private int currentButtonIndex = 0; // 現在のボタンインデックス
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,7 +29,10 @@ public class SelectFrame : MonoBehaviour
     {
         InputMove();
         DecideButton();
-        this.transform.position = Vector3.Lerp(this.transform.position, targetPos, Time.deltaTime * MoveSpeed);
+        if(isLerp)
+            this.transform.position = Vector3.Lerp(this.transform.position, targetPos, Time.deltaTime * MoveSpeed);
+        else
+            this.transform.position = targetPos; // 直接位置を設定する場合
     }
 
     /// <summary>
