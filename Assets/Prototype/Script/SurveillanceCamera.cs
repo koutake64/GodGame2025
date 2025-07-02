@@ -182,8 +182,9 @@ public class SurveillanceCamera : MonoBehaviour
 
         if (needUpdateTileList)
         {
-            GetSearchedTileList(); // ✅ 必要なときだけ更新
-            needUpdateTileList = false;
+            ResetCameraRange();            // 前回の表示を消す
+            GetSearchedTileList();        //  Raycastチェックありのリスト取得 + 描画
+            needUpdateTileList = false;   //  フラグ解除
         }
 
 
@@ -717,11 +718,11 @@ public class SurveillanceCamera : MonoBehaviour
         }
         needUpdateTileList = true;
         
-            
-            ResetCameraRange();
-            GetSearchedTileList();
-            SearchRange();
-        
+        RotateVisualObject();      // 回転
+
+        ResetCameraRange();
+        SearchRange();
+        GetSearchedTileList();
 
         // 0.3秒後に再入力を許可
         Invoke(nameof(UnlockCameraRotate), 0.3f);
