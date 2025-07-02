@@ -15,6 +15,7 @@ public class CameraManager : MonoBehaviour
     private GameSystem gameSystem;
     private UIManager uiManager;
     private TreasureEffect treasureEffect;
+    private TimeTransitionMovie timeTransitionMovie;
     private bool initNightPos = false;
 
     private Camera mainCamera;
@@ -54,11 +55,12 @@ public class CameraManager : MonoBehaviour
         fieldDataManager = FindFirstObjectByType<_FieldDataManager>();
         gameSystem = FindFirstObjectByType<GameSystem>();
         uiManager = FindFirstObjectByType<UIManager>();
+        timeTransitionMovie = FindFirstObjectByType<TimeTransitionMovie>();
     }
 
     void LateUpdate()
 	{
-        if (gameSystem.GetIsGoal()) return; // ゴール演出中はカメラの動きを停止
+        if (gameSystem.GetIsGoal() || timeTransitionMovie.GetIsMoviePlaying()) return; // 演出中はカメラの動きを停止
 
         switch (timeManager.CurrentState)
 		{
