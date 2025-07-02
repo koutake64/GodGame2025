@@ -194,7 +194,7 @@ VFXRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5889222035102046140}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -253,8 +253,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9174946373867437475}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.152296, y: 1.83, z: 17.337315}
+  m_LocalRotation: {x: -0, y: -0, z: -0.70710677, w: 0.7071068}
+  m_LocalPosition: {x: 16.152298, y: 3.8300035, z: 17.337315}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -262,7 +262,7 @@ Transform:
   - {fileID: 2420902188870895393}
   - {fileID: 3473789488055585002}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &3355273844352452547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +345,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f028828202a8dfb4685ffca397bf8eb4, type: 2}
     - target: {fileID: -7511558181221131132, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
