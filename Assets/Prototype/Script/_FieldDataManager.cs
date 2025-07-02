@@ -865,6 +865,13 @@ public class _FieldDataManager : MonoBehaviour
         }
     }
 
+    public Vector3 GridToWorldPosition(Vector2Int gridPos)
+    {
+        float tileSize = 1f; // 例えば 1ユニット = 1マス
+        return new Vector3(gridPos.x * tileSize, 0, gridPos.y * tileSize);
+    }
+
+
     public int GetStageNum()
     {
         return sd.GetStageNum();

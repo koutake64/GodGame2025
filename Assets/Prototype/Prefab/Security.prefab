@@ -444,6 +444,10 @@ PrefabInstance:
       value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 170ddd2f598a84f4abaf5ea59f09bf11, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 170ddd2f598a84f4abaf5ea59f09bf11, type: 3}
       propertyPath: m_TagString
       value: Security
       objectReference: {fileID: 0}

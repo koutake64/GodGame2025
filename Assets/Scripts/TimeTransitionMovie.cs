@@ -19,7 +19,7 @@ public class TimeTransitionMovie : MonoBehaviour
     private float noonMovieStart;
     private float nightMovieStart;
     private float duration = 5f;
-    private float moveSpeed = 1.8f;
+    private float moveSpeed = 1.0f;
     private float cameraMoveSpeed = 5.0f;
 
     private bool isNoonMoviePlaying = false;
@@ -80,7 +80,7 @@ public class TimeTransitionMovie : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         princess = GameObject.FindGameObjectWithTag("Princess");
         cameraObj = GameObject.FindGameObjectWithTag("MainCamera");
-
+        
         // 初期位置を保持
         if (player && princess && cameraObj)
         {
@@ -100,24 +100,27 @@ public class TimeTransitionMovie : MonoBehaviour
     {
         Debug.Log("昼の演出開始");
 
-        //// フェードアウト
-        //await Task.WhenAll(FadeOut(player), FadeOut(princess));
-
         // カメラを初期位置へ
         await MoveTo(cameraObj.transform, initialCamPos, cameraMoveSpeed);
 
+        // 執事のポジションを (0,1) にセット
+        var butlerMoveController = player.GetComponent<CharacterMoveController>();
+        if (butlerMoveController != null)
+        {
+            butlerMoveController.SetPos(new Vector2Int(0, 1));
+        }
+
         // お嬢様と執事を画面外に移動
-        princess.transform.position = initialPrincessPos - offScreenOffset;
+        princess.transform.position = initialPrincessPos - offScreenOffset * 10;
         player.transform.position = initialPlayerPos - offScreenOffset;
 
+        // 見た目を初期位置に向けておく
         player.transform.LookAt(initialPlayerPos);
 
-        // 執事のみ移動
-        await MoveTo_XAxisOnly(player.transform, initialPlayerPos, moveSpeed);
+        //// 執事のみ移動
+        //await MoveTo_XAxisOnly(player.transform, initialPlayerPos, moveSpeed);
 
-        // 執事のみフェードイン
-        //await FadeIn(player);
-        isMoviePlaying = false; // 映像の再生が終了したことを示すフラグをリセット
+        isMoviePlaying = false; // 演出終了
     }
 
     async Task PlayNightTransitionMovie()
@@ -128,12 +131,20 @@ public class TimeTransitionMovie : MonoBehaviour
         await MoveTo(cameraObj.transform, initialCamPos, cameraMoveSpeed);
 
         // 執事のみ移動
-        player.transform.position = initialPlayerPos + offScreenOffset;
-        await MoveTo_XAxisOnly(player.transform, initialPlayerPos, moveSpeed);
+        var butlerMoveController = player.GetComponent<CharacterMoveController>();
+        if (butlerMoveController != null)
+        {
+            butlerMoveController.SetPos(new Vector2Int(0, 1));
+        }
 
-        // 執事フェードアウト → 怪盗お嬢様フェードイン
-        await Task.WhenAll(FadeOut(player), 
-            MoveTo_XAxisOnly(player.transform, initialPlayerPos - offScreenOffset, moveSpeed));
+        player.transform.position = initialPlayerPos + offScreenOffset; // 執事を画面外に移動
+        butlerMoveController.AddPosX(-5);
+
+        // 見た目を初期位置に向けておく
+        player.transform.LookAt(initialPlayerPos);
+
+        //await MoveTo_XAxisOnly(player.transform, initialPlayerPos - offScreenOffset, moveSpeed);
+
         await Task.Delay(300);
 
         // ここで夜用のPrincess（怪盗ver）に切り替えるなら、別の GameObject を有効化・切り替え等が必要
