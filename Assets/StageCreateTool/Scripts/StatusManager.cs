@@ -14,22 +14,22 @@ public class StatusManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            move.y += 100;
+            move.y -= 100;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            move.x -= 100;
+            move.x += 100;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            move.y -= 100;
+            move.y += 100;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            move.x += 100;
+            move.x -= 100;
         }
 
-        transform.position += move * Time.deltaTime;
+        transform.position += move * Time.deltaTime * 2;
 
     }
 

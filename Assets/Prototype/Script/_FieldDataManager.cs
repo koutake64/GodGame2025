@@ -75,7 +75,13 @@ public class _FieldDataManager : MonoBehaviour
     private List<GameObject> moveGameObjList = new List<GameObject>();
 
     [Header("ステージデータ")]
-    [SerializeField] private StageData sd;
+    [SerializeField] private List<TextAsset> stageData;
+
+    [Header("テキストローダー")]
+    [SerializeField] private TextLoader textLoder;
+
+    //[Header("ステージデータ")]
+    //[SerializeField] private StageData sd;
 
     [Header("床の親オブジェクト(空のオブジェクトでOK)\n" +
             "※このゲームオブジェクトにFieldDataManagerをつける")]
@@ -131,7 +137,7 @@ public class _FieldDataManager : MonoBehaviour
     [SerializeField] private GameObject outOfRangeTile;
 
     private int securityRouteDrawFrame;
-    private List<Vector2Int> securityRoute;
+    private List<Vector2Int> securityRoute  = new List<Vector2Int>();
     private bool securityRouteDrawFlag;
 
     private void Start()
@@ -139,9 +145,10 @@ public class _FieldDataManager : MonoBehaviour
         // --- ヌルチェック
         // TODO 後で
 
-        List<StageData.S_STAGEINFO> data = sd.GetData();
-        fieldSizeX = sd.GetSize().x;
-        fieldSizeY = sd.GetSize().y;
+        textLoder.LoadStage(stageData[StageNummber.Get()].text);
+        List<TextLoader.CellData> sd = textLoder.cellList;
+        fieldSizeX = textLoder.stageWidth;
+        fieldSizeY = textLoder.stageHeight;
 
         // --- フィールドデータの作成
         Vector2Int fieldSize = new Vector2Int(fieldSizeX, fieldSizeY);
@@ -156,16 +163,29 @@ public class _FieldDataManager : MonoBehaviour
 
         fieldGameObj = new S_TAILPREHUBINFO[fieldSizeX, fieldSizeY];
 
-        for (int i = 0; i < data.Count; i++)
+        for (int i = 0; i < sd.Count; i++)
         {
-            AddInfo(data[i].pos, data[i].state, data[i].dir, data[i].id);
-        }
+            if (sd[i].state == E_FIELDSTATE.none)
+            {
+                continue;
+            }
 
-        List<StageData.S_ROUTEINFO> routeList = sd.GetRoute();
+            AddInfo(new Vector2Int(sd[i].x, sd[i].y), sd[i].state, sd[i].dir, sd[i].id);
 
-        for (int i = 0; i < routeList.Count; i++)
-        {
-            route.Add(routeList[i].id, routeList[i].route);
+            if (sd[i].state == E_FIELDSTATE.start)
+            {
+                AddInfo(new Vector2Int(sd[i].x, sd[i].y), E_FIELDSTATE.princess, sd[i].dir, sd[i].id);
+                AddInfo(new Vector2Int(sd[i].x, sd[i].y), E_FIELDSTATE.butler, sd[i].dir, sd[i].id);
+            }
+
+            if (sd[i].state == E_FIELDSTATE.securityGuard_N)
+            {
+                List<Vector2Int> routeList = new List<Vector2Int>();
+                routeList.Add(sd[i].route);
+                routeList.Add(new Vector2Int(sd[i].x, sd[i].y));
+                route.Add(sd[i].id, routeList);
+            }
+
         }
 
         // ---床の生成
@@ -806,7 +826,7 @@ public class _FieldDataManager : MonoBehaviour
                     //else
                     if (fieldData[x, y][i].state == E_FIELDSTATE.light)
                     {
-                        LightObject lo = fieldData[x, y][i].obj.GetComponent<LightObject>();
+                        LightObject lo = fieldData[x, y][i].obj.GetComponentInChildren<LightObject>();
 
                         List<Vector2Int> posList = lo.GetShadowList();
 
@@ -814,7 +834,7 @@ public class _FieldDataManager : MonoBehaviour
                         {
                             state[posList[j].x, posList[j].y] = E_FIELDSTATE.shadow;
                         }
-                   
+
                     }
 
                 }
@@ -823,10 +843,10 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
-        for (int i = 0; i < securityRoute.Count; ++i)
-        {
-            state[securityRoute[i].x, securityRoute[i].y] = E_FIELDSTATE.securityRoute;
-        }
+        //for (int i = 0; i < securityRoute.Count; ++i)
+        //{
+        //    state[securityRoute[i].x, securityRoute[i].y] = E_FIELDSTATE.securityRoute;
+        //}
 
         for (int y = 0; y < fieldSize.y; ++y)
         {
@@ -893,14 +913,9 @@ public class _FieldDataManager : MonoBehaviour
         return new Vector3(gridPos.x * tileSize, 0, gridPos.y * tileSize);
     }
 
-
-    public int GetStageNum()
+    public TextAsset GetStageDataText(int num)
     {
-        return sd.GetStageNum();
+        return stageData[num];
     }
 
-    public StageData GetStageData()
-    {
-        return sd;
-    }
 }

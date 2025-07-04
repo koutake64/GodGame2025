@@ -7,8 +7,7 @@ using UnityEditor;
 
 public class TimeManager : MonoBehaviour
 {
-	[SerializeField] private StageData stageData;
-	[SerializeField] private System.Collections.Generic.List<StageTimeData> stageTimeSet;
+	//[SerializeField] private System.Collections.Generic.List<StageTimeData> stageTimeSet;
     // ====== シリアライズ =====
     [SerializeField, Header("昼開始時刻(秒)")]		private float noonTime;
     [SerializeField, Header("夕方背景時刻(秒)")]	private float afterNoonTime;
@@ -20,56 +19,38 @@ public class TimeManager : MonoBehaviour
 	[SerializeField, Header("ゲーム内速度"), Range(0, 2)] private float gameSpeed;
 
 
-	[System.Serializable]
-	public class StageTimeData
-	{
-		public StageData stageData;
-		public float noonTime;
-		public float afterNoonTime;
-		public float nightTime;
-	}
+	
 
     // --- 変数 ---
     private float time = 0; // 時間管理
     private CommonSE_Proto.E_TIMEOFDAY currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
 	private CommonSE_Proto.E_TIMEOFDAY prevState = CommonSE_Proto.E_TIMEOFDAY.morning;
+	[SerializeField]private TextLoader textLoader;
+	[SerializeField] private _FieldDataManager fieldDataManager;
+	
 
 	private void Start()
     {
-        var fieldDataManager = FindFirstObjectByType<_FieldDataManager>();
-        if (fieldDataManager != null)
-        {
-            stageData = fieldDataManager.GetStageData();
-        }
-        else
-        {
-            Debug.LogWarning("_FieldDataManager が見つかりませんでした。");
-        }
 
-        ApplyTimeSettings();
-
-        levelText.text = "朝";
+		levelText.text = "朝";
         SunMove(0f);
         SetTimeScale(gameSpeed);
+
+        //fieldDataManager = FindFirstObjectByType<_FieldDataManager>();
+
+		if (fieldDataManager != null)
+		{
+			Debug.Log("aaaaaaa");
+		}
+
+		textLoader.LoadStage(fieldDataManager.GetStageDataText(StageNummber.Get()).text);
+		noonTime = textLoader.timeMorning; 
+		afterNoonTime = textLoader.timeEvening;
+		nightTime = textLoader.timeNight;
+
     }
 
-    private void ApplyTimeSettings()
-    {
-        foreach (var setting in stageTimeSet)
-        {
-            if (setting.stageData == stageData)
-            {
-                noonTime = setting.noonTime;
-                afterNoonTime = setting.afterNoonTime;
-                nightTime = setting.nightTime;
-                return;
-            }
-        }
-
-        Debug.LogWarning("一致するステージ時間設定が見つかりませんでした。");
-    }
-
-	private void Update()
+    private void Update()
 	{
         prevState = currentState;
 

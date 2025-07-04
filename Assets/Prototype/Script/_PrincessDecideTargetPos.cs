@@ -37,7 +37,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
             Debug.Log("owari");
         }
 
-        if (fdMng.GetStageNum() == 1)
+        if (StageNummber.Get() == 0)
         {
             keyList.Add(5);
         }

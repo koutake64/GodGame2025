@@ -554,8 +554,8 @@ MonoBehaviour:
   stateDropdown: {fileID: 1801071962}
   dirDropdown: {fileID: 1261065713}
   idText: {fileID: 2035079706}
-  routeXText: {fileID: 0}
-  routeYText: {fileID: 0}
+  routeXText: {fileID: 838650554}
+  routeYText: {fileID: 1138149429}
 --- !u!1 &46177860
 GameObject:
   m_ObjectHideFlags: 0
@@ -8348,7 +8348,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec5c6e0639aab4487147bdd68d56f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageTextFile: {fileID: 4900000, guid: de9a0a14480128545b923cbdac5b4bb6, type: 3}
+  stageTextFile: {fileID: 4900000, guid: 4364ce4ff5ea18f4d959d868deb827bc, type: 3}
+  stageWidth: 0
+  stageHeight: 0
+  timeMorning: 0
+  timeEvening: 0
+  timeNight: 0
 --- !u!1 &1780466454
 GameObject:
   m_ObjectHideFlags: 0

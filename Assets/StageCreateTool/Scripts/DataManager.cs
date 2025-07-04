@@ -46,7 +46,7 @@ public class DataManager : MonoBehaviour
 
     public void CreateNewData()
     {
-        editData = new StreamWriter("Assets/StageCreateTool/Text/test.txt",false);
+        editData = new StreamWriter("Assets/StageCreateTool/Text/noname.txt",false);
 
     }
 

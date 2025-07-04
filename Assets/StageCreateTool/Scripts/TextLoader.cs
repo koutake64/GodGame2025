@@ -5,24 +5,24 @@ public class TextLoader : MonoBehaviour
 {
     [SerializeField] private TextAsset stageTextFile;
 
-    private int stageWidth;
-    private int stageHeight;
-    private int timeMorning;
-    private int timeEvening;
-    private int timeNight;
+    public int stageWidth;
+    public int stageHeight;
+    public int timeMorning;
+    public int timeEvening;
+    public int timeNight;
 
     public struct CellData
     {
         public int x, y;
         public _FieldDataManager.E_FIELDSTATE state;
         public int id;
-        public CommonSE_Proto.E_DIRECTION direction;
+        public CommonSE_Proto.E_DIRECTION dir;
         public Vector2Int route;
     }
 
     public List<CellData> cellList = new List<CellData>();
 
-    void Start()
+    void Awake()
     {
         if (stageTextFile != null)
         {
@@ -34,7 +34,7 @@ public class TextLoader : MonoBehaviour
         }
     }
 
-    void LoadStage(string text)
+    public void LoadStage(string text)
     {
         string[] lines = text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
 
@@ -79,7 +79,7 @@ public class TextLoader : MonoBehaviour
                 y = y,
                 state = state,
                 id = id,
-                direction = direction,
+                dir = direction,
                 route = new Vector2Int(routeX, routeY)
             });
         }
@@ -89,7 +89,14 @@ public class TextLoader : MonoBehaviour
 
     _FieldDataManager.E_FIELDSTATE ParseState(string str)
     {
-        return System.Enum.TryParse(str, out _FieldDataManager.E_FIELDSTATE result) ? result : _FieldDataManager.E_FIELDSTATE.none;
+        if (System.Enum.TryParse(str, out _FieldDataManager.E_FIELDSTATE result))
+        {
+            return result;
+        }
+        else
+        {
+            return _FieldDataManager.E_FIELDSTATE.none;
+        }
     }
 
     CommonSE_Proto.E_DIRECTION ParseDirection(string str)

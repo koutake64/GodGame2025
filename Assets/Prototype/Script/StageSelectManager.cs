@@ -50,12 +50,15 @@ public class StageSelectManager : MonoBehaviour
         switch (index)
         {
             case 0:
+                StageNummber.Set(index);
                 SceneChanger.ChangeScene("PrototypeScene");
                 break;
             case 1:
+                StageNummber.Set(index);
                 SceneChanger.ChangeScene("PrototypeScene");
                 break;
             case 2:
+                StageNummber.Set(index);
                 SceneChanger.ChangeScene("PrototypeScene");
                 break;
             case 3:
