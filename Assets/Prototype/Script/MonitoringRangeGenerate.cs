@@ -61,9 +61,6 @@ public class MonitoringRangeGanerate : MonoBehaviour
                 obj = Instantiate(monitoringDiagonalObj, createPos, Quaternion.identity);
             }
 
-            // 方向を変更
-            obj.transform.LookAt(standardPos);
-
             // 生成済みオブジェクト配列に追加
             monitoringObject.Add(obj);
         }
