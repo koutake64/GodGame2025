@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.VFX;
-using static CommonSE_Proto;
 
 /// <summary>
 /// 監視カメラの索敵範囲を管理するスクリプト
@@ -9,80 +8,36 @@ using static CommonSE_Proto;
 /// </summary>
 public class SurveillanceCamera : MonoBehaviour
 {
-    // 監視状態の列挙型（左・中央・右）
-    private enum E_WATCHSTATE
+    public enum CameraDirection
     {
-        Left,
+        Left = -1,  // 左にずらした際に左に回転させたいから-1スタート
         Center,
         Right,
     }
 
-    [Header("警備員の呼び出し範囲")]
-    [SerializeField] int callRange = 0;
+    [Header("監視する範囲")]
+    [SerializeField] private Vector2Int searchRange;
 
-    // 現在の監視状態（初期は中央）
-    private E_WATCHSTATE watchState = E_WATCHSTATE.Center;
+    [Header("お嬢様を見つけた際に警備員に通知する範囲")]
+    [SerializeField] private Vector2Int notificationRange;
 
-    // フィールド情報を管理するクラス
-    private _FieldDataManager fieldDataManager;
+    [Header("方向をずらした際の回転角度")]
+    [SerializeField, Range(0, 90)] private float rotateAngle;
 
-    // カメラの位置（マス座標）
-    private Vector2Int SurveillanceCameraPos = new Vector2Int();
 
-    // カメラの正面方向（初期は上方向）
-    private Vector2 forward = Vector2.up;
+    private _FieldDataManager   fieldData;      // _FieldDataManager
+    private CameraDirection     direction;      // 現在の方向
+    private Vector2Int          myPos;          // 自身のマス
+    private Vector2Int          fieldSize;      // フィールドサイズ
+    private List<Vector2Int>    searchList;     // 監視座標リスト
+    private Vector2             cameraForward;  // カメラの進行方向
+    private Vector2Int          cameraDir;      // カメラの向き
+    private TimeManager         timeManager;    // TimeManager
 
-    //プレイヤーの座標
-    Vector3 playerPos = new Vector3();
 
-    private Vector3 princessPos = new Vector3();
-
-    //カメラの向きの取得
-    CommonSE_Proto.E_DIRECTION CameraDir;
-
-    //カメラの周りにプレイヤーがいるか
-    bool isPlayerInRange = false;
-
-    // お嬢様呼び出し処理用
-    bool isFoundTarget = false;
-    int frameCount = 0;
-    List<SecurityController> callSecurityList = new List<SecurityController>();
-
-    Vector2Int targetPos = new Vector2Int();
-
-    // タイムマネージャー
-    private TimeManager timeManager;
-
-    //監視カメラの向き
-    private float angleY = 0f;
-
-    //レイ用
-    public float rayLength = 6.0f;   // Rayの長さ（6.0f）
-    public int rayCount = 8;         // Rayの本数（例：6本で扇状）
-
-    // インパクトエフェクト
-    private VisualEffect impactEffect;
-
-    // 警備員のエフェクトスクリプト
-    private SecurityEffect securityEffect;
-
-    private bool needUpdateTileList = true;
-
-    private void Start()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-
-
-        // フィールドマネージャーを取得
-        fieldDataManager = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
-        if (!fieldDataManager)
-        {
-            Debug.LogError(
-                "Script:SurveillanceCamera.cs \n" +
-                "fieldDataManagerがnullです"
-            );
-        }
-
-        // タイムマネージャー取得
         timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
         if (!timeManager)
         {
@@ -92,653 +47,236 @@ public class SurveillanceCamera : MonoBehaviour
             );
         }
 
-        // インパクトエフェクトを取得
-        impactEffect = GetComponentInChildren<VisualEffect>();
-        if (!impactEffect)
+        fieldData = GameObject.Find("Field").GetComponentInChildren<_FieldDataManager>();
+        if (!fieldData)
         {
             Debug.LogError(
-                "Script:SurveillanceCamera.cs \n" +
-                "impactEffectがnullです"
+                "Script:LightObject.cs \n" +
+                "fieldがnullです"
             );
         }
-        impactEffect.Stop(); // 初期状態ではエフェクトを停止
 
-        SurveillanceCameraPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        direction = CameraDirection.Center;
+        myPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        fieldSize = fieldData.GetFieldSize();
+        searchList = new List<Vector2Int>();
+        cameraForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
 
-        //Debug.Log($"カメラ位置（マス座標）: ({SurveillanceCameraPos}");
-
-        float yRotation = transform.eulerAngles.y;
-        if (Mathf.Approximately(yRotation, 0f))
-            forward = Vector2.up;
-        else if (Mathf.Approximately(yRotation, 90f))
-            forward = Vector2.right;
-        else if (Mathf.Approximately(yRotation, 180f))
-            forward = Vector2.down;
-        else if (Mathf.Approximately(yRotation, 270f))
-            forward = Vector2.left;
+        // 向いている方向
+        if (Mathf.Abs(cameraForward.x) > Mathf.Abs(cameraForward.y))
+        {
+            cameraDir = cameraForward.x > 0 ? Vector2Int.right : Vector2Int.left;
+        }
         else
-            Debug.LogWarning($"想定外の角度です: {yRotation}");
+        {
+            cameraDir = cameraForward.y > 0 ? Vector2Int.up : Vector2Int.down;
+        }
 
-        // 回転と索敵範囲の初期描画を実行
-        RotateVisualObject();
-        SearchRange();
-        GetSearchedTileList();
-
-        // 初期向きを記録しておく
-
+        // 初期位置の監視範囲を計算
+        CalcSearchRange();
     }
+
+    // Update is called once per frame
     void Update()
     {
-        // プレイヤーの GameObject を使って座標を取得
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
+        // 夜以外は終了
+        if (timeManager.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.night)
         {
-            playerPos = player.transform.position;
-            //Debug.Log($"プレイヤーの位置 : ({playerPos}");
-        }
-        else
-        {
-            //Debug.LogError("プレイヤーが見つかりませんでした");
+            return;
         }
 
-        // プリンセスの GameObject を使って座標を取得
-        GameObject princess = GameObject.FindWithTag("Princess");
-        if (princess != null)
-        {
-            princessPos = princess.transform.position;
-            //Debug.Log($"プレイヤーの位置 : ({princessPos}");
-        }
-        else
-        {
-            //Debug.LogError("プリンセスが見つかりませんでした");
-        }
-
-        GetOffsetsBasedOnWatchState();
-        //GetSearchedTileList();
-
-        Vector2Int playerGridPos = new Vector2Int((int)playerPos.x, (int)playerPos.z);
-
-        int PlayerInRangeY = (playerGridPos.y - SurveillanceCameraPos.y);
-        int PlayerInRangeX = (playerGridPos.x - SurveillanceCameraPos.x);
-        isPlayerInRange = false; // 一度リセット
-
-        if (forward == Vector2.up || forward == Vector2.down)
-        {
-            // 左右（X軸方向）1マス離れているならOK
-            if ((PlayerInRangeX == 1 || PlayerInRangeX == -1) && PlayerInRangeY == 0)
-            {
-                isPlayerInRange = true;
-                Debug.Log("カメラの向きが変えられる（左右）");
-            }
-        }
-        else if (forward == Vector2.right || forward == Vector2.left)
-        {
-            // 上下（Y軸方向）1マス離れているならOK
-            if ((PlayerInRangeY == 1 || PlayerInRangeY == -1) && PlayerInRangeX == 0)
-            {
-                isPlayerInRange = true;
-                Debug.Log("カメラの向きが変えられる（上下）");
-            }
-        }
-
-        // 監視範囲の状態をリセット
-        ResetCameraRange();
-
-        // 現在の監視状態に応じて索敵処理を実行
-        SearchRange();
+        searchCamera();
     }
 
-    /// <summary>
-    /// カメラオブジェクトの見た目をforwardの向きに合わせて回転させる
-    /// </summary>
-    private void RotateVisualObject()
+    public void Action(Transform playerTransform)
     {
+        // プレイヤーがライトに対してどの位置にいるか計算
+        Vector2 toPlayer = new Vector2(playerTransform.position.x - this.transform.position.x, playerTransform.position.z - this.transform.position.z).normalized;
 
+        // 内積の計算により、ライトの向きに対しての位置関係を計算
+        float dot = Vector2.Dot(cameraForward, toPlayer);
 
-
-        if (forward == Vector2.up)
+        // しきい値で横にいても0.0fにならない場合に対応
+        if (Mathf.Abs(dot) < 0.01)
         {
-            angleY = 0f;
-        }
-        else if (forward == Vector2.right)
-        {
-            angleY = 90f;
-        }
-        else if (forward == Vector2.down)
-        {
-            angleY = 180f;
-        }
-        else if (forward == Vector2.left)
-        {
-            angleY = 270f;
+            dot = 0.0f;
         }
 
-        this.transform.rotation = Quaternion.Euler(0f, angleY, 0f);
+        // 外積の計算を用いてライトに対して左右どちらにいるか判定
+        float cross = cameraForward.x * toPlayer.y - cameraForward.y * toPlayer.x;
+
+        // 横にいる場合にのみ処理を行う
+        if (dot == 0)
+        {
+            if (cross > 0) // ライトの左側
+            {
+                ChangeDirection(CameraDirection.Right);
+            }
+            else if (cross < 0) // ライトの右側
+            {
+                ChangeDirection(CameraDirection.Left);
+            }
+        }
+    }
+    public void ChangeDirection(CameraDirection changeDirection)
+    {
+        // 前の方向とずらしたい方向を足して変更可能な値か確認
+        CameraDirection newDirection = (int)direction + changeDirection;
+        if (Mathf.Abs((int)newDirection) > 1)
+        {
+            return;
+        }
+
+        // 角度を更新
+        Vector3 currentAngle = transform.eulerAngles;
+
+        // 向きを更新
+        direction = newDirection;
+
+        // 新しい方向を適用
+        currentAngle.y += (int)changeDirection * rotateAngle;
+        transform.eulerAngles = currentAngle;
+
+        // 影の位置を再計算
+        CalcSearchRange();
     }
 
-    /// <summary>
-    /// 現在の監視状態に応じて3×3の索敵範囲を設定する
-    /// </summary>
-    private void SearchRange()
+    private void CalcSearchRange()
     {
-        int offsetValue = 0;
-        isFoundTarget = false;
-        frameCount++;
-
-        // 状態に応じてスライド方向を決定
-        if (forward == Vector2.right || forward == Vector2.left)
+        // リストに要素があれば削除処理を実行
+        if (searchList.Count > 0)
         {
-            if (watchState == E_WATCHSTATE.Left)
-            {
-                offsetValue = 2;
-                transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
-            }
-            else if (watchState == E_WATCHSTATE.Center)
-            {
-                offsetValue = 0;
-                transform.rotation = Quaternion.Euler(0f, angleY, 0f);
-            }
-            else if (watchState == E_WATCHSTATE.Right)
-            {
-                offsetValue = -2;
-                transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
-            }
-        }
-        if (forward == Vector2.up || forward == Vector2.down)
-        {
-
-            if (watchState == E_WATCHSTATE.Left)
-            {
-                offsetValue = 2;
-                transform.rotation = Quaternion.Euler(0f, angleY + 45f, 0f);
-            }
-            else if (watchState == E_WATCHSTATE.Center)
-            {
-                offsetValue = 0;
-                transform.rotation = Quaternion.Euler(0f, angleY, 0f);
-            }
-            else if (watchState == E_WATCHSTATE.Right)
-            {
-                offsetValue = -2;
-                transform.rotation = Quaternion.Euler(0f, angleY - 45f, 0f);
-            }
-        }
-        // スライド方向を現在の向きに回転
-        Vector2 slideDir = RotateOffset(new Vector2(offsetValue, 0), forward);
-
-        // 索敵範囲の中心位置を計算（カメラの2マス先＋スライド方向）
-        Vector2 center = SurveillanceCameraPos + forward * 2 + slideDir;
-
-        Vector2Int max = fieldDataManager.GetFieldSize();
-
-        // お嬢様の座標
-        Vector2Int princessGridPos = new Vector2Int((int)princessPos.x, (int)princessPos.z);
-
-
-        float halfAngle = 90f; // 左右90°ずつ（合計180°）
-        float startAngle = -halfAngle; // 左端の角度（-90°）
-
-        float angleStep = (halfAngle * 2) / (rayCount - 1); // Ray間の角度差
-
-        for (int i = 0; i < rayCount; i++)
-        {
-            // 各Rayの発射角度
-            float angle = startAngle + i * angleStep;
-
-            // 角度分だけ前方をY軸で回転 → 飛ばす方向
-            Vector3 direction = Quaternion.Euler(0, angle, 0) * transform.forward;
-
-            // Ray作成
-            Ray ray = new Ray(transform.position, direction);
-
-            // シーンビュー上にRayを描画
-            Debug.DrawRay(ray.origin, ray.direction * rayLength, Color.red);
-
-            // RaycastAll を使用してすべてのヒットを取得
-            RaycastHit[] hits = Physics.RaycastAll(ray.origin, ray.direction, rayLength);
-
-            // ヒット順にソート（近い順）
-            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-
-            RaycastHit hit;
-
-            // Rayが何かに当たったかチェック（距離制限付き）
-            // Rayが最初に当たった物体を調べる
-            if (Physics.Raycast(ray.origin, ray.direction * rayLength, out hit))
-            {
-                if (hit.collider.gameObject == this.gameObject)
-                    continue; // 自分自身は無視
-
-                // ヒットポイントをグリッド座標に変換
-                Vector2Int hitPos = new Vector2Int((int)hit.point.x, (int)hit.point.z);
-
-                bool inSightRange = false;
-
-                // 3×3の範囲を走査して、ヒットポイントが含まれているかチェック
-                for (int dx = -1; dx <= 1 && !inSightRange; dx++)
-                {
-                    for (int dy = -1; dy <= 1 && !inSightRange; dy++)
-                    {
-                        Vector2 offset = new Vector2(dx, dy);
-                        Vector2 rotatedOffset = RotateOffset(offset, forward);
-                        Vector2Int checkPos = Vector2Int.RoundToInt(center + rotatedOffset);
-
-                        int tx = checkPos.x;
-                        int ty = checkPos.y;
-
-                        // 範囲外は無視
-                        if (tx < 0 || tx >= max.x || ty < 0 || ty >= max.y)
-                            continue;
-
-                        // ヒットポイントが範囲内にあればフラグを立ててループ終了
-                        if (hitPos == checkPos)
-                        {
-                            inSightRange = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!inSightRange)
-                    continue; // 索敵範囲外なら無視
-                if (timeManager.GetCurState() == E_TIMEOFDAY.noon && timeManager.GetCurState() == E_TIMEOFDAY.afternoon)
-                {
-                    // 索敵範囲内だった場合の処理
-                    if (hit.collider.CompareTag("Player"))
-                    {
-                        /// ※ここに執事がアクションした場合に警備員が向かう処理を書く
-                        Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
-                    }
-                }
-                if (timeManager.GetCurState() == E_TIMEOFDAY.night)
-                {
-                    // 索敵範囲内だった場合の処理
-                    if (hit.collider.CompareTag("Princess"))
-                    {
-                        Debug.Log($"プリンセス発見！: ({hitPos}) - {hit.collider.gameObject.name}");
-                        isFoundTarget = true;
-                        frameCount = 0;
-                        targetPos = hit.collider.GetComponent<CharacterMoveController>().GetCurrentPos();
-                        AudioManager.Instance.PlaySE(5);
-                        WarningVolumeController.Instance.NotifyCameraDetection();
-                    }
-                    else if (hit.collider.CompareTag("Player"))
-                    {
-                        Debug.Log($"執事発見！: ({hitPos}) - {hit.collider.gameObject.name}");
-                    }
-                }
-            }
+            searchList.Clear();
         }
 
-        if (isFoundTarget)
+        // 方向に応じて加算する値を変更する
+        Vector2Int lateralDir = new Vector2Int();
+        switch (direction)
         {
-            // 呼び出し通知オブジェクトリスト
-            List<SecurityController> securityObj = new List<SecurityController>();
+            case CameraDirection.Left:
+                lateralDir = new Vector2Int(-cameraDir.y, cameraDir.x);
+                break;
+            case CameraDirection.Right:
+                lateralDir = new Vector2Int(cameraDir.y, -cameraDir.x);
+                break;
+            case CameraDirection.Center:
+                lateralDir = new Vector2Int(-cameraDir.y, cameraDir.x);
+                break;
+        }
 
-            // 自身の座標
-            Vector2Int cameraPos = new Vector2Int((int)this.transform.position.x, (int)this.transform.position.z);
+        // 衝突判定用変数
+        RaycastHit hit;
 
-            // 呼び始めの座標用
-            Vector2Int callStart = new Vector2Int(cameraPos.x - callRange / 2, cameraPos.y - callRange / 2);
-
-            // 通知範囲内にいる警備員を取得
-            for (int y = 0; y < callRange; ++y)
+        // 向いている方向に応じた影の生成処理
+        if (direction == CameraDirection.Center)
+        {
+            for (int i = -1; i < searchRange.x - 1; ++i)
             {
-                for (int x = 0; x < callRange; ++x)
+                for (int j = 0; j < searchRange.y; ++j)
                 {
-                    // 範囲内のリスト取得
-                    Vector2Int callPos = new Vector2Int(callStart.x + x, callStart.y + y);
+                    // 対象マスの座標を計算
+                    Vector2Int targetPos = myPos + cameraDir * (j + 1) + lateralDir * i;
 
-                    // 範囲外確認
-                    if (callPos.x < 0 || callPos.x >= max.x || callPos.y < 0 || callPos.y >= max.y)
+                    // 範囲外チェック
+                    if (targetPos.x < 0 || targetPos.x >= fieldSize.x || targetPos.y < 0 || targetPos.y >= fieldSize.y)
+                    {
+                        continue;
+                    }
+
+                    // ターゲット座標をVector3に変換
+                    Vector3 target = new Vector3(targetPos.x, 0.0f, targetPos.y);
+
+                    // 自身から目標座標へ向かう方向を計算
+                    Vector3 dirToTarget = (target - this.transform.position).normalized;
+
+                    // 自身から目標座標への距離を計算
+                    float distance = Vector3.Distance(this.transform.position, target);
+
+                    // 目標座標に向かってレイを飛ばし、障害物がないか確認する
+                    if (Physics.Raycast(this.transform.position, dirToTarget, out hit, distance))
+                    {
                         continue;
 
-                    // 対象座標のリスト取得
-                    var list = fieldDataManager.GetInfoList(callPos);
+                    }
+                    searchList.Add(targetPos);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < searchRange.x; ++i)
+            {
+                for (int j = 0; j < searchRange.y; ++j)
+                {
+                    // 対象マスの座標を計算
+                    Vector2Int targetPos = myPos + cameraDir * (j + 1) + lateralDir * i;
 
-                    if (list.Count != 0)
+                    // 範囲外チェック
+                    if (targetPos.x < 0 || targetPos.x >= fieldSize.x || targetPos.y < 0 || targetPos.y >= fieldSize.y)
                     {
-                        // リストの中に警備員がいたら取得
-                        foreach (var obj in list)
-                        {
-                            if (!obj.obj) continue;
-                            var security = obj.obj.GetComponent<SecurityController>();
-                            if (!security) continue;
+                        continue;
+                    }
 
-                            // リストに追加
-                            securityObj.Add(security);
+                    // ターゲット座標をVector3に変換
+                    Vector3 target = new Vector3(targetPos.x, 0.0f, targetPos.y);
+
+                    // 自身から目標座標へ向かう方向を計算
+                    Vector3 dirToTarget = (target - this.transform.position).normalized;
+
+                    // 自身から目標座標への距離を計算
+                    float distance = Vector3.Distance(this.transform.position, target);
+
+                    // 目標座標に向かってレイを飛ばし、障害物がないか確認する
+                    if (Physics.Raycast(this.transform.position, dirToTarget, out hit, distance))
+                    {
+                        continue;
+
+                    }
+
+                    searchList.Add(targetPos);
+                }
+            }
+        }
+
+        if (searchList.Count > 0)
+        {
+            // 監視の範囲を監視範囲表示スクリプトに送信
+            this.GetComponent<MonitoringRangeGanerate>().SetArrayShadow(searchList);
+        }
+    }
+
+    private void searchCamera()
+    {
+        foreach (var pos in searchList)
+        {
+            // 監視座標にお嬢様がいるか確認
+            var objList = fieldData.GetInfoList(pos);
+
+            foreach(var obj in objList)
+            {
+                // オブジェクトがプリンセスか確認
+                if(obj.state == _FieldDataManager.E_FIELDSTATE.princess)
+                {
+                    // 警備員リスト
+                    var securities = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
+
+                    // 各々通知範囲にいるか確認
+                    foreach(var security in securities)
+                    {
+                        // フィールド上の警備員の座標
+                        Vector2Int securityPos = security.GetComponent<CharacterMoveController>().GetCurrentPos();
+
+                        // 警備員が通知範囲にいるか確認
+                        if( securityPos.x > myPos.x - notificationRange.x / 2 && 
+                            securityPos.x < myPos.x + notificationRange.x / 2 &&
+                            securityPos.y > myPos.y - notificationRange.y / 2 &&
+                            securityPos.y < myPos.y + notificationRange.y / 2 )
+                        {
+                            security.GetComponent<SecurityController>().FoundPrincess(pos);
                         }
                     }
-                    if (securityObj.Count != 0)
-                    {
-                        foreach (var obj in securityObj)
-                        {
-                            // すでに通知済みなら次へ
-                            if (obj.GetIsFoundPrincess())
-                                continue;
-
-                            // 呼び出しオブジェクトリストに追加
-                            callSecurityList.Add(obj);
-
-                            // ターゲット座標を通知
-                            obj.FoundPrincess(targetPos);
-
-                            securityEffect = obj.GetComponent<SecurityEffect>();
-                            if (securityEffect == null)
-                            {
-                                Debug.LogWarning("SurveillanceCamera：SecurityEffectが取得できませんでした");
-                            }
-                            if (securityEffect != null)
-                            {
-                                securityEffect.StartSingleAlertEffect(); // エフェクトを再生
-                            }
-
-                            frameCount = 0;
-                        }
-                    }
                 }
             }
         }
-
-        if (!isFoundTarget && frameCount > 120 && callSecurityList.Count != 0)
-        {
-            foreach (var security in callSecurityList)
-            {
-                if (security.GetIsFoundPrincess())
-                {
-                    security.SetIsFoundPrincess(false);
-                }
-            }
-
-            // 配列を初期化
-            callSecurityList.Clear();
-        }
     }
-
-    /// <summary>
-    /// 前フレームに設定されたカメラの索敵範囲をリセット
-    /// </summary>
-    private void ResetCameraRange()
-    {
-        Vector2Int max = fieldDataManager.GetFieldSize();
-
-        for (int x = 0; x < max.x; x++)
-        {
-            for (int y = 0; y < max.y; y++)
-            {
-                Vector2Int pos = new Vector2Int(x, y);
-
-            }
-        }
-    }
-
-    /// <summary>
-    /// オフセットベクトルをforward方向に応じて回転させる
-    /// </summary>
-    private Vector2 RotateOffset(Vector2 offset, Vector2 forward)
-    {
-        if (forward == Vector2.up)
-        {
-            return offset;
-        }
-        else if (forward == Vector2.right)
-        {
-            return new Vector2(-offset.y, offset.x);
-        }
-        else if (forward == Vector2.down)
-        {
-            return new Vector2(-offset.x, -offset.y);
-        }
-        else if (forward == Vector2.left)
-        {
-            return new Vector2(offset.y, -offset.x);
-        }
-
-        return offset;
-    }
-
-
-    public void SetCameraDir(CommonSE_Proto.E_DIRECTION dir)
-    {
-        CameraDir = dir;
-    }
-
-    public void PerformRayBasedSearch()
-    {
-        List<Vector2Int> searchArea = fieldDataManager.GetStatePos(_FieldDataManager.E_FIELDSTATE.sc_searchRange);
-        Vector3 rayOrigin = GetRayStartPoint(SurveillanceCameraPos, CameraDir); // 近い頂点2つからでも良い
-
-        foreach (var targetPos in searchArea)
-        {
-            if (targetPos == SurveillanceCameraPos) continue;
-
-            Vector3 targetWorld = GridToWorld(targetPos);
-
-            Vector3 dirToTarget = (targetWorld - rayOrigin).normalized;
-            float dist = Vector3.Distance(rayOrigin, targetWorld);
-
-            if (Physics.Raycast(rayOrigin, dirToTarget, out RaycastHit hit, dist))
-            {
-                if (IsWall(hit.collider.gameObject))
-                {
-                    // 壁に遮られている
-                    Debug.Log("壁が範囲内にあります。");
-                    continue;
-                }
-            }
-            // 壁に遮られていない
-        }
-    }
-
-    Vector3 GetRayStartPoint(Vector2Int gridPos, E_DIRECTION dir)
-    {
-        Vector3 world = GridToWorld(gridPos);
-
-        switch (dir)
-        {
-            case CommonSE_Proto.E_DIRECTION.right:
-                return world + new Vector3(0.5f, 0.0f, 0.5f);
-            case CommonSE_Proto.E_DIRECTION.left:
-                return world + new Vector3(-0.5f, 0.0f, -0.5f);
-            case CommonSE_Proto.E_DIRECTION.up:
-                return world + new Vector3(0.5f, 0.0f, 0.5f);
-            case CommonSE_Proto.E_DIRECTION.down:
-                return world + new Vector3(-0.5f, 0.0f, -0.5f);
-            default:
-                return world;
-        }
-    }
-
-    Vector3 GridToWorld(Vector2Int grid)
-    {
-        return new Vector3(grid.x, 0, grid.y); // Yが高さ、X-ZがマスのXY
-    }
-
-    bool IsWall(GameObject obj)
-    {
-        return obj.CompareTag("Wall"); // 壁には"Wall"タグをつけておく
-    }
-
-    // 索敵範囲のマス座標を保持するリスト
-    private List<Vector2Int> searchedTileList = new List<Vector2Int>();
-
-    /// <summary>
-    /// 現在の監視状態に応じて索敵しているマスのリストを返す
-    /// </summary>
-    public List<Vector2Int> GetSearchedTileList()
-    {
-        List<Vector2Int> searchedTileList = new List<Vector2Int>();
-
-        Vector2Int center = SurveillanceCameraPos;
-        Vector2Int[] offsets = GetOffsetsBasedOnWatchState();
-        Vector3 rayOrigin = GetRayStartPoint(center, CameraDir);
-
-        // 先頭にカメラ自身の位置を追加
-        searchedTileList.Add(center);
-
-        foreach (var offset in offsets)
-        {
-            Vector2Int targetGrid = center + offset;
-            Vector3 targetWorld = GridToWorld(targetGrid);
-
-            Vector3 dirToTarget = (targetWorld - rayOrigin).normalized;
-            float dist = Vector3.Distance(rayOrigin, targetWorld);
-
-            //Vector3 pos = new Vector3(center.x, 0.0f, center.y);
-            //Vector3 dirToTarget = (targetWorld - pos).normalized;
-            //float dist = Vector3.Distance(pos, targetWorld);
-            
-            // 衝突判定用
-            RaycastHit hit;
-
-            // 遮蔽物チェック（LayerMask 指定）
-            if (Physics.Raycast(rayOrigin, dirToTarget, out hit, dist))
-            {
-                Debug.Log(targetGrid + "：" + hit.collider.name);
-
-                if(hit.collider.name != ("ProBuilder"))
-                {
-                    continue; // 遮られているためスキップ
-                }
-
-                Debug.Log("登録");
-            }
-
-            searchedTileList.Add(targetGrid);
-        }
-
-        // デバッグ表示
-        foreach (var pos in searchedTileList)
-        {
-            Debug.Log($"視認可能な索敵マス: {pos}");
-        }
-
-        this.GetComponent<MonitoringRangeGanerate>().SetArrayShadow(searchedTileList);
-
-        return searchedTileList;
-    }
-
-    /// <summary>
-    /// 監視状態とforwardに応じて、索敵範囲の相対オフセットを返す
-    /// </summary>
-    private Vector2Int[] GetOffsetsBasedOnWatchState()
-    {
-        List<Vector2Int> offsetList = new List<Vector2Int>();
-
-        Vector2Int forwardDir = Vector2Int.RoundToInt(forward);
-        Vector2Int rightDir = new Vector2Int(-forwardDir.y, -forwardDir.x);
-
-        int sideOffset = 0;
-        if (watchState == E_WATCHSTATE.Left) sideOffset = -1;
-        else if (watchState == E_WATCHSTATE.Right) sideOffset = 1;
-
-        for (int i = 1; i <= 3; i++)
-        {
-            for (int j = -1; j <= 1; j++)
-            {
-                Vector2Int offset = forwardDir * i + rightDir * (j + sideOffset);
-                offsetList.Add(offset);
-            }
-        }
-
-        return offsetList.ToArray();
-    }
-
-    public bool GetIsFoundTarget()
-    {
-        return isFoundTarget;
-    }
-
-    private bool isCameraRotating = false;
-
-    public void CameraAction(Transform playerTransform)
-    {
-        // 多重実行防止（連打防止）
-        if (isCameraRotating) return;
-
-        if (!isPlayerInRange) return;
-
-        var state = timeManager.GetCurState();
-        if (state != E_TIMEOFDAY.noon && state != E_TIMEOFDAY.afternoon) return;
-
-        isCameraRotating = true;
-
-        impactEffect.Play(); // インパクトエフェクトを再生
-        AudioManager.Instance.PlaySE(3); // 効果音再生
-
-        E_WATCHSTATE prevState = watchState;
-
-        // カメラの向きとプレイヤーの相対位置で watchState を更新
-        Vector3 cameraPos = transform.position;
-
-        if (forward == Vector2.up)
-        {
-            if (playerPos.x > cameraPos.x) // プレイヤーが左
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
-                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
-            }
-            else if (playerPos.x < cameraPos.x) // プレイヤーが右
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
-                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
-            }
-        }
-        else if (forward == Vector2.down)
-        {
-            if (playerPos.x < cameraPos.x) // プレイヤーが左
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
-                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
-            }
-            else if (playerPos.x > cameraPos.x) // プレイヤーが右
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
-                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
-            }
-        }
-        else if (forward == Vector2.left)
-        {
-            if (playerPos.z < cameraPos.z) // プレイヤーが左
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
-                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
-            }
-            else if (playerPos.z > cameraPos.z) // プレイヤーが右
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
-                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
-            }
-        }
-        else if (forward == Vector2.right)
-        {
-            if (playerPos.z > cameraPos.z) // プレイヤーが左
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Right :
-                             (watchState == E_WATCHSTATE.Left) ? E_WATCHSTATE.Center : watchState;
-            }
-            else if (playerPos.z < cameraPos.z) // プレイヤーが右
-            {
-                watchState = (watchState == E_WATCHSTATE.Center) ? E_WATCHSTATE.Left :
-                             (watchState == E_WATCHSTATE.Right) ? E_WATCHSTATE.Center : watchState;
-            }
-        }
-        needUpdateTileList = true;
-        
-        RotateVisualObject();      // 回転
-
-        ResetCameraRange();
-        SearchRange();
-        GetSearchedTileList();
-
-        // 0.3秒後に再入力を許可
-        Invoke(nameof(UnlockCameraRotate), 0.3f);
-    }
-
-    private void UnlockCameraRotate()
-    {
-        isCameraRotating = false;
-    }
-}
-
-
+} 
