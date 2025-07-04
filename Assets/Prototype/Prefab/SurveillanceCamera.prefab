@@ -165,9 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3a164e12bd0d24c8f8f69547ef43c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callRange: 7
-  rayLength: 6
-  rayCount: 8
+  searchRange: {x: 3, y: 3}
+  notificationRange: {x: 7, y: 7}
+  rotateAngle: 25
 --- !u!114 &-6856814355518030640
 MonoBehaviour:
   m_ObjectHideFlags: 0

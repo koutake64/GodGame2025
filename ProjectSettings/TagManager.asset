@@ -10,6 +10,7 @@ TagManager:
   - Security
   - Princess
   - Treasure
+  - Obstacles
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor.Rendering;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 
 /// <summary>
@@ -164,9 +165,6 @@ public class SurveillanceCamera : MonoBehaviour
                 break;
         }
 
-        // 衝突判定用変数
-        RaycastHit hit;
-
         // 向いている方向に応じた影の生成処理
         if (direction == CameraDirection.Center)
         {
@@ -192,12 +190,27 @@ public class SurveillanceCamera : MonoBehaviour
                     // 自身から目標座標への距離を計算
                     float distance = Vector3.Distance(this.transform.position, target);
 
+                    // レイに対する全ての衝突を検知
+                    RaycastHit[] hits = Physics.RaycastAll(this.transform.position, dirToTarget, distance);
+
+                    // このマスをスキップするか
+                    bool isSkipPos = false;
+
                     // 目標座標に向かってレイを飛ばし、障害物がないか確認する
-                    if (Physics.Raycast(this.transform.position, dirToTarget, out hit, distance))
+                    foreach (RaycastHit hit in hits)
+                    {
+                        if (hit.collider.CompareTag("Obstacles"))
+                        {
+                            isSkipPos = true;
+                            break;
+                        }
+                    }
+
+                    if (isSkipPos)
                     {
                         continue;
-
                     }
+
                     searchList.Add(targetPos);
                 }
             }
@@ -226,11 +239,25 @@ public class SurveillanceCamera : MonoBehaviour
                     // 自身から目標座標への距離を計算
                     float distance = Vector3.Distance(this.transform.position, target);
 
+                    // レイに対する全ての衝突を検知
+                    RaycastHit[] hits = Physics.RaycastAll(this.transform.position, dirToTarget, distance);
+
+                    // このマスをスキップするか
+                    bool isSkipPos = false;
+
                     // 目標座標に向かってレイを飛ばし、障害物がないか確認する
-                    if (Physics.Raycast(this.transform.position, dirToTarget, out hit, distance))
+                    foreach (RaycastHit hit in hits)
+                    {
+                        if (hit.collider.CompareTag("Obstacles"))
+                        {
+                            isSkipPos = true;
+                            break;
+                        }
+                    }
+
+                    if (isSkipPos)
                     {
                         continue;
-
                     }
 
                     searchList.Add(targetPos);
