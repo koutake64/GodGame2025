@@ -241,10 +241,10 @@ public class CharacterMoveController : MonoBehaviour
         moveRoute.Clear();
     }
 
-    public void StartAutoMove(Vector2Int goal)
+    public List<Vector2Int> StartAutoMove(Vector2Int goal)
     {
         // 移動中の場合は終了
-        if (isMove) return;
+        if (isMove) return null;
 
         // 自動移動中フラグをあげる
         isAutoMoving = true;
@@ -254,6 +254,8 @@ public class CharacterMoveController : MonoBehaviour
 
         // 探索経路セット
         SetMoveRoute(route);
+
+        return route;
     }
 
     public void SetMoveRoute(List<Vector2Int> route)
