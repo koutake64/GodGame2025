@@ -38,7 +38,7 @@ public class _FieldDataManager : MonoBehaviour
 
         // --- その他
         talk,               // お花しするマス
-        testtttttttt,        // 消す
+        securityRoute,      
         none
 
     }
@@ -129,6 +129,10 @@ public class _FieldDataManager : MonoBehaviour
 
     [Header("場外床")]
     [SerializeField] private GameObject outOfRangeTile;
+
+    private int securityRouteDrawFrame;
+    private List<Vector2Int> securityRoute;
+    private bool securityRouteDrawFlag;
 
     private void Start()
     {
@@ -551,7 +555,14 @@ public class _FieldDataManager : MonoBehaviour
     {
         if (updateCnt > 3 && changeColorFlag)
         {
+            if (securityRouteDrawFrame > 0)
+            {
+                securityRouteDrawFlag = true;
+                securityRouteDrawFrame--;
+            }
+
             ChangeTail_debug();
+            securityRouteDrawFlag = false;
             changeColorFlag = false;
         }
 
@@ -812,6 +823,11 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
+        for (int i = 0; i < securityRoute.Count; ++i)
+        {
+            state[securityRoute[i].x, securityRoute[i].y] = E_FIELDSTATE.securityRoute;
+        }
+
         for (int y = 0; y < fieldSize.y; ++y)
         {
             for (int x = 0; x < fieldSize.x; ++x)
@@ -830,7 +846,7 @@ public class _FieldDataManager : MonoBehaviour
                     renderer.material = new Material(renderer.sharedMaterial);
                     renderer.material.color = Color.black;
                 }
-                else if (state[x, y] == E_FIELDSTATE.testtttttttt)
+                else if (state[x, y] == E_FIELDSTATE.securityRoute)
                 {
                     var renderer = fieldGameObj[x, y].obj.GetComponent<MeshRenderer>();
                     renderer.material = new Material(renderer.sharedMaterial);
@@ -863,6 +879,12 @@ public class _FieldDataManager : MonoBehaviour
                 fieldData[pos.x, pos.y][cnt] = newData;
             }
         }
+    }
+
+    public void SecurityRouteDraw(int frame, List<Vector2Int> route)
+    {
+        securityRouteDrawFrame = frame;
+        securityRoute = route;
     }
 
     public Vector3 GridToWorldPosition(Vector2Int gridPos)
