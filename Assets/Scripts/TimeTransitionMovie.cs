@@ -19,7 +19,7 @@ public class TimeTransitionMovie : MonoBehaviour
     private float noonMovieStart;
     private float nightMovieStart;
     private float duration = 5f;
-    private float moveSpeed = 1.0f;
+    private float moveSpeed = 3.0f;
     private float cameraMoveSpeed = 5.0f;
 
     private bool isNoonMoviePlaying = false;
@@ -138,7 +138,7 @@ public class TimeTransitionMovie : MonoBehaviour
         }
 
         player.transform.position = initialPlayerPos + offScreenOffset; // ·–‚ğ‰æ–ÊŠO‚ÉˆÚ“®
-        butlerMoveController.AddPosX(-5);
+        await MoveTo_XAxisOnly(player.transform, initialPlayerPos, moveSpeed);
 
         // Œ©‚½–Ú‚ğ‰ŠúˆÊ’u‚ÉŒü‚¯‚Ä‚¨‚­
         player.transform.LookAt(initialPlayerPos);
