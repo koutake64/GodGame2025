@@ -274,6 +274,9 @@ public class SurveillanceCamera : MonoBehaviour
 
     private void searchCamera()
     {
+        var asas = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.princess);
+
+
         foreach (var pos in searchList)
         {
             // 監視座標にお嬢様がいるか確認
