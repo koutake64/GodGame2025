@@ -87,12 +87,12 @@ public class LightObject : MonoBehaviour
             dot = 0.0f;
         }
         
-        // 外積の計算を用いてライトに対して左右どちらにいるか判定
-        float cross = lightForward.x * toPlayer.y - lightForward.y * toPlayer.x;
-
         // 横にいる場合にのみ処理を行う
         if(dot == 0)
         {
+            // 外積の計算を用いてライトに対して左右どちらにいるか判定
+            float cross = lightForward.x * toPlayer.y - lightForward.y * toPlayer.x;
+            
             if (cross > 0) // ライトの左側
             {
                 ChangeDirection(LightDirection.Right);

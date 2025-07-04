@@ -13,6 +13,9 @@ public class SecurityController : MonoBehaviour
     [Header("足音が聞こえる範囲")]
     [SerializeField] private int footstepsRange;
 
+    [Header("ルートを表示するフレーム数")]
+    [SerializeField] private int drawRouteFrame = 30;
+
     [SerializeField, SceneSelector] private string sceneName;
 
     private List<Vector2Int>        targetArray = new List<Vector2Int>();
@@ -107,7 +110,13 @@ public class SecurityController : MonoBehaviour
         if (isEndMovement && targetArray.Count > 0)
         {
             // 移動先を指定
-            moveController.StartAutoMove(targetArray[currentIndex]);
+            var route = moveController.StartAutoMove(targetArray[currentIndex]);
+
+            // ルートがある場合表示
+            if(route != null)
+            {
+                fieldData.SecurityRouteDraw(drawRouteFrame, route);
+            }
 
             // 移動終了フラグを下げる
             isEndMovement = false;
@@ -399,7 +408,15 @@ public class SecurityController : MonoBehaviour
             return false;
         }
 
-        moveController.StartAutoMove(foundPos);
+        // ルートを取得
+        var route = moveController.StartAutoMove(foundPos);
+
+        // ルートがある場合表示
+        if (route != null)
+        {
+            fieldData.SecurityRouteDraw(drawRouteFrame, route);
+        }
+
         isEndMovement = false;
         isStartMoveFoundPos = true;
 
