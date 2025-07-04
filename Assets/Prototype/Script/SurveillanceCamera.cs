@@ -122,6 +122,7 @@ public class SurveillanceCamera : MonoBehaviour
         // 回転と索敵範囲の初期描画を実行
         RotateVisualObject();
         SearchRange();
+        GetSearchedTileList();
 
         // 初期向きを記録しておく
 
@@ -179,14 +180,6 @@ public class SurveillanceCamera : MonoBehaviour
                 Debug.Log("カメラの向きが変えられる（上下）");
             }
         }
-
-        if (needUpdateTileList)
-        {
-            ResetCameraRange();            // 前回の表示を消す
-            GetSearchedTileList();        //  Raycastチェックありのリスト取得 + 描画
-            needUpdateTileList = false;   //  フラグ解除
-        }
-
 
         // 監視範囲の状態をリセット
         ResetCameraRange();
@@ -544,13 +537,13 @@ public class SurveillanceCamera : MonoBehaviour
         switch (dir)
         {
             case CommonSE_Proto.E_DIRECTION.right:
-                return world + new Vector3(0.5f, 0, 0.3f);
+                return world + new Vector3(0.5f, 0.0f, 0.5f);
             case CommonSE_Proto.E_DIRECTION.left:
-                return world + new Vector3(-0.5f, 0, -0.3f);
+                return world + new Vector3(-0.5f, 0.0f, -0.5f);
             case CommonSE_Proto.E_DIRECTION.up:
-                return world + new Vector3(0.3f, 0, 0.5f);
+                return world + new Vector3(0.5f, 0.0f, 0.5f);
             case CommonSE_Proto.E_DIRECTION.down:
-                return world + new Vector3(-0.3f, 0, -0.5f);
+                return world + new Vector3(-0.5f, 0.0f, -0.5f);
             default:
                 return world;
         }
@@ -591,10 +584,24 @@ public class SurveillanceCamera : MonoBehaviour
             Vector3 dirToTarget = (targetWorld - rayOrigin).normalized;
             float dist = Vector3.Distance(rayOrigin, targetWorld);
 
+            //Vector3 pos = new Vector3(center.x, 0.0f, center.y);
+            //Vector3 dirToTarget = (targetWorld - pos).normalized;
+            //float dist = Vector3.Distance(pos, targetWorld);
+            
+            // 衝突判定用
+            RaycastHit hit;
+
             // 遮蔽物チェック（LayerMask 指定）
-            if (Physics.Raycast(rayOrigin, dirToTarget, out RaycastHit hit, dist))
+            if (Physics.Raycast(rayOrigin, dirToTarget, out hit, dist))
             {
-                continue; // 遮られているためスキップ
+                Debug.Log(targetGrid + "：" + hit.collider.name);
+
+                if(hit.collider.name != ("ProBuilder"))
+                {
+                    continue; // 遮られているためスキップ
+                }
+
+                Debug.Log("登録");
             }
 
             searchedTileList.Add(targetGrid);
