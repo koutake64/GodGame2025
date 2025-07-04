@@ -717,13 +717,6 @@ public class _FieldDataManager : MonoBehaviour
                                     instPos,
                                     instRot
                                     );
-
-                                SurveillanceCamera sc = obj.transform.GetComponent<SurveillanceCamera>();
-                                if ( sc != null )
-                                {
-                                    sc.SetCameraDir(fieldData[x, y][i].dir);
-                                }
-
                                 break;
                             case E_FIELDSTATE.sc_searchRange:
                                 break;

@@ -120,7 +120,7 @@ public class PlayerMove : MonoBehaviour
 						LookAtObject(objPos);
                     }
                     AudioManager.Instance.PlaySE(6);
-                    camera.CameraAction(this.transform);
+                    camera.Action(this.transform);
 					break;
 				}
                 var light = info.obj.GetComponent<LightObject>();
