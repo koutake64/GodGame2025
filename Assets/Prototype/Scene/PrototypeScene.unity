@@ -1096,6 +1096,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageData:
   - {fileID: 4900000, guid: 4364ce4ff5ea18f4d959d868deb827bc, type: 3}
+  - {fileID: 4900000, guid: a5caf619bbe8d764f8cbdb8d5d70bae2, type: 3}
   textLoder: {fileID: 324351710}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
