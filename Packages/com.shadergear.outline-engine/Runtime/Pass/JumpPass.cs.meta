@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: cd8de9f9632e91c4d997ed7f48fec9d8
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Pass/JumpPass.cs
+  uploadId: 767454

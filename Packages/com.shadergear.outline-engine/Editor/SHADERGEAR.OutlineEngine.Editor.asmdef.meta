@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c95409feb3c3f9d479dce3216c5a47a1
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Editor/SHADERGEAR.OutlineEngine.Editor.asmdef
+  uploadId: 767454

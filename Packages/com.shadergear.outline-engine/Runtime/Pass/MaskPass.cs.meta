@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 4b4766acf6dd4a447879350b6b8ed3c0
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Pass/MaskPass.cs
+  uploadId: 767454

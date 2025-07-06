@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 0dd2d543f92943444a1ccce2fcf0f81f
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Data/Overlay/OverlayStyle.cs
+  uploadId: 767454

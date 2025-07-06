@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 90571bbe613fa9a43a2155eaeabb3434
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Data/Rendering/RenderingOcclusion.cs
+  uploadId: 767454

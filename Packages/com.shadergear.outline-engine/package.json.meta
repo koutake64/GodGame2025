@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a290a07cc5cf800479f9054e982177d0
+PackageManifestImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/package.json
+  uploadId: 767454

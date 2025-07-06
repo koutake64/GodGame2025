@@ -471,6 +471,22 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4495414801083549842, guid: 4101df82f1ba72343b27665e6573c0c9, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495414801083549842, guid: 4101df82f1ba72343b27665e6573c0c9, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495414801083549842, guid: 4101df82f1ba72343b27665e6573c0c9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 25faf4319ec502442a09ce525904d648, type: 2}
+    - target: {fileID: 4495414801083549842, guid: 4101df82f1ba72343b27665e6573c0c9, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 25faf4319ec502442a09ce525904d648, type: 2}
     - target: {fileID: 4644621790114097240, guid: 4101df82f1ba72343b27665e6573c0c9, type: 3}
       propertyPath: m_Layer
       value: 11

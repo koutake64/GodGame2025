@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 91a37e28db37cb1409540c5ea9894ea4
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Resources/OutlineEngine/OcclusionPass.shader
+  uploadId: 767454

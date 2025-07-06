@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4e9c80ea1b4652d4f80cf1dd657b9959
+ShaderIncludeImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Resources/OutlineEngine/TextureSource.hlsl
+  uploadId: 767454

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: df7ee8b0e18624b40acfed97d28a4fe2
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Resources/OutlineEngine/MaskPass.shader
+  uploadId: 767454

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 77423c47489ae274a899ed2b426e7536
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/CHANGELOG.md
+  uploadId: 767454

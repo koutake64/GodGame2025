@@ -1,0 +1,25 @@
+{
+    "name": "com.shadergear.outline-engine",
+    "version": "1.1.0",
+    "unity": "6000.0",
+    "dependencies": {
+        "com.unity.render-pipelines.universal": "17.0.4"
+    },
+    "displayName": "Outline Engine",
+    "description": "Create games that stand out — with beautiful, customizable and performant outlines.",
+    "author": {
+        "name": "SHADERGEAR",
+        "email": "hello@shadergear.com",
+        "url": "https://shadergear.com"
+    },
+    "documentationUrl": "https://docs.shadergear.com",
+    "changelogUrl": "https://shadergear.gitbook.io/docs/assets/outline-engine/releases",
+    "keywords": ["outline", "shadergear", "outline engine", "shader"],
+    "samples": [
+        {
+            "displayName": "Chess Demo",
+            "description": "",
+            "path": "Samples~/Chess"
+        }
+    ]
+}
