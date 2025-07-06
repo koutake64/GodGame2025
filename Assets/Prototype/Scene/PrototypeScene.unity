@@ -2254,6 +2254,7 @@ MonoBehaviour:
   nameTextObj: {fileID: 1237518191}
   mainiTextProObj: {fileID: 811968039}
   nameTextProObj: {fileID: 135802325}
+  action: {fileID: -944628639613478452, guid: 209329f0efb75344d98dfabb65cdf08a, type: 3}
   spriteDirectory: Sprites/
   characterImages: {fileID: 183525361}
   talkFlg: 0

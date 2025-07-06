@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class TextManager : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class TextManager : MonoBehaviour
     [SerializeField, Header("名前テキスト")] private GameObject nameTextObj;
     [SerializeField, Header("メインテキスト(TMPro)")] private GameObject mainiTextProObj;
     [SerializeField, Header("名前テキスト(TMPro)")] private GameObject nameTextProObj;
+
+    // InputSystem
+    [SerializeField] private InputActionAsset action;
+    private InputAction nextAction;
 
     [Header("※ここからはさわらない※")]
     public string spriteDirectory = "Sprites/";
@@ -104,13 +109,16 @@ public class TextManager : MonoBehaviour
             Debug.LogError("Script:TextManager.cs \n" +
               "TimeManagerがnullです");
         }
+
+        nextAction = action.FindAction("Player/Next");
+        nextAction.Enable();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (!isAuto && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return)))
+        if (!isAuto && nextAction.triggered)
             OnClick(false);
 
         // Tキーでオートモード切り替え
@@ -495,4 +503,13 @@ public class TextManager : MonoBehaviour
         string[] ps = parameter.Replace(" ", "").Split(',');
         return new Vector3(float.Parse(ps[0]), float.Parse(ps[1]), float.Parse(ps[2]));
     }
+
+    public void OnNext(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+        }
+    }
+
 }

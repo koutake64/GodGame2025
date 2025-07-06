@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SelectFrame : MonoBehaviour
@@ -9,7 +11,13 @@ public class SelectFrame : MonoBehaviour
     private StageSelectManager selMng;
     private int currentButtonIndex = 0; // 現在のボタンインデックス
 
-
+    // InputSystem
+    [SerializeField] private InputActionAsset inputActions;
+    private InputAction upAction;
+    private InputAction downAction;
+    private InputAction leftAction;
+    private InputAction rightAction;
+    private InputAction nextAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +30,21 @@ public class SelectFrame : MonoBehaviour
         }
 
         targetPos = selMng.GetButtonPos(currentButtonIndex);
+
+        // Actionの取得
+        var map = inputActions.FindActionMap("Menu");
+        upAction = map.FindAction("UP");
+        downAction = map.FindAction("Down");
+        leftAction = map.FindAction("Left");
+        rightAction = map.FindAction("Right");
+        nextAction = map.FindAction("Next");
+
+        // 有効化
+        upAction.Enable();
+        downAction.Enable();
+        leftAction.Enable();
+        rightAction.Enable();
+        nextAction.Enable();
     }
 
     // Update is called once per frame
@@ -40,6 +63,7 @@ public class SelectFrame : MonoBehaviour
     /// </summary>
     void InputMove()
     {
+        /*
         // 上下ボタン
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -71,7 +95,26 @@ public class SelectFrame : MonoBehaviour
                 targetPos = selMng.GetButtonPos(currentButtonIndex);
             }
         }
+        */
+        if (downAction.WasPressedThisFrame())
+        {
+            currentButtonIndex = (currentButtonIndex + 1) % 5;
+            targetPos = selMng.GetButtonPos(currentButtonIndex);
+        }
+        else if (upAction.WasPressedThisFrame())
+        {
+            currentButtonIndex = (currentButtonIndex + 4) % 5;
+            targetPos = selMng.GetButtonPos(currentButtonIndex);
+        }
 
+        if (rightAction.WasPressedThisFrame() || leftAction.WasPressedThisFrame())
+        {
+            if (currentButtonIndex == 0 || currentButtonIndex == 1 || currentButtonIndex == 2)
+            {
+                currentButtonIndex = 3;
+                targetPos = selMng.GetButtonPos(currentButtonIndex);
+            }
+        }
     }
 
     /// <summary>
@@ -79,7 +122,13 @@ public class SelectFrame : MonoBehaviour
     /// </summary>
     void DecideButton()
     {
+        /*
         if(Input.GetKeyDown(KeyCode.Return))
+        {
+            StartCoroutine(selMng.ActionButton(currentButtonIndex));
+        }
+        */
+        if (nextAction.WasPressedThisFrame())
         {
             StartCoroutine(selMng.ActionButton(currentButtonIndex));
         }

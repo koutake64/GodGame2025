@@ -951,6 +951,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 10
   isLerp: 1
+  inputActions: {fileID: -944628639613478452, guid: ba0fce63f3ee6a641944922eaca25363, type: 3}
 --- !u!1 &926987723
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,9 @@ public class GameManager : MonoBehaviour
 {
     private void Start()
     {
-        Cursor.visible = false;
+        Cursor.visible = false;             // カーソル
+        Application.targetFrameRate = 60;   // FPS
+        QualitySettings.vSyncCount = 0;     // Sync(モニター依存にならないようにする処理
     }
 
     private void Update()
