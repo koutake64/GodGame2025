@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 0ea8abfb04734c346a0ea7ed0a767da4
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Pass/OutlinePass.cs
+  uploadId: 767454

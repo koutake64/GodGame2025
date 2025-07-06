@@ -1,0 +1,21 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Packages/com.shadergear.outline-engine/Editor/Introduction/IntroductionWindow.uss?fileID=7433441132597879392&amp;guid=271e19ba2c9535741b514f1561db9541&amp;type=3#IntroductionWindow" />
+    <engine:VisualElement name="introduction" class="panel">
+        <engine:Label text="Introduction" class="header" />
+        <engine:Label text="Thank you for choosing &lt;b&gt;Outline Engine&lt;/b&gt;! Enjoy making the most of your new asset. Please follow the steps below to get started." class="content" />
+    </engine:VisualElement>
+    <engine:VisualElement name="getting-started" class="panel">
+        <engine:Label text="Getting Started" class="header" />
+        <engine:Label text="1. Select the &lt;link=&quot;renderer-asset&quot;&gt;&lt;color=#40a0ff&gt;&lt;u&gt;Renderer Asset&lt;/u&gt;&lt;/color&gt;&lt;/link&gt; in the Inspector window." class="content" />
+        <engine:Label text="2. Press the &quot;Add Renderer Feature&quot; button at the bottom." class="content" />
+        <engine:Label text="3. Choose &lt;b&gt;Outline Engine&lt;/b&gt; from the list." class="content" />
+    </engine:VisualElement>
+    <engine:VisualElement name="next-steps" class="panel">
+        <engine:Label text="Next Steps" class="header" />
+        <engine:Label text="Check out the &lt;a href=&quot;https://docs.shadergear.com/&quot;&gt;documentation&lt;/a&gt; for guides on customization, performance and scripting." class="content" />
+    </engine:VisualElement>
+    <engine:VisualElement name="your-thoughts" class="panel">
+        <engine:Label text="Your Thoughts" class="header" />
+        <engine:Label text="Please consider sharing your feedback by &lt;a href=&quot;https://u3d.as/3wiF&quot;&gt;leaving a review on the Asset Store&lt;/a&gt;. Thank you!" class="content" />
+    </engine:VisualElement>
+</engine:UXML>

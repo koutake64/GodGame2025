@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ed94a8dcaba0f4842b77d6b4df062366
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2655988077585873504
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Patterns/Pattern Preset.preset
+  uploadId: 767454

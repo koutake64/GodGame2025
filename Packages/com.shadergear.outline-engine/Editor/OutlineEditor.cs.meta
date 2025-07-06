@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 5772a969441af364fbd3224bd5029dc2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - renderingIcon: {fileID: 2800000, guid: ff92d6fc1a19cd04da4a427129df391c, type: 3}
+  - outlineIcon: {fileID: 2800000, guid: cc6ec2584dda1824090684f42ef39281, type: 3}
+  - overlayIcon: {fileID: 2800000, guid: 8fcb23d6a412ca14290577702b413e1c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Editor/OutlineEditor.cs
+  uploadId: 767454

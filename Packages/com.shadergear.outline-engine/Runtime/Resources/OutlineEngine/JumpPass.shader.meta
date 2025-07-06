@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b86c424368a4c954088032e79381cd9c
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Resources/OutlineEngine/JumpPass.shader
+  uploadId: 767454

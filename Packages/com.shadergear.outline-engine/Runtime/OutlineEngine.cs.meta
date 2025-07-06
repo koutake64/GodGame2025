@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 502ab268656a13b4a823c0e151e04d5c
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/OutlineEngine.cs
+  uploadId: 767454

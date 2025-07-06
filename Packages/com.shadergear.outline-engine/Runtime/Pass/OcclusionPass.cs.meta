@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 6cec8e01edc51fa4f94d00bdbe4338bf
+AssetOrigin:
+  serializedVersion: 1
+  productId: 317035
+  packageName: Outline Engine
+  packageVersion: 1.1.0
+  assetPath: Packages/com.shadergear.outline-engine/Runtime/Pass/OcclusionPass.cs
+  uploadId: 767454
