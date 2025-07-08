@@ -1,7 +1,7 @@
 20,19
 35,90,130
 0,0,start,-1,down,
-1,0,pillar,0,down,
+1,0,wall,0,down,
 2,0,none,-1,down,
 3,0,none,-1,down,
 4,0,none,-1,down,
@@ -21,7 +21,7 @@
 18,0,securityGuard_N,33,up,18,3,
 19,0,securityGuard_N,44,up,19,2,
 0,1,none,-1,down,
-1,1,pillar,0,down,
+1,1,wall,0,down,
 2,1,none,-1,down,
 3,1,none,-1,down,
 4,1,none,-1,down,
@@ -41,7 +41,7 @@
 18,1,none,-1,down,
 19,1,none,-1,down,
 0,2,none,-1,down,
-1,2,pillar,0,down,
+1,2,wall,0,down,
 2,2,none,-1,down,
 3,2,none,-1,down,
 4,2,none,-1,down,
