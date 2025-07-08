@@ -19,7 +19,7 @@ public class TimeTransitionMovie : MonoBehaviour
     private float noonMovieStart;
     private float nightMovieStart;
     private float duration = 5f;
-    private float moveSpeed = 1.0f;
+    private float moveSpeed = 2.5f;
     private float cameraMoveSpeed = 5.0f;
 
     private bool isNoonMoviePlaying = false;
@@ -117,9 +117,6 @@ public class TimeTransitionMovie : MonoBehaviour
         // 見た目を初期位置に向けておく
         player.transform.LookAt(initialPlayerPos);
 
-        //// 執事のみ移動
-        //await MoveTo_XAxisOnly(player.transform, initialPlayerPos, moveSpeed);
-
         isMoviePlaying = false; // 演出終了
     }
 
@@ -130,20 +127,15 @@ public class TimeTransitionMovie : MonoBehaviour
         // カメラを初期位置へ
         await MoveTo(cameraObj.transform, initialCamPos, cameraMoveSpeed);
 
-        // 執事のみ移動
+        // 執事のコンポーネントを取得
         var butlerMoveController = player.GetComponent<CharacterMoveController>();
         if (butlerMoveController != null)
         {
-            butlerMoveController.SetPos(new Vector2Int(0, 1));
-            butlerMoveController.AddPosX(-1); // 執事を左に移動
+            // 執事のポジションを画面にセット
+            butlerMoveController.SetPos(new Vector2Int(5, 1));
+            // 執事を初期位置に移動
+            butlerMoveController.AddPosX(-5);
         }
-
-        player.transform.position = initialPlayerPos; // 執事を画面外に移動
-        await MoveTo_XAxisOnly(player.transform, initialPlayerPos - offScreenOffset, moveSpeed);
-
-        //await MoveTo_XAxisOnly(player.transform, initialPlayerPos - offScreenOffset, moveSpeed);
-
-        await Task.Delay(300);
 
         // ここで夜用のPrincess（怪盗ver）に切り替えるなら、別の GameObject を有効化・切り替え等が必要
         isMoviePlaying = false; // 映像の再生が終了したことを示すフラグをリセット
@@ -158,26 +150,6 @@ public class TimeTransitionMovie : MonoBehaviour
         }
         target.position = destination; // 最終位置補正
     }
-
-    async Task MoveTo_XAxisOnly(Transform target, Vector3 destination, float moveSpeed)
-    {
-        // YとZは固定
-        float fixedY = target.position.y;
-        float fixedZ = target.position.z;
-
-        while (Mathf.Abs(target.position.x - destination.x) > 0.01f)
-        {
-            float step = moveSpeed * Time.deltaTime;
-            float newX = Mathf.MoveTowards(target.position.x, destination.x, step);
-            target.position = new Vector3(newX, fixedY, fixedZ);
-
-            await Task.Yield();
-        }
-
-        // 最終位置補正（Xだけ）
-        target.position = new Vector3(destination.x, fixedY, fixedZ);
-    }
-
 
     async Task FadeOut(GameObject obj)
     {

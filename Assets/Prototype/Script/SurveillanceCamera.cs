@@ -2,6 +2,7 @@
 using UnityEditor.Rendering;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
+using UnityEngine.VFX;
 
 /// <summary>
 /// 監視カメラの索敵範囲を管理するスクリプト
@@ -34,6 +35,8 @@ public class SurveillanceCamera : MonoBehaviour
     private Vector2             cameraForward;  // カメラの進行方向
     private Vector2Int          cameraDir;      // カメラの向き
     private TimeManager         timeManager;    // TimeManager
+    private VisualEffect        vfx;            // VisualEffectコンポーネント
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -55,6 +58,19 @@ public class SurveillanceCamera : MonoBehaviour
                 "Script:LightObject.cs \n" +
                 "fieldがnullです"
             );
+        }
+
+        vfx = GetComponentInChildren<VisualEffect>();
+        if (!vfx)
+        {
+            Debug.LogError(
+                "Script:SurveillanceCamera.cs \n" +
+                "VisualEffectコンポーネントが見つかりません"
+            );
+        }
+        else 
+        {
+            vfx.Stop(); // 初期状態ではVFXを停止
         }
 
         direction = CameraDirection.Center;
@@ -127,6 +143,9 @@ public class SurveillanceCamera : MonoBehaviour
         {
             return;
         }
+
+        // 方向を変更する場合はVFXを再生
+        vfx.Play();
 
         // 角度を更新
         Vector3 currentAngle = transform.eulerAngles;
