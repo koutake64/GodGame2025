@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor.Rendering;
-using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.VFX;
 
