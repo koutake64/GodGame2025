@@ -84,7 +84,7 @@ MonoBehaviour:
   <Outline>k__BackingField:
     <Style>k__BackingField: 1
     <Width>k__BackingField: 5
-    <Color>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+    <Color>k__BackingField: {r: 3.9999998, g: 3.9999998, b: 3.9999998, a: 1}
     <Softness>k__BackingField: 0
     <TextureSource>k__BackingField: {fileID: 0}
     <TextureScale>k__BackingField: {x: 1, y: 1}
@@ -101,7 +101,7 @@ MonoBehaviour:
     <TextureRotation>k__BackingField: 0
     <TextureAnimationSpeed>k__BackingField: 0
     <TextureAnimationDirection>k__BackingField: 0
-  <Tab>k__BackingField: 0
+  <Tab>k__BackingField: 1
 --- !u!114 &1437721888594217344
 MonoBehaviour:
   m_ObjectHideFlags: 0
