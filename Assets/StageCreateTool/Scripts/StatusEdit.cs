@@ -59,6 +59,9 @@ public class StatusEdit : MonoBehaviour
             case 8:
                 state = _FieldDataManager.E_FIELDSTATE.securityGuard_N;
                 break;
+            case 9:
+                state = _FieldDataManager.E_FIELDSTATE.talk;
+                break;
         }
 
     }

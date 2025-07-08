@@ -90,6 +90,9 @@ public class Status : MonoBehaviour
             case _FieldDataManager.E_FIELDSTATE.securityGuard_N:
                 tmp.text = "Œx" + ":" + id.ToString() + ":" + dirStr;
                 break;
+            case _FieldDataManager.E_FIELDSTATE.talk:
+                tmp.text = "˜b";
+                break;
         }
     }
 
@@ -123,6 +126,9 @@ public class Status : MonoBehaviour
                 break;
             case _FieldDataManager.E_FIELDSTATE.securityGuard_N:
                 img.color = Color.green;
+                break;
+            case _FieldDataManager.E_FIELDSTATE.talk:
+                img.color = Color.magenta;
                 break;
         }
     }
