@@ -13,11 +13,18 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Escape))
         {
-            Cursor.visible = true;
-        }
-        if (Input.GetMouseButton(0))
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+			Application.Quit();//ゲームプレイ終了
+#endif
+		}
+
+		if (Input.GetMouseButton(0))
         {
             Cursor.visible = false;
         }
+
+
     }
 }
