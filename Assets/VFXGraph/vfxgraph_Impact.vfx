@@ -85,34 +85,13 @@ MonoBehaviour:
     - model: {fileID: 8926484042661614991}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615047}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615097}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615210}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615006}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615021}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615236}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615117}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615310}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615275}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615281}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615189}
@@ -135,37 +114,13 @@ MonoBehaviour:
     - model: {fileID: 8926484042661615314}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615316}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615320}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615397}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615335}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615379}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615458}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615338}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615340}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615395}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615350}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615487}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615465}

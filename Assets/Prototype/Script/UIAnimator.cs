@@ -89,7 +89,7 @@ public class UIAnimator : MonoBehaviour
             {
                 case E_AnimationType.Move:
                     // UIの位置を補間移動
-                    rectTransform.anchoredPosition=Vector3.Lerp(startPos, endPos, easeT); 
+                    rectTransform.anchoredPosition = Vector3.Lerp(startPos, endPos, easeT);
                     break;
                 case E_AnimationType.Custom:
                     // カスタムコールバックを呼び出す
