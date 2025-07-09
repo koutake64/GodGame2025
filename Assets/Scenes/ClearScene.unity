@@ -886,8 +886,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scenes:
+  - PrototypeScene
   - TitileScene
   buttons:
+  - {fileID: 1026613037}
   - {fileID: 1393837835}
   - {fileID: 1441834634}
   isEndButton: 1
