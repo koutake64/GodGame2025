@@ -84,13 +84,10 @@ public class ModelShiftByTime : MonoBehaviour
             GameObject obj = this.gameObject;
             Vector2Int startPos = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.start)[0];
 
-            if (obj.name == "Princess_a")
+            CharacterMoveController cm = obj.GetComponent<CharacterMoveController>();
+            if (cm)
             {
-                fdMng.AddInfo(startPos, _FieldDataManager.E_FIELDSTATE.princess);
-            }
-            if (obj.name == "Player_a")
-            {
-                fdMng.AddInfo(startPos, _FieldDataManager.E_FIELDSTATE.butler);
+                cm.SetPos(startPos);
             }
 
         }
