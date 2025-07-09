@@ -43,7 +43,19 @@ public class PlayerMove : MonoBehaviour
 	void Update()
 	{
 
-        gameTime = timeManager.GetCurrentTime();
+		if (Input.GetKey(KeyCode.Escape))
+		{
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+			Application.Quit();//ゲームプレイ終了
+#endif
+		}
+			
+
+
+
+			gameTime = timeManager.GetCurrentTime();
         float nightStartTime = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.night);
 
         // 夕方→夜移動処理
