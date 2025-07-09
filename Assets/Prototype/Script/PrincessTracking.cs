@@ -4,6 +4,7 @@ public class PrincessTracking : MonoBehaviour
 {
     private CharacterMoveController playerController;
     private CharacterMoveController princessController;
+    private TimeManager timeManager;
 
     private Vector2Int lastPrincessPrevPos;
 
@@ -33,12 +34,17 @@ public class PrincessTracking : MonoBehaviour
             return;
         }
 
+        timeManager = GameObject.Find("Canvas").GetComponent<TimeManager>();
+
         lastPrincessPrevPos = princessController.GetPrevPos();
     }
 
     void Update()
     {
-        if (princessController == null || playerController == null) return;
+        if (princessController == null || playerController == null || timeManager.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.morning)
+        {
+            return;
+        }
 
         Vector2Int currentPrevPos = princessController.GetPrevPos();
 

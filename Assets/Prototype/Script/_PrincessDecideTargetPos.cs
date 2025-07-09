@@ -22,6 +22,8 @@ public class _PrincessDecideTargetPos : MonoBehaviour
     List<int> keyList = new List<int>();
     List<int> shadowKeyList = new List<int>();
 
+    private bool onceKeyReset = false;
+
     private void Start()
     {
         cmController = GetComponent<CharacterMoveController>();
@@ -52,10 +54,8 @@ public class _PrincessDecideTargetPos : MonoBehaviour
                 MorningUpdate();
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.noon:
-
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.night:
                 NightUpdate();
@@ -80,6 +80,16 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private void NightUpdate()
     {
+        if (!onceKeyReset)
+        {
+            keyList.Clear();
+            if (StageNummber.Get() == 0)
+            {
+                keyList.Add(5);
+            }
+            onceKeyReset = true;
+        }
+
         SetSearchRange();
         if (!cmController.GetAutoMove())
         {

@@ -18,9 +18,6 @@ public class TimeManager : MonoBehaviour
     [SerializeField, Header("‘¾—zŒõ")]				private GameObject sun;
 	[SerializeField, Header("ƒQ[ƒ€“à‘¬“x"), Range(0, 2)] private float gameSpeed;
 
-
-	
-
     // --- •Ï” ---
     private float time = 0; // ŠÔŠÇ—
     private CommonSE_Proto.E_TIMEOFDAY currentState = CommonSE_Proto.E_TIMEOFDAY.morning;
