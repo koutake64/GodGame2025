@@ -88,6 +88,7 @@ public class PlayerMove : MonoBehaviour
 	private void ChangeObjectDirection()
 	{
 		// Œ»İ‚ÌÀ•W‚ğæ“¾
+
 		Vector2Int pos = moveController.GetCurrentPos();
 
 		// •ûŒü
@@ -123,7 +124,7 @@ public class PlayerMove : MonoBehaviour
                     camera.Action(this.transform);
 					break;
 				}
-                var light = info.obj.GetComponent<LightObject>();
+                var light = info.obj.transform.GetChild(0).GetComponent<LightObject>();
                 if (light)
                 {
                     Vector3 objPos = info.obj.GetComponent<Transform>().position;
