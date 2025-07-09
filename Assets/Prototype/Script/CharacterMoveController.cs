@@ -25,7 +25,7 @@ public class CharacterMoveController : MonoBehaviour
     private bool                isStop;         // 動きを止めるか
     private bool                isFrontChara;   // 前方にキャラがいるか
     private int                 characterID;    // キャラクターID
-
+ 
     void Start()
     {
         fieldData = GameObject.Find("Field").GetComponent<_FieldDataManager>();

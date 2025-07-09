@@ -36,6 +36,10 @@ public class SecurityController : MonoBehaviour
     private TimeManager             timeManager;    // タイムマネージャー
     private UIManager               uiManager;      // UIマネージャー
     private SecurityEffect          securityEffect; // セキュリティエフェクト
+
+    private int cnt = 0;
+    private int waitCnt = 180;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -101,6 +105,16 @@ public class SecurityController : MonoBehaviour
             timeManager.GetCurState() == CommonSE_Proto.E_TIMEOFDAY.noon && timeManager.IsChangeState())
         {
             transform.position = new Vector3(initPos.x, 0.0f, initPos.y);
+        }
+
+        if(isFoundPrincess)
+        {
+            cnt++;
+
+            if(cnt > waitCnt)
+            {
+                isFoundPrincess = false;
+            }
         }
 
         // 足音を鳴らすか判定
@@ -375,6 +389,7 @@ public class SecurityController : MonoBehaviour
         foundPos = targetPos;
         currentIndex += addNum * -1;
         isEndMovement = false;
+        cnt = 0;
     }
 
     public bool GetIsFoundPrincess()

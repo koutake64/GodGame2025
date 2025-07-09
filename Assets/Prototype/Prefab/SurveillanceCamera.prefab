@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   searchRange: {x: 3, y: 3}
-  notificationRange: {x: 7, y: 7}
+  notificationRange: {x: 10, y: 10}
   rotateAngle: 25
 --- !u!114 &-6856814355518030640
 MonoBehaviour:

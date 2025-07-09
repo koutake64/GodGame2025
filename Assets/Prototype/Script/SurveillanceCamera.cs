@@ -304,6 +304,8 @@ public class SurveillanceCamera : MonoBehaviour
                 // オブジェクトがプリンセスか確認
                 if(obj.state == _FieldDataManager.E_FIELDSTATE.princess)
                 {
+                    WarningVolumeController.Instance.NotifyCameraDetection();
+                    
                     // 警備員リスト
                     var securities = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
 
@@ -312,14 +314,19 @@ public class SurveillanceCamera : MonoBehaviour
                     {
                         // フィールド上の警備員の座標
                         Vector2Int securityPos = security.GetComponent<CharacterMoveController>().GetCurrentPos();
-
+    
                         // 警備員が通知範囲にいるか確認
                         if( securityPos.x > myPos.x - notificationRange.x / 2 && 
                             securityPos.x < myPos.x + notificationRange.x / 2 &&
                             securityPos.y > myPos.y - notificationRange.y / 2 &&
                             securityPos.y < myPos.y + notificationRange.y / 2 )
                         {
-                            security.GetComponent<SecurityController>().FoundPrincess(pos);
+                            SecurityController controller = security.GetComponent<SecurityController>();
+
+                            if (!controller.GetIsFoundPrincess())
+                            {
+                                controller.FoundPrincess(pos);
+                            }
                         }
                     }
                 }
