@@ -163,7 +163,12 @@ public class UIManager : MonoBehaviour
         // TODO UI‚ğ’Ç‰Á‚µ‚½‚ç‚±‚±‚É’Ç‰Á‚µ‚Ä‚¢‚­
 
         if (memoAnimator != null)
-            memoAnimator.SetBool("isUseMemo", useMemo);
+        {
+            if (StageNummber.Get() == 0)
+                memoAnimator.SetBool("isUseMemo", useMemo);
+            else if (StageNummber.Get() == 1)
+                memoAnimator.SetBool("isUseMemo_01", useMemo);
+        }
     }
 
     /// <summary>
