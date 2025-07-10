@@ -2244,7 +2244,10 @@ MonoBehaviour:
   - Texts/M_1-2
   - Texts/NO_1-1
   - Texts/NI_1-1
-  - 
+  - Texts/M_2-1
+  - Texts/M_2-2
+  - Texts/NO_2-1
+  - Texts/NI_2-1
   charInterval: 0.03
   isUseTMPro: 0
   autoDelay: 0.5
