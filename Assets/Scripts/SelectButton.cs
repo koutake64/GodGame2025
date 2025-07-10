@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class SelectButton : MonoBehaviour
 {
+    [SerializeField] int id;
+
     [SerializeField, Header("‘JˆÚæ‚ÌƒV[ƒ“–¼"), SceneSelector]
     private string[] scenes;
 
@@ -59,6 +61,13 @@ public class SelectButton : MonoBehaviour
 
         if (index >= 0 && index < scenes.Length && !string.IsNullOrEmpty(scenes[index]))
         {
+            if (index == 0 && id == 0)
+            {
+                int nextStageNum = StageNummber.Get();
+                nextStageNum++;
+                StageNummber.Set(nextStageNum);
+            }
+
             SceneChanger.ChangeScene(scenes[index]);
         }
     }
