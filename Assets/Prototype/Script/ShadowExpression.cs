@@ -36,6 +36,12 @@ public class ShadowExpression : MonoBehaviour
 
         foreach (var item in shadow)
         {
+            // À•W‚ª2‚ÂˆÈã‚È‚¢‚È‚çŸ‚Ìƒ‹[ƒv‚Ö
+            if(item.Count <= 1)
+            {
+                continue;
+            }
+
             Vector2Int Standard = item[0];
             item.Remove(Standard);
             Vector3 standardPos = new Vector3(Standard.x, 0.0f, Standard.y);

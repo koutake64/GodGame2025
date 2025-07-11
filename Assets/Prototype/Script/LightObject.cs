@@ -166,11 +166,11 @@ public class LightObject : MonoBehaviour
             // このマスが影になったかフラグ
             bool isThisShadow;
 
-            // 影グループに追加用データ
-            List<Vector2Int> group = new List<Vector2Int>();
-
             for (int i = -1; i < illuminateRange.x - 1; ++i)
             {
+                // 影グループに追加用データ
+                List<Vector2Int> group = new List<Vector2Int>();
+
                 // 違う列に影が行かないようにフラグを下げる
                 isShadow = false;
 
@@ -245,15 +245,15 @@ public class LightObject : MonoBehaviour
                     // ループ終了フラグが立ってらこのループを終了
                     if(isEndLoop)
                     {
+                        // 影グループを送信用データに追加
+                        if (group.Count > 0)
+                        {
+                            shadowGroup.Add(group);
+                        }
+
                         break;
                     }
                 }
-            }
-
-            // 影グループを送信用データに追加
-            if (group.Count > 0)
-            {
-                shadowGroup.Add(group);
             }
         }
         else
