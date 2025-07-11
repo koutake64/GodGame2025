@@ -43,10 +43,13 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         {
             keyList.Add(5);
         }
+        if (StageNummber.Get() == 1)
+        {
+        }
 
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         switch(timeMng.GetCurState())
         {
