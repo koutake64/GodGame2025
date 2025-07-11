@@ -19,9 +19,9 @@ public class TimeTransitionMovie : MonoBehaviour
     private float noonMovieStart;
     private float nightMovieStart;
     private float duration = 5f;
-    private float moveSpeed = 2.5f;
     private float cameraMoveSpeed = 5.0f;
 
+    private bool isInitialized = false;
     private bool isNoonMoviePlaying = false;
     private bool isNightMoviePlaying = false;
     private bool isMoviePlaying = false;
@@ -49,12 +49,11 @@ public class TimeTransitionMovie : MonoBehaviour
         // 演出開始時間を設定
         noonMovieStart = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) - duration;
         nightMovieStart = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.night) - duration;
-
-        StartCoroutine(DelayedInit());
     }
 
     void Update()
     {
+        Invoke(nameof(DelayedInit), 0.1f);
         gameTime = timeManager.GetCurrentTime();
 
         if (!isNoonMoviePlaying && gameTime >= noonMovieStart && gameTime < nightMovieStart)
@@ -72,9 +71,9 @@ public class TimeTransitionMovie : MonoBehaviour
         }
     }
 
-    private IEnumerator DelayedInit()
+    private void DelayedInit()
     {
-        yield return null; // 1フレーム待つ
+        if(isInitialized) return; // 既に初期化済みなら何もしない
 
         // 各オブジェクトを取得
         player = GameObject.FindGameObjectWithTag("Player");
@@ -89,6 +88,8 @@ public class TimeTransitionMovie : MonoBehaviour
             initialPrincessPos = princess.transform.position;
 
             Debug.Log("初期ポジション取得完了\n" + initialCamPos + initialPlayerPos + initialPrincessPos);
+
+            isInitialized = true; // 初期化完了フラグを設定
         }
         else
         {
