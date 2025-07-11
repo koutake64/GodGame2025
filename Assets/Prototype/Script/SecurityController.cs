@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEngine;
 
 public class SecurityController : MonoBehaviour
 {
@@ -385,6 +384,7 @@ public class SecurityController : MonoBehaviour
     }
     public void FoundPrincess(Vector2Int targetPos)
     {
+        securityEffect.StartSingleAlertEffect(); // エフェクトを再生
         isFoundPrincess = true;
         foundPos = targetPos;
         currentIndex += addNum * -1;

@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   opaqueMaterial: {fileID: 2100000, guid: b61c72cc6d590a44fa4e3e895cf69a10, type: 2}
-  transparentMaterial: {fileID: 2100000, guid: b61c72cc6d590a44fa4e3e895cf69a10, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 9338cc1dd26cd8242b18a2a8f4aee1b7, type: 2}
 --- !u!65 &4093988055353424003
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -33,7 +33,7 @@ public class SurveillanceCamera : MonoBehaviour
     private Vector2             cameraForward;  // カメラの進行方向
     private Vector2Int          cameraDir;      // カメラの向き
     private TimeManager         timeManager;    // TimeManager
-    private VisualEffect        vfx;            // VisualEffectコンポーネント
+    private VisualEffect        impactEffect;   // VisualEffectコンポーネント
 
 
 
@@ -58,8 +58,8 @@ public class SurveillanceCamera : MonoBehaviour
             );
         }
 
-        vfx = GetComponentInChildren<VisualEffect>();
-        if (!vfx)
+        impactEffect = GetComponentInChildren<VisualEffect>();
+        if (!impactEffect)
         {
             Debug.LogError(
                 "Script:SurveillanceCamera.cs \n" +
@@ -68,7 +68,7 @@ public class SurveillanceCamera : MonoBehaviour
         }
         else 
         {
-            vfx.Stop(); // 初期状態ではVFXを停止
+            impactEffect.Stop(); // 初期状態ではVFXを停止
         }
 
         direction = CameraDirection.Center;
@@ -143,7 +143,7 @@ public class SurveillanceCamera : MonoBehaviour
         }
 
         // 方向を変更する場合はVFXを再生
-        vfx.Play();
+        impactEffect.Play();
 
         // 角度を更新
         Vector3 currentAngle = transform.eulerAngles;
