@@ -1122,6 +1122,7 @@ MonoBehaviour:
   - {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
   - {fileID: 2952474259421678109, guid: f2b6f5c1e07f2eb4b892c5ae8f85b4af, type: 3}
   - {fileID: 1603426483798060309, guid: d154514669df01a4eab465a0e092ac9f, type: 3}
+  routeMarkerPrefab: {fileID: 4724916732475247546, guid: 24f5e1c9df509f34bae9b9a1dc909a5e, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
   rope: {fileID: 6181181272637633349, guid: 4a97dc5b166a8c041b1563713ab780ee, type: 3}
   outOfRangeTile: {fileID: 8951184714324223293, guid: 7b244f19c2663d64ab521eaf273933c8, type: 3}

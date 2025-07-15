@@ -130,12 +130,10 @@ public class SurveillanceCamera : MonoBehaviour
             if (cross > 0) // カメラの左側
             {
                 ChangeDirection(CameraDirection.Right);
-                AudioManager.Instance.PlaySE(6);
             }
             else if (cross < 0) // カメラの右側
             {
                 ChangeDirection(CameraDirection.Left);
-                AudioManager.Instance.PlaySE(6);
             }
         }
     }
@@ -150,6 +148,9 @@ public class SurveillanceCamera : MonoBehaviour
 
         // 方向を変更する場合はVFXを再生
         impactEffect.Play();
+
+        // SE再生
+        AudioManager.Instance.PlaySE(6);
 
         // 角度を更新
         Vector3 currentAngle = transform.eulerAngles;

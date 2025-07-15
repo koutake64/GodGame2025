@@ -126,6 +126,9 @@ public class _FieldDataManager : MonoBehaviour
     [Header("警備員巡回ルート(IDはこちらで指定)")]
     [SerializeField] private Dictionary<int, List<Vector2Int>> route = new Dictionary<int, List<Vector2Int>>();
 
+    [Header("警備員ルート表示用マーカー")]
+    [SerializeField] private GameObject routeMarkerPrefab;
+
     [Header("ポール")]
     [SerializeField] private GameObject pole;
 
@@ -137,6 +140,7 @@ public class _FieldDataManager : MonoBehaviour
 
     private int securityRouteDrawFrame;
     private List<Vector2Int> securityRoute  = new List<Vector2Int>();
+    private List<GameObject> securityRouteMarkers = new List<GameObject>();
     private bool securityRouteDrawFlag;
 
     private void Start()
@@ -580,7 +584,8 @@ public class _FieldDataManager : MonoBehaviour
                 securityRouteDrawFrame--;
             }
 
-            ChangeTail_debug();
+            //ChangeTail_debug();
+            ChangeTail_SecurityRoute();
             securityRouteDrawFlag = false;
             changeColorFlag = false;
         }
@@ -897,6 +902,25 @@ public class _FieldDataManager : MonoBehaviour
     {
         securityRouteDrawFrame = frame;
         securityRoute = route;
+    }
+
+    private void ChangeTail_SecurityRoute()
+    {
+        // 前回生成したマーカーをすべて削除
+        foreach (var marker in securityRouteMarkers)
+        {
+            if (marker != null) Destroy(marker);
+        }
+        securityRouteMarkers.Clear();
+
+        // 巡回ルートにマーカーを配置
+        foreach (var pos in securityRoute)
+        {
+            Vector3 worldPos = GridToWorldPosition(pos) + Vector3.up * 0.1f; // 少し浮かせて表示
+            GameObject marker = Instantiate(routeMarkerPrefab, worldPos, Quaternion.identity);
+            marker.transform.SetParent(field.transform); // フィールドの子に
+            securityRouteMarkers.Add(marker);
+        }
     }
 
     public Vector3 GridToWorldPosition(Vector2Int gridPos)
