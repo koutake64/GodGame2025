@@ -53,7 +53,7 @@ public class TimeTransitionMovie : MonoBehaviour
 
     void Update()
     {
-        Invoke(nameof(DelayedInit), 0.1f);
+        Invoke(nameof(DelayedInit), 0.1f);　// 1フレーム遅延して初期化を行う
         gameTime = timeManager.GetCurrentTime();
 
         if (!isNoonMoviePlaying && gameTime >= noonMovieStart && gameTime < nightMovieStart)
@@ -71,6 +71,9 @@ public class TimeTransitionMovie : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 1フレーム遅延して初期化を行うメソッド
+    /// </summary>
     private void DelayedInit()
     {
         if(isInitialized) return; // 既に初期化済みなら何もしない
@@ -97,15 +100,26 @@ public class TimeTransitionMovie : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ***非同期処理***
+    /// 昼の演出ムービーを再生するメソッド
+    /// </summary>
+    /// <returns></returns>
     async Task PlayNoonTransitionMovie()
     {
         Debug.Log("昼の演出開始");
+
+        // 各キャラクターのコンポーネントを取得
+        var butlerMoveController = player.GetComponent<CharacterMoveController>();
+        var princessMoveController = princess.GetComponent<CharacterMoveController>();
+
+        butlerMoveController.Stop(); // 執事の動きを停止
+        princessMoveController.Stop(); // お嬢様の動きを停止
 
         // カメラを初期位置へ
         await MoveTo(cameraObj.transform, initialCamPos, cameraMoveSpeed);
 
         // 執事のポジションを (0,1) にセット
-        var butlerMoveController = player.GetComponent<CharacterMoveController>();
         if (butlerMoveController != null)
         {
             butlerMoveController.SetPos(new Vector2Int(0, 1));
@@ -118,9 +132,17 @@ public class TimeTransitionMovie : MonoBehaviour
         // 見た目を初期位置に向けておく
         player.transform.LookAt(initialPlayerPos);
 
+        butlerMoveController.ReStart(); // 執事の動きを再開
+        princessMoveController.ReStart(); // お嬢様の動きを再開
+
         isMoviePlaying = false; // 演出終了
     }
 
+    /// <summary>
+    /// ***非同期処理***
+    /// 夜の演出ムービーを再生するメソッド
+    /// </summary>
+    /// <returns></returns>
     async Task PlayNightTransitionMovie()
     {
         Debug.Log("夜の演出開始");
@@ -132,6 +154,7 @@ public class TimeTransitionMovie : MonoBehaviour
         var butlerMoveController = player.GetComponent<CharacterMoveController>();
         if (butlerMoveController != null)
         {
+            butlerMoveController.Stop(); // 執事の動きを停止
             // 執事のポジションを画面にセット
             butlerMoveController.SetPos(new Vector2Int(5, 1));
             // 執事を初期位置に移動
@@ -142,6 +165,13 @@ public class TimeTransitionMovie : MonoBehaviour
         isMoviePlaying = false; // 映像の再生が終了したことを示すフラグをリセット
     }
 
+    /// <summary>
+    /// カメラを指定の位置に移動させるメソッド
+    /// </summary>
+    /// <param name="target">移動させるオブジェクト</param>
+    /// <param name="destination">座標の指定</param>
+    /// <param name="moveSpeed">移動速度</param>
+    /// <returns></returns>
     async Task MoveTo(Transform target, Vector3 destination, float moveSpeed)
     {
         while (Vector3.Distance(target.position, destination) > 0.01f)
