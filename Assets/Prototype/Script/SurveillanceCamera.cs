@@ -35,7 +35,8 @@ public class SurveillanceCamera : MonoBehaviour
     private TimeManager         timeManager;    // TimeManager
     private VisualEffect        impactEffect;   // VisualEffectコンポーネント
 
-
+    // フラグ：お嬢様が前フレームで検出されていたかどうか
+    private bool wasPrincessDetected = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -89,7 +90,9 @@ public class SurveillanceCamera : MonoBehaviour
 
         // 初期位置の監視範囲を計算
         CalcSearchRange();
-    }
+
+       
+}
 
     // Update is called once per frame
     void Update()
@@ -105,10 +108,11 @@ public class SurveillanceCamera : MonoBehaviour
 
     public void Action(Transform playerTransform)
     {
-        // プレイヤーがライトに対してどの位置にいるか計算
+
+        // プレイヤーがカメラに対してどの位置にいるか計算
         Vector2 toPlayer = new Vector2(playerTransform.position.x - this.transform.position.x, playerTransform.position.z - this.transform.position.z).normalized;
 
-        // 内積の計算により、ライトの向きに対しての位置関係を計算
+        // 内積の計算により、カメラの向きに対しての位置関係を計算
         float dot = Vector2.Dot(cameraForward, toPlayer);
 
         // しきい値で横にいても0.0fにならない場合に対応
@@ -117,17 +121,17 @@ public class SurveillanceCamera : MonoBehaviour
             dot = 0.0f;
         }
 
-        // 外積の計算を用いてライトに対して左右どちらにいるか判定
+        // 外積の計算を用いてカメラに対して左右どちらにいるか判定
         float cross = cameraForward.x * toPlayer.y - cameraForward.y * toPlayer.x;
 
         // 横にいる場合にのみ処理を行う
         if (dot == 0)
         {
-            if (cross > 0) // ライトの左側
+            if (cross > 0) // カメラの左側
             {
                 ChangeDirection(CameraDirection.Right);
             }
-            else if (cross < 0) // ライトの右側
+            else if (cross < 0) // カメラの右側
             {
                 ChangeDirection(CameraDirection.Left);
             }
@@ -161,6 +165,7 @@ public class SurveillanceCamera : MonoBehaviour
 
     private void CalcSearchRange()
     {
+
         // リストに要素があれば削除処理を実行
         if (searchList.Count > 0)
         {
@@ -289,8 +294,13 @@ public class SurveillanceCamera : MonoBehaviour
         }
     }
 
+
+    
     private void searchCamera()
     {
+        // 今フレームで検出されたか  追加。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+        bool isPrincessDetectedNow = false;
+
         var asas = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.princess);
 
 
@@ -304,7 +314,15 @@ public class SurveillanceCamera : MonoBehaviour
                 // オブジェクトがプリンセスか確認
                 if(obj.state == _FieldDataManager.E_FIELDSTATE.princess)
                 {
-                    WarningVolumeController.Instance.NotifyCameraDetection();
+                    isPrincessDetectedNow = true;
+
+                    // ★ 初めて検出したときだけSE再生  追加。。。。。。。。。。。。。。。。。。。。。。。。。。。。.........
+                    if (!wasPrincessDetected)
+                    {
+                        AudioManager.Instance.PlaySE(5);
+                        WarningVolumeController.Instance.NotifyCameraDetection();
+                    }
+                   // WarningVolumeController.Instance.NotifyCameraDetection();
                     
                     // 警備員リスト
                     var securities = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.securityGuard_N);
@@ -329,8 +347,13 @@ public class SurveillanceCamera : MonoBehaviour
                             }
                         }
                     }
-                }
+                    break; // プリンセスが見つかったらループ終了
+                }           
             }
+            if (isPrincessDetectedNow)
+                break;
         }
+        // 検出状態を記録（次フレームのため）
+        wasPrincessDetected = isPrincessDetectedNow;
     }
 } 
