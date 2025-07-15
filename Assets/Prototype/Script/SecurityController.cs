@@ -125,12 +125,6 @@ public class SecurityController : MonoBehaviour
             // 移動先を指定
             var route = moveController.StartAutoMove(targetArray[currentIndex]);
 
-            // ルートがある場合表示
-            if(route != null)
-            {
-                fieldData.SecurityRouteDraw(drawRouteFrame, route);
-            }
-
             // 移動終了フラグを下げる
             isEndMovement = false;
         }
