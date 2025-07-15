@@ -132,7 +132,6 @@ public class PlayerMove : MonoBehaviour
 						// 対象オブジェクトの方を見る
 						LookAtObject(objPos);
                     }
-                    AudioManager.Instance.PlaySE(6);
                     camera.Action(this.transform);
 					break;
 				}

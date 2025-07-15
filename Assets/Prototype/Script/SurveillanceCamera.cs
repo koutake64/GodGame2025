@@ -130,10 +130,12 @@ public class SurveillanceCamera : MonoBehaviour
             if (cross > 0) // カメラの左側
             {
                 ChangeDirection(CameraDirection.Right);
+                AudioManager.Instance.PlaySE(6);
             }
             else if (cross < 0) // カメラの右側
             {
                 ChangeDirection(CameraDirection.Left);
+                AudioManager.Instance.PlaySE(6);
             }
         }
     }
