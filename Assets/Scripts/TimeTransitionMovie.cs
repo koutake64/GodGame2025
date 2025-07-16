@@ -154,7 +154,6 @@ public class TimeTransitionMovie : MonoBehaviour
         var butlerMoveController = player.GetComponent<CharacterMoveController>();
         if (butlerMoveController != null)
         {
-            butlerMoveController.Stop(); // 執事の動きを停止
             // 執事のポジションを画面にセット
             butlerMoveController.SetPos(new Vector2Int(5, 1));
             // 執事を初期位置に移動
