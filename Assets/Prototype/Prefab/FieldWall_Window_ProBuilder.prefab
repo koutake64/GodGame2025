@@ -3550,6 +3550,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExhibitionArt1
       objectReference: {fileID: 0}
+    - target: {fileID: 3270566134583722995, guid: 62d850b8cb7fde741a84d9e898a85a6a, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3919150794458702374, guid: 62d850b8cb7fde741a84d9e898a85a6a, type: 3}
       propertyPath: m_CastShadows
       value: 0
@@ -3579,6 +3583,10 @@ PrefabInstance:
     - target: {fileID: 5045093842778418472, guid: 23893499dddedc445b0db9fe7a3655a8, type: 3}
       propertyPath: m_Name
       value: orange
+      objectReference: {fileID: 0}
+    - target: {fileID: 5045093842778418472, guid: 23893499dddedc445b0db9fe7a3655a8, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5568725893806897042, guid: 23893499dddedc445b0db9fe7a3655a8, type: 3}
       propertyPath: m_LocalPosition.x

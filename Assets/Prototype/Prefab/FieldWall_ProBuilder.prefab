@@ -466,6 +466,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gakubuti2_10bai (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -536,6 +540,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gakubuti2_10bai
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -605,6 +613,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
       propertyPath: m_Name
       value: Gakubuti2_10bai (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a0f8243dba2c0ac4084e31a7e392f47c, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -845,6 +857,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5d2393921a2cf1c4f8f22ce02288b541, type: 3}
       propertyPath: m_Name
       value: Gakubuti1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d2393921a2cf1c4f8f22ce02288b541, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
