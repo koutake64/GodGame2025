@@ -276,7 +276,7 @@ public class _FieldDataManager : MonoBehaviour
             Quaternion.identity
             );
 
-        fwPos = new Vector3(fieldSizeX, 0.0f, 24.0f);
+        fwPos = new Vector3(fieldSizeX, 0.0f, 30.0f);
 
         obj = Instantiate(
             fieldWallWindow,
@@ -284,7 +284,7 @@ public class _FieldDataManager : MonoBehaviour
             Quaternion.identity
             );
 
-        fwPos = new Vector3(fieldSizeX, 0.0f, -6.0f);
+        fwPos = new Vector3(fieldSizeX, 0.0f, -19.0f);
 
         obj = Instantiate(
             fieldWallWindow,
