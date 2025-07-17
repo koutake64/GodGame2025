@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
-	private CharacterMoveController moveController;
+    private CharacterMoveController moveController;
 	private TimeManager timeManager;
 	private _FieldDataManager fieldData;
 	private UIManager uiManager;
@@ -41,21 +41,8 @@ public class PlayerMove : MonoBehaviour
 	}
 
 	void Update()
-	{
-
-		if (Input.GetKey(KeyCode.Escape))
-		{
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
-#else
-			Application.Quit();//ゲームプレイ終了
-#endif
-		}
-			
-
-
-
-			gameTime = timeManager.GetCurrentTime();
+    {
+		gameTime = timeManager.GetCurrentTime();
         float nightStartTime = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.night);
 
         // 夕方→夜移動処理
