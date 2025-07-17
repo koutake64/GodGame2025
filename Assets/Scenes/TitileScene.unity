@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9fae2a27a3ba454d97f8d3675f4a93c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputActions: {fileID: -944628639613478452, guid: ba0fce63f3ee6a641944922eaca25363, type: 3}
   nextSceneName: PrototypeScene
 --- !u!1 &410087039
 GameObject:
