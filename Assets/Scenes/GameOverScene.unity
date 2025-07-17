@@ -160,6 +160,7 @@ MonoBehaviour:
   - {fileID: 1919187944}
   - {fileID: 731113744}
   isEndButton: 1
+  inputActions: {fileID: -944628639613478452, guid: ba0fce63f3ee6a641944922eaca25363, type: 3}
 --- !u!114 &585802993
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class SelectButton : MonoBehaviour
 {
@@ -16,25 +17,48 @@ public class SelectButton : MonoBehaviour
 
     private int currentIndex = 0;
 
-    private void Start()
+
+	[SerializeField] private InputActionAsset inputActions;
+	private InputAction upAction;
+	private InputAction downAction;
+	private InputAction leftAction;
+	private InputAction rightAction;
+	private InputAction nextAction;
+
+
+	private void Start()
     {
         ChangeColor();
-    }
+
+		var map = inputActions.FindActionMap("Menu");
+		upAction = map.FindAction("UP");
+		downAction = map.FindAction("Down");
+		leftAction = map.FindAction("Left");
+		rightAction = map.FindAction("Right");
+		nextAction = map.FindAction("Next");
+
+		// —LŒø‰»
+		upAction.Enable();
+		downAction.Enable();
+		leftAction.Enable();
+		rightAction.Enable();
+		nextAction.Enable();
+	}
 
     private void Update()
     {
         // Todo InputSystem‚É’uŠ·
-        if (Input.GetKeyDown(KeyCode.A))
+        if (rightAction.WasPressedThisFrame())
         {
             currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
             ChangeColor();
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (leftAction.WasPressedThisFrame())
         {
             currentIndex = (currentIndex + 1) % buttons.Length;
             ChangeColor();
         }
-        else if (Input.GetKeyDown(KeyCode.Return))
+        else if (nextAction.WasPressedThisFrame())
         {
             SelectedAction(currentIndex);
         }
