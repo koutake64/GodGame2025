@@ -43,9 +43,6 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         {
             keyList.Add(5);
         }
-        if (StageNummber.Get() == 1)
-        {
-        }
 
     }
 
@@ -86,6 +83,7 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         if (!onceKeyReset)
         {
             keyList.Clear();
+            shadowKeyList.Clear();
             if (StageNummber.Get() == 0)
             {
                 keyList.Add(5);

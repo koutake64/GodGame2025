@@ -45,7 +45,7 @@ public class PrincessTalk : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isTalk)
+        if (timeMng.GetCurState() != CommonSE_Proto.E_TIMEOFDAY.morning || !isTalk)
         {
             CharacterMoveController cmc = GetComponent<CharacterMoveController>();
             cmc.ReStart();
