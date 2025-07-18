@@ -46,6 +46,7 @@ public class CameraManager : MonoBehaviour
     private bool isZooming = false;
     private float cameraMoveSpeed = 5f;
     private float treasureMoveSpeed = 3f;
+    private bool isFindingPrincess = false;
 
     void Start()
     {
@@ -64,54 +65,29 @@ public class CameraManager : MonoBehaviour
 
         switch (timeManager.CurrentState)
 		{
-			case CommonSE_Proto.E_TIMEOFDAY.night:
-                Vector2Int fieldSize = fieldDataManager.GetFieldSize();
-                if (princessTransform == null)
+            case CommonSE_Proto.E_TIMEOFDAY.night:
+                // Princess未取得かつ今取得中でなければ、1フレーム遅らせて取得
+                if (princessTransform == null && !isFindingPrincess)
                 {
-                    GameObject princessObj = GameObject.FindWithTag(princessTag);
-                    if (princessObj != null)
-                    {
-                        princessTransform = princessObj.transform;
-
-                        // プレイヤー初期位置が左端 or 右端か確認し、カメラ初期位置を調整
-                        fieldSize = fieldDataManager.GetFieldSize();
-                        float princessX = princessTransform.position.x;
-
-                        if (princessX < fieldSize.x / 2)
-                        {
-                            // 左端スタート：右に5マス離す
-                            transform.position = princessTransform.position + new Vector3(5, offsetPosition.y, offsetPosition.z);
-                        }
-                        else
-                        {
-                            // 右端スタート：左に5マス離す
-                            transform.position = princessTransform.position + new Vector3(-5, offsetPosition.y, offsetPosition.z);
-                        }
-
-                        // カメラ角度維持
-                        transform.eulerAngles = fixedRotation;
-                    }
-                    else
-                    {
-                        Debug.LogWarning("プレイヤーが見つかりません。タグを確認してください。");
-                        return;
-                    }
+                    StartCoroutine(FindPrincessDelayed());
+                    return; // このフレームは何もしない
                 }
-
-                // 通常のカメラ追従処理
-                Vector2Int fieldSizeDay = fieldDataManager.GetFieldSize();
-                float princessXPos = princessTransform.position.x;
-                Vector3 targetPosDay = princessTransform.position + offsetPosition;
-
-                if (princessXPos < 5 || princessXPos > fieldSizeDay.x - 6)
+                if (princessTransform != null)
                 {
-                    targetPosDay.x = transform.position.x;
+                    // Princessの位置に合わせてカメラを追従
+                    Vector2Int fieldSize = fieldDataManager.GetFieldSize();
+                    float princessX = princessTransform.position.x;
+                    Vector3 targetPos = princessTransform.position + offsetPosition;
+                    // カメラのX位置制限（端で固定）
+                    if (princessX < 5 || princessX > fieldSize.x - 6)
+                    {
+                        targetPos.x = transform.position.x;
+                    }
+                    transform.position = targetPos;
                 }
-
-                transform.position = targetPosDay;
                 break;
 
-			case CommonSE_Proto.E_TIMEOFDAY.morning:
+            case CommonSE_Proto.E_TIMEOFDAY.morning:
 				PlayerStartPos();
 				break;
 			case CommonSE_Proto.E_TIMEOFDAY.noon:
@@ -267,6 +243,23 @@ public class CameraManager : MonoBehaviour
 
         // 演出フラグON
         isCinematic = true;
+    }
+
+    private IEnumerator FindPrincessDelayed()
+    {
+        isFindingPrincess = true;
+        // 1フレーム待機（すべてのUpdate/LateUpdateが終わった後）
+        yield return new WaitForEndOfFrame();
+        GameObject princessObj = GameObject.FindWithTag(princessTag);
+        if (princessObj != null)
+        {
+            princessTransform = princessObj.transform;
+        }
+        else
+        {
+            Debug.LogWarning("お嬢様が見つかりませんでした。タグ設定を確認してください。");
+        }
+        isFindingPrincess = false;
     }
 
     private void GameClear()
