@@ -281,9 +281,6 @@ public class _PrincessDecideTargetPos : MonoBehaviour
         prevTargetPos = nextTargetPos;
         nextTargetPos = bestTarget;
 
-        Debug.Log(
-            "key : " + currentKey
-            );
     }
 
     public List<Vector2Int> GetRange()

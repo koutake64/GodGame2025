@@ -5,6 +5,8 @@ public class BGMTimeManager : MonoBehaviour
     private TimeManager timeManager;
     private CommonSE_Proto.E_TIMEOFDAY currentTimeState = CommonSE_Proto.E_TIMEOFDAY.morning;
 
+    private bool once = true;
+
     private void Start()
     {
         timeManager = FindFirstObjectByType<TimeManager>();
@@ -24,10 +26,11 @@ public class BGMTimeManager : MonoBehaviour
 
         var newState = timeManager.CurrentState;
 
-        if (newState != currentTimeState)
+        if (newState != currentTimeState || once)
         {
             currentTimeState = newState;
             PlayBGMByTime(newState);
+            once = false;
         }
     }
 
@@ -42,10 +45,10 @@ public class BGMTimeManager : MonoBehaviour
                 AudioManager.Instance.PlayBGM(1);
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.afternoon:
-                AudioManager.Instance.PlayBGM(1); 
+                AudioManager.Instance.PlayBGM(1);
                 break;
             case CommonSE_Proto.E_TIMEOFDAY.night:
-                AudioManager.Instance.PlayBGM(2); 
+                AudioManager.Instance.PlayBGM(2);
                 break;
         }
     }
