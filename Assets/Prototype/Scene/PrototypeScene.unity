@@ -1095,9 +1095,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData:
+  - {fileID: 4900000, guid: 6ed829c162864354fb41f4553ab3eeed, type: 3}
   - {fileID: 4900000, guid: 4364ce4ff5ea18f4d959d868deb827bc, type: 3}
   - {fileID: 4900000, guid: a5caf619bbe8d764f8cbdb8d5d70bae2, type: 3}
-  - {fileID: 4900000, guid: 6ed829c162864354fb41f4553ab3eeed, type: 3}
   textLoder: {fileID: 324351710}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   exhibitionStand: {fileID: 3556016710770019404, guid: 948f0b42d5fca7a4ca75d0ebdfe99c05, type: 3}
   goal:
   - {fileID: 9174946373867437475, guid: 03e1020fea0f69b4492d1b351016e93d, type: 3}
-  - {fileID: 2952474259421678109, guid: f2b6f5c1e07f2eb4b892c5ae8f85b4af, type: 3}
+  - {fileID: 5606701195781556868, guid: 22ccbc2e1fab6904e8d1ecb148680436, type: 3}
   - {fileID: 1603426483798060309, guid: d154514669df01a4eab465a0e092ac9f, type: 3}
   routeMarkerPrefab: {fileID: 4724916732475247546, guid: 24f5e1c9df509f34bae9b9a1dc909a5e, type: 3}
   pole: {fileID: 3577765438420144229, guid: ca3c0a89e56718e4e87711485f9ae5e4, type: 3}
