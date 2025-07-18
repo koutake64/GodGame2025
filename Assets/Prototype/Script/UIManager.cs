@@ -168,6 +168,8 @@ public class UIManager : MonoBehaviour
                 memoAnimator.SetBool("isUseMemo", useMemo);
             else if (StageNummber.Get() == 1)
                 memoAnimator.SetBool("isUseMemo_01", useMemo);
+            else if (StageNummber.Get() == 2)
+                memoAnimator.SetBool("isUseMemo_02", useMemo);
         }
     }
 
