@@ -451,6 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8763ddf1a91eb42aad0845ee01da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputActions: {fileID: -944628639613478452, guid: ba0fce63f3ee6a641944922eaca25363, type: 3}
 --- !u!114 &8472673827619722079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,6 +569,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 784c00a7-c81a-4c1c-8f0b-c987d8966de0
     m_ActionName: 'Player/SwitchAction[/Keyboard/tab,/XInputControllerWindows/buttonSouth]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5547551a-972f-4c72-b322-f45de4ba2ace
+    m_ActionName: 'Player/End[/Keyboard/escape,/XInputControllerWindows/start]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -775,6 +780,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8763ddf1a91eb42aad0845ee01da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputActions: {fileID: -944628639613478452, guid: ba0fce63f3ee6a641944922eaca25363, type: 3}
 --- !u!114 &4397068198710546789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -892,6 +898,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5547551a-972f-4c72-b322-f45de4ba2ace
+    m_ActionName: 'Player/End[/Keyboard/escape,/XInputControllerWindows/start]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

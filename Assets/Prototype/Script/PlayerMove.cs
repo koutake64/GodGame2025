@@ -17,7 +17,10 @@ public class PlayerMove : MonoBehaviour
 	private float noonTime;
 	private float gameTime;
 
-	public void OnMove(InputAction.CallbackContext context)
+    [SerializeField] private InputActionAsset inputActions;
+    private InputAction nextAction;
+
+    public void OnMove(InputAction.CallbackContext context)
 	{
 		moveInput = context.ReadValue<Vector2>();
 	}
@@ -36,7 +39,11 @@ public class PlayerMove : MonoBehaviour
                "fieldData‚ªnull‚Å‚·"
             );
         }
-		fieldSize = fieldData.GetFieldSize();
+        var map = inputActions.FindActionMap("Menu");
+        nextAction = map.FindAction("Next");
+        nextAction.Enable();
+
+        fieldSize = fieldData.GetFieldSize();
 		noonTime = timeManager.GetTime(CommonSE_Proto.E_TIMEOFDAY.noon) + 120f;
 	}
 
@@ -78,7 +85,7 @@ public class PlayerMove : MonoBehaviour
             inputTimer = inputCooldown;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (nextAction.WasPressedThisFrame())
         {
             ChangeObjectDirection();
         }

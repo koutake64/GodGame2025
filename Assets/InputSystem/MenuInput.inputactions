@@ -66,7 +66,7 @@
                 {
                     "name": "",
                     "id": "1fac16b7-fa21-4503-a7eb-e180bf056358",
-                    "path": "<Gamepad>/dpad/down",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
