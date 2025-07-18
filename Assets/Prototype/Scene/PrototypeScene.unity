@@ -1095,9 +1095,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData:
-  - {fileID: 4900000, guid: 6ed829c162864354fb41f4553ab3eeed, type: 3}
   - {fileID: 4900000, guid: 4364ce4ff5ea18f4d959d868deb827bc, type: 3}
   - {fileID: 4900000, guid: a5caf619bbe8d764f8cbdb8d5d70bae2, type: 3}
+  - {fileID: 4900000, guid: 6ed829c162864354fb41f4553ab3eeed, type: 3}
   textLoder: {fileID: 324351710}
   field: {fileID: 324351706}
   tileA: {fileID: 3484109660521580606, guid: d8b5652dc42417044a6bd061320afe74, type: 3}
@@ -3013,7 +3013,6 @@ MonoBehaviour:
   spriteList:
   - {fileID: 21300000, guid: bb87568cde16a4047979213734074270, type: 3}
   - {fileID: 21300000, guid: e7126e320e76a654e822fda218a31ee1, type: 3}
-  - {fileID: 21300000, guid: e5a4f540ab1552c49bf560f00fefb58b, type: 3}
 --- !u!1 &2082979514
 GameObject:
   m_ObjectHideFlags: 0
