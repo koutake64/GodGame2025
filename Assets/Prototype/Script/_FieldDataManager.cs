@@ -840,10 +840,10 @@ public class _FieldDataManager : MonoBehaviour
 
         }
 
-        for (int i = 0; i < securityRoute.Count; ++i)
-        {
-            state[securityRoute[i].x, securityRoute[i].y] = E_FIELDSTATE.securityRoute;
-        }
+        //for (int i = 0; i < securityRoute.Count; ++i)
+        //{
+        //    state[securityRoute[i].x, securityRoute[i].y] = E_FIELDSTATE.securityRoute;
+        //}
 
         for (int y = 0; y < fieldSize.y; ++y)
         {
