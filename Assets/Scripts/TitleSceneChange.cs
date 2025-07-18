@@ -10,7 +10,7 @@ public class TitleSceneChange : MonoBehaviour
 	private void Start()
 	{
 		var map = inputActions.FindActionMap("Menu");
-		nextAction = map.FindAction("Next");
+		nextAction = map.FindAction("any");
 		nextAction.Enable();
 	}
 
