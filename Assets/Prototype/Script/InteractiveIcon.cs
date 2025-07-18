@@ -40,13 +40,13 @@ public class InteractiveIcon : MonoBehaviour
         {
             return;
         }
+        bool showUI = false;
 
+        // カメラ用
         var cameraPosList = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.surveillanceCamera);
         var cameraObjList = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.surveillanceCamera);
         var playerPos = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.butler);
         var player = playerPos[0];
-
-        bool showUI = false;
         for (int i = 0; i < cameraPosList.Count; i++)
         {
             var cameraPos = cameraPosList[i];
@@ -63,6 +63,28 @@ public class InteractiveIcon : MonoBehaviour
 
             if(dot == 0 && toPlayer.magnitude == 1)
             {  
+                showUI = true;
+            }
+        }
+
+        // ライト用
+        var lightPosList = fieldData.GetStatePos(_FieldDataManager.E_FIELDSTATE.light);
+        var lightObjList = fieldData.GetGameObjectList(_FieldDataManager.E_FIELDSTATE.light);
+        for(int i= 0;i<lightPosList.Count;i++)
+        {
+            var lightPos = lightPosList[i];
+            var lightObj = lightObjList[i];
+
+            Vector2Int toPlayer = new Vector2Int(player.x - lightPos.x, player.y - lightPos.y);
+            Vector2 lightFowardVec = new Vector2(lightObj.transform.forward.x, lightObj.transform.forward.z).normalized;
+            Vector2Int vlightFoward = new Vector2Int(
+                Mathf.RoundToInt(lightFowardVec.x),
+                Mathf.RoundToInt(lightFowardVec.y)
+                );
+            int dot = toPlayer.x * vlightFoward.x + toPlayer.y * vlightFoward.y;
+
+            if(dot == 0 && toPlayer.magnitude == 1)
+            {
                 showUI = true;
             }
         }
