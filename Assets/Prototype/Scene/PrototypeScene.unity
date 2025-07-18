@@ -960,8 +960,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   cameraOffset: {x: 0, y: 3, z: -10}
-  treasureOffset0: {x: 0, y: 1, z: 0}
-  treasureOffset1: {x: 0, y: 0, z: -1}
+  treasureOffset0: {x: 0, y: 5, z: 0}
+  treasureOffset1: {x: 0, y: 3, z: -1}
   spinSpeed: 60
   targetFOV: 20
   zoomSpeed: 5
