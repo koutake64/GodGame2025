@@ -48,7 +48,17 @@ public class _PrincessDecideTargetPos : MonoBehaviour
 
     private void LateUpdate()
     {
-        switch(timeMng.GetCurState())
+        List<Vector2Int> goalList = fdMng.GetStatePos(_FieldDataManager.E_FIELDSTATE.goal);
+        if (goalList.Count <= 0) return;
+        Vector2Int goalPos = goalList[0];
+        Vector2Int princessPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+
+        if (goalPos == princessPos)
+        {
+            return;
+        }
+
+        switch (timeMng.GetCurState())
         {
             case CommonSE_Proto.E_TIMEOFDAY.morning:
                 MorningUpdate();
